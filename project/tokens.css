@@ -1,0 +1,73 @@
+/* =============================================================
+   OBI EMEKA — DESIGN TOKENS
+   Personal brand. Monoline geometric. High contrast.
+   ============================================================= */
+
+/* ---- Type ---- */
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+:root {
+  /* ===== COLORS ===== */
+  /* Core — black & white are the brand. Everything else is a supporting role. */
+  --ink:        #0A0A0A;   /* near-black, softer than #000 for screen */
+  --paper:      #F6F4EF;   /* warm off-white, the primary "white" surface */
+  --paper-pure: #FFFFFF;   /* hard white, used sparingly for cards on paper */
+  --bone:       #E8E4DA;   /* muted divider / pressed states */
+  --char:       #1F1D1A;   /* inverse cards on paper that aren't pure black */
+
+  /* Accents — used as punctuation, not decoration. Pick ONE per surface. */
+  --citrus:     #E8FF3A;   /* electric yellow-green, the "spotlight" */
+  --rust:       #C0411F;   /* terracotta, warmth */
+  --aqua:       #2A6FDB;   /* deep working blue */
+
+  /* Functional */
+  --muted:      #6B6660;
+  --hairline:   rgba(10,10,10,0.08);
+  --hairline-strong: rgba(10,10,10,0.16);
+  --hairline-inverse: rgba(246,244,239,0.14);
+
+  /* ===== TYPE ===== */
+  --font-display: 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-text:    'Bricolage Grotesque', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, monospace;
+
+  /* Bricolage is variable; we lean on opsz for big display set */
+  --display-xl: 800 clamp(56px, 8vw, 128px)/0.92 var(--font-display);
+  --display-l:  700 clamp(40px, 5.5vw, 80px)/0.96 var(--font-display);
+  --display-m:  700 clamp(32px, 4vw, 56px)/1.02 var(--font-display);
+  --headline:   600 28px/1.15 var(--font-display);
+  --title:      600 20px/1.3 var(--font-text);
+  --body:       400 16px/1.55 var(--font-text);
+  --small:      500 13px/1.45 var(--font-text);
+  --caps:       600 12px/1 var(--font-text);
+  --mono:       500 13px/1.4 var(--font-mono);
+
+  /* ===== SPACING ===== */
+  --s-1:  4px;
+  --s-2:  8px;
+  --s-3:  12px;
+  --s-4:  16px;
+  --s-5:  24px;
+  --s-6:  32px;
+  --s-7:  48px;
+  --s-8:  64px;
+  --s-9:  96px;
+  --s-10: 128px;
+
+  /* ===== RADIUS ===== */
+  /* The brand letterforms are super-elliptical. Radii are big, never sharp. */
+  --r-1: 8px;
+  --r-2: 14px;
+  --r-3: 22px;
+  --r-4: 32px;
+  --r-pill: 999px;
+
+  /* ===== SHADOW ===== */
+  /* Restrained. The brand is flat; shadow is for elevation only. */
+  --shadow-1: 0 1px 0 rgba(10,10,10,0.04), 0 2px 6px rgba(10,10,10,0.06);
+  --shadow-2: 0 2px 4px rgba(10,10,10,0.05), 0 12px 32px rgba(10,10,10,0.08);
+  --shadow-pop: 0 24px 60px -20px rgba(10,10,10,0.35);
+}
+
+/* utility caps */
+.caps { font: var(--caps); letter-spacing: 0.14em; text-transform: uppercase; }
