@@ -892,7 +892,7 @@ export function Footer({ onNav }) {
 
         <div className="foot-grid">
           <div className="foot-col foot-id">
-            <img src="/assets/monogram-inverse.png" alt="Obi Emeka" />
+            <img src="/assets/logo-wordmark-inverse.png" alt="Obi Emeka" />
             <p style={{ color: 'rgba(246,244,239,0.7)', maxWidth: '32ch' }}>
               Founder &amp; CEO, WhiteRabbit Agro. Building OriginTrace and
               FarmWise. Based in Enugu, working everywhere African
