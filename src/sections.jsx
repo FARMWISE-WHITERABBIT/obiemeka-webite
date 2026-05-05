@@ -272,7 +272,7 @@ export function About() {
           <p className="body-text">
             He advises agri-tech founders on product strategy, structures
             agro real estate development &amp; management vehicles, and
-            speaks regularly on EUDR readiness and the future of African
+            speaks regularly on export compliance and the future of African
             export trade.
           </p>
 
@@ -283,7 +283,7 @@ export function About() {
             </div>
             <div className="cred">
               <span className="k">Sector</span>
-              <span className="v">Agri · Export · SaaS</span>
+              <span className="v">Agriculture · Software Technology · Export</span>
             </div>
             <div className="cred">
               <span className="k">Operating since</span>
@@ -315,7 +315,7 @@ const VENTURES = [
     id: 'whiterabbit',
     num: '01',
     name: 'WhiteRabbit Agro',
-    nameEm: null,
+    nameEm: 'Agro',
     tags: ['Agro real estate development & management', 'Enugu, NG'],
     desc: 'Agro real estate development & management — investors buy plantation plots, WhiteRabbit develops and runs them end-to-end through harvest, export and distribution, and profits are shared.',
     detail: {
@@ -452,25 +452,80 @@ export function Ventures() {
 /* =============================================================
    PRESS / PARTNERS STRIP
    ============================================================= */
-export function Press() {
-  const partners = [
-    { name: 'NEPC', acro: true },
-    { name: 'Union Bank', acro: false },
-    { name: 'Federal Ministry of Agriculture & Food Security', acro: false },
-    { name: 'Ministry of Agro-Industrialization', acro: false },
-  ]
+const PRESS_PARTNERS = [
+  {
+    name: 'Nigerian Export Promotion Council',
+    short: 'NEPC',
+    logo: '/assets/partners/nepc.png',
+    acro: true,
+  },
+  {
+    name: 'Union Bank',
+    short: 'Union Bank',
+    logo: '/assets/partners/union-bank.png',
+    acro: false,
+  },
+  {
+    name: 'Ministry of Agriculture & Agro-Industrialization, Enugu State',
+    short: 'Enugu Agro Ministry',
+    logo: null,
+    acro: false,
+  },
+  {
+    name: 'Vanguard',
+    short: 'Vanguard',
+    logo: '/assets/partners/vanguard.png',
+    acro: false,
+  },
+  {
+    name: 'BusinessDay',
+    short: 'BusinessDay',
+    logo: '/assets/partners/businessday.png',
+    acro: false,
+  },
+  {
+    name: 'Channels TV',
+    short: 'Channels TV',
+    logo: '/assets/partners/channels.png',
+    acro: false,
+  },
+]
 
+export function Press() {
   return (
     <section className="press">
       <div className="row">
         <span className="label">— Featured / Partnered with</span>
-        <div className="partners">
-          {partners.map((p) => (
-            <span key={p.name} className={`partner ${p.acro ? 'acro' : ''}`}>{p.name}</span>
+        <div className="partners" style={{ gridTemplateColumns: 'repeat(6, 1fr)' }}>
+          {PRESS_PARTNERS.map((p) => (
+            <PartnerLogo key={p.name} partner={p} />
           ))}
         </div>
       </div>
     </section>
+  )
+}
+
+function PartnerLogo({ partner }) {
+  const [imgFailed, setImgFailed] = React.useState(false)
+  if (partner.logo && !imgFailed) {
+    return (
+      <span className={`partner ${partner.acro ? 'acro' : ''}`} title={partner.name}>
+        <img
+          src={partner.logo}
+          alt={partner.short}
+          onError={() => setImgFailed(true)}
+          style={{ maxHeight: '28px', maxWidth: '100%', objectFit: 'contain',
+                   filter: 'grayscale(1) contrast(0.7)', opacity: 0.65,
+                   transition: 'opacity .2s ease, filter .2s ease' }}
+          onMouseOver={(e) => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.filter = 'none'; }}
+          onMouseOut={(e) => { e.currentTarget.style.opacity = '0.65'; e.currentTarget.style.filter = 'grayscale(1) contrast(0.7)'; }}
+        />
+      </span>
+    )
+  }
+  return (
+    <span className={`partner ${partner.acro ? 'acro' : ''}`}>{partner.short}</span>
   )
 }
 
@@ -837,7 +892,7 @@ export function Footer({ onNav }) {
 
         <div className="foot-grid">
           <div className="foot-col foot-id">
-            <img src="/assets/monogram.png" alt="Obi Emeka" />
+            <img src="/assets/monogram-inverse.png" alt="Obi Emeka" />
             <p style={{ color: 'rgba(246,244,239,0.7)', maxWidth: '32ch' }}>
               Founder &amp; CEO, WhiteRabbit Agro. Building OriginTrace and
               FarmWise. Based in Enugu, working everywhere African
