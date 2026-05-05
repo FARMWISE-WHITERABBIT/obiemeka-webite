@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react'
 
 export const SESSIONS = [
-  { id: 'discovery', name: 'Discovery Call',      price: '₦50,000 · 60 min' },
-  { id: 'strategy',  name: 'Strategy Session',    price: '₦450,000 · 3 hrs cumulative' },
+  { id: 'discovery', name: 'Discovery Call',      price: '₦50,000 · 30 min' },
+  { id: 'strategy',  name: 'Strategy Session',    price: '₦450,000 · 5 hrs cumulative' },
   { id: 'retainer',  name: 'Advisory Retainer',   price: '₦400,000 / month' },
   { id: 'speaking',  name: 'Speaking Engagement', price: 'Quote on request' },
 ]

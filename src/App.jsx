@@ -4,7 +4,7 @@ import { BookingForm } from './BookingForm'
 import { TweaksPanel, TweakSection, TweakRadio, useTweaks } from './TweaksPanel'
 
 const TWEAK_DEFAULTS = {
-  accent: 'aqua',
+  accent: 'green',
 }
 
 export default function App() {
@@ -13,7 +13,7 @@ export default function App() {
   const [onPaper, setOnPaper] = useState(false)
 
   useEffect(() => {
-    document.body.classList.remove('accent-citrus', 'accent-rust', 'accent-aqua')
+    document.body.classList.remove('accent-citrus', 'accent-rust', 'accent-aqua', 'accent-green')
     document.body.classList.add('accent-' + t.accent)
   }, [t.accent])
 
@@ -122,9 +122,10 @@ export default function App() {
             value={t.accent}
             onChange={(v) => setTweak('accent', v)}
             options={[
+              { value: 'green',  label: 'Green'  },
+              { value: 'aqua',   label: 'Aqua'   },
               { value: 'citrus', label: 'Citrus' },
               { value: 'rust',   label: 'Rust'   },
-              { value: 'aqua',   label: 'Aqua'   },
             ]}
           />
         </TweakSection>
