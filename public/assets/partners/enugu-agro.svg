@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 150" width="500" height="150">
+  <!-- Background -->
+  <rect width="500" height="150" fill="white"/>
+  <!-- Enugu State green emblem -->
+  <circle cx="75" cy="75" r="60" fill="#0C712E"/>
+  <circle cx="75" cy="75" r="54" fill="#6DAB3C"/>
+  <circle cx="75" cy="75" r="46" fill="#0C712E"/>
+  <!-- Torch symbol -->
+  <rect x="70" y="50" width="10" height="35" fill="#FFCC00" rx="2"/>
+  <ellipse cx="75" cy="47" rx="10" ry="14" fill="#FF6600"/>
+  <ellipse cx="75" cy="45" rx="6" ry="8" fill="#FFCC00"/>
+  <!-- Lions (simplified triangular shapes) -->
+  <polygon points="50,95 35,110 65,110" fill="#FFCC00"/>
+  <polygon points="100,95 85,110 115,110" fill="#FFCC00"/>
+  <!-- Text below emblem -->
+  <text x="75" y="132" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#0C712E" text-anchor="middle">ENUGU STATE</text>
+  <!-- Ministry name -->
+  <text x="300" y="40" font-family="Arial, sans-serif" font-size="15" font-weight="bold" fill="#0C712E" text-anchor="middle">ENUGU STATE</text>
+  <text x="300" y="62" font-family="Arial, sans-serif" font-size="13" fill="#333333" text-anchor="middle">Ministry of Agriculture</text>
+  <text x="300" y="82" font-family="Arial, sans-serif" font-size="13" fill="#333333" text-anchor="middle">&amp; Agro-Industrialization</text>
+  <line x1="155" y1="95" x2="450" y2="95" stroke="#6DAB3C" stroke-width="2"/>
+  <text x="300" y="115" font-family="Arial, sans-serif" font-size="11" fill="#6DAB3C" text-anchor="middle" font-style="italic">Tomorrow is Here</text>
+</svg>

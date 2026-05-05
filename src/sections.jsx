@@ -456,37 +456,37 @@ const PRESS_PARTNERS = [
   {
     name: 'Nigerian Export Promotion Council',
     short: 'NEPC',
-    logo: '/assets/partners/nepc.png',
+    logo: '/assets/partners/nepc.svg',
     acro: true,
   },
   {
     name: 'Union Bank',
     short: 'Union Bank',
-    logo: '/assets/partners/union-bank.png',
+    logo: '/assets/partners/union-bank.svg',
     acro: false,
   },
   {
     name: 'Ministry of Agriculture & Agro-Industrialization, Enugu State',
     short: 'Enugu Agro Ministry',
-    logo: null,
+    logo: '/assets/partners/enugu-agro.svg',
     acro: false,
   },
   {
     name: 'Vanguard',
     short: 'Vanguard',
-    logo: '/assets/partners/vanguard.png',
+    logo: '/assets/partners/vanguard.svg',
     acro: false,
   },
   {
     name: 'BusinessDay',
     short: 'BusinessDay',
-    logo: '/assets/partners/businessday.png',
+    logo: '/assets/partners/businessday.svg',
     acro: false,
   },
   {
     name: 'Channels TV',
     short: 'Channels TV',
-    logo: '/assets/partners/channels.png',
+    logo: '/assets/partners/channels.svg',
     acro: false,
   },
 ]
@@ -496,7 +496,7 @@ export function Press() {
     <section className="press">
       <div className="row">
         <span className="label">— Featured / Partnered with</span>
-        <div className="partners" style={{ gridTemplateColumns: 'repeat(6, 1fr)' }}>
+        <div className="partners">
           {PRESS_PARTNERS.map((p) => (
             <PartnerLogo key={p.name} partner={p} />
           ))}
