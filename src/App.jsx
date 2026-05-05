@@ -4,7 +4,7 @@ import { BookingForm } from './BookingForm'
 import { TweaksPanel, TweakSection, TweakRadio, useTweaks } from './TweaksPanel'
 
 const TWEAK_DEFAULTS = {
-  accent: 'citrus',
+  accent: 'aqua',
 }
 
 export default function App() {
@@ -52,7 +52,7 @@ export default function App() {
     }, 50)
   }
 
-  function handleBookSpeaking(topic) {
+  function handleBookSpeaking() {
     setPickedSession('speaking')
     setTimeout(() => {
       document.getElementById('book')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -106,16 +106,6 @@ export default function App() {
                 <span className="chip">09:00–17:00 WAT</span>
                 <span className="chip">Reply ≤ 48h</span>
               </div>
-            </div>
-            <div className="booking-aside-meta">
-              <b>Where I'm based</b>
-              Enugu, Nigeria · Lagos satellite<br />
-              Will travel for retainer engagements<br />
-              <br />
-              <b>What you'll get back</b>
-              A reply (yes / no / referral)<br />
-              A calendar link if it's a fit<br />
-              An invoice within 24h of confirm
             </div>
           </div>
           <BookingForm pickedSession={pickedSession} onPickSession={setPickedSession} />

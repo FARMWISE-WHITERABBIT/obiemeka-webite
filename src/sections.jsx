@@ -49,7 +49,7 @@ export function Nav({ onNav, onPaperSection }) {
   return (
     <header className={`nav ${solid ? 'solid' : ''} ${onPaperSection ? 'on-paper' : ''}`}>
       <div className="left">
-        <img className="mono-mark" src="/assets/logo-wordmark.png" alt="Obi Emeka" />
+        <img className="mono-mark" src="/assets/monogram.png" alt="Obi Emeka" />
       </div>
       <nav>
         <ul>
@@ -92,11 +92,10 @@ export function Hero({ onNav }) {
 
       <div className="hero-bottom">
         <p className="hero-bio">
-          <b>Founder, CEO &amp; agri-tech operator</b> building the
-          infrastructure that connects African agriculture to global
-          markets — from 20-hectare cocoa plantations in Enugu to
-          export-compliance software shipping in five regulatory
-          regimes.
+          Founder, CEO &amp; agri-tech operator building WhiteRabbit Agro,
+          OriginTrace and FarmWise — three platforms building the compliance,
+          traceability, and farm digitization infrastructure that connects
+          African agriculture to global markets.
         </p>
         <div className="hero-ctas">
           <button className="btn btn-primary" onClick={() => onNav('book')}>
@@ -194,9 +193,20 @@ export function About() {
 
       <div className="about">
         <div className="about-portrait">
-          <div className="portrait-canvas" />
-          <div className="portrait-figure"><PortraitFigure /></div>
-          <span className="portrait-stamp">PORTRAIT · DRAG TO REPLACE</span>
+          <img
+            src="/assets/obi-emeka-portrait.jpeg"
+            alt="Obi Emeka"
+            style={{
+              position: 'absolute', inset: 0,
+              width: '100%', height: '100%',
+              objectFit: 'cover', objectPosition: 'center top',
+            }}
+          />
+          <div style={{
+            position: 'absolute', inset: 0,
+            background: 'linear-gradient(to top, rgba(10,10,10,0.55) 0%, transparent 55%)',
+            zIndex: 1,
+          }} />
           <div className="portrait-meta">
             <span className="ph-lab">— OE / 2026</span>
             <span className="ph-name">Obi Emeka, CEO</span>
@@ -271,7 +281,7 @@ const VENTURES = [
         { n: '20+ ha', l: 'Cocoa under development' },
         { n: '5–7yr',  l: 'Investor horizon' },
       ],
-      url: '#',
+      url: 'https://whiterabbitagro.com/',
       urlLabel: 'whiterabbitagro.com',
     },
   },
@@ -305,8 +315,8 @@ const VENTURES = [
         { n: 'GPS',        l: 'Plot-level mapping' },
         { n: 'Plot-level', l: 'Verified farm records' },
       ],
-      url: '#',
-      urlLabel: 'farmwise.africa',
+      url: 'https://farmwise.whiterabbitagro.com/',
+      urlLabel: 'farmwise.whiterabbitagro.com',
     },
   },
 ]
@@ -720,7 +730,7 @@ export function Footer({ onNav }) {
 
         <div className="foot-grid">
           <div className="foot-col foot-id">
-            <img src="/assets/logo-wordmark-inverse.png" alt="Obi Emeka" />
+            <img src="/assets/monogram.png" alt="Obi Emeka" style={{ filter: 'invert(1)', height: '42px', width: 'auto' }} />
             <p style={{ color: 'rgba(246,244,239,0.7)', maxWidth: '32ch' }}>
               Founder &amp; CEO, WhiteRabbit Agro. Building OriginTrace and
               FarmWise. Based in Enugu, working everywhere African
@@ -763,7 +773,7 @@ export function Footer({ onNav }) {
             <h4>Office</h4>
             <ul>
               <li><a href="#">Enugu, Nigeria</a></li>
-              <li><a href="#">Lagos satellite</a></li>
+              <li><a href="#">Lagos &amp; Abuja satellites</a></li>
               <li><a href="#">Remote, by appt</a></li>
             </ul>
           </div>

@@ -216,7 +216,6 @@ export function BookingForm({ pickedSession, onPickSession }) {
       )}
 
       <div className="form-actions">
-        <span className="left-meta">Replies within 48h, on weekdays</span>
         <button className="btn btn-primary" type="submit" disabled={status === 'loading'}
                 style={{ opacity: status === 'loading' ? 0.7 : 1 }}>
           {status === 'loading' ? 'Sending…' : 'Send brief'} <span className="arrow" />
