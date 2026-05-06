@@ -600,7 +600,7 @@ body.accent-green { --accent: #3DAE7A;       --accent-ink: var(--ink);   }
 .press .partners {
   flex: 1;
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: var(--s-4);
   align-items: center;
 }
