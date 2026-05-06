@@ -884,16 +884,13 @@ export function Footer({ onNav }) {
     <footer className="site-foot">
       <div className="inner">
 
-        {/* Logo + tagline: logo is free of any grid constraint here */}
-        <div className="foot-head">
-          <img className="foot-logo" src="/assets/logo-wordmark-inverse.png" alt="Obi Emeka" />
-          <h2 className="foot-display">
-            Let's build the <em>rails</em>.
-          </h2>
-        </div>
+        <h2 className="foot-display">
+          Let's build the <em>rails</em>.
+        </h2>
 
         <div className="foot-grid">
           <div className="foot-col foot-id">
+            <img className="foot-logo" src="/assets/logo-wordmark-inverse.png" alt="Obi Emeka" />
             <p>
               Founder &amp; CEO, WhiteRabbit Agro. Building OriginTrace and
               FarmWise. Based in Enugu, working everywhere African
