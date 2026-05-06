@@ -1034,15 +1034,33 @@ footer.site-foot {
   margin-top: 0;
 }
 footer .inner { max-width: 1440px; margin: 0 auto; }
+
+/* ── Logo + tagline header: logo lives here, outside any grid cell ── */
+.foot-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-6);
+  padding-bottom: var(--s-7);
+  border-bottom: 1px solid var(--hairline-inverse);
+  margin-bottom: var(--s-7);
+}
+.foot-logo {
+  display: block;
+  width: auto;
+  height: auto;
+  max-height: 200px;
+  max-width: none;      /* override global img { max-width: 100% } */
+}
+
 .foot-display {
   font-family: var(--font-display);
   font-weight: 800;
   font-size: clamp(72px, 12vw, 200px);
   line-height: 0.85;
   letter-spacing: -0.05em;
-  margin: 0 0 var(--s-7);
-  padding-bottom: var(--s-7);
-  border-bottom: 1px solid var(--hairline-inverse);
+  margin: 0;
+  padding: 0;
+  border: none;
   max-width: 14ch;
 }
 .foot-display em { font-style: italic; color: var(--accent); font-weight: 800; }
@@ -1050,7 +1068,7 @@ footer .inner { max-width: 1440px; margin: 0 auto; }
 
 .foot-grid {
   display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr;
   gap: var(--s-6);
   align-items: start;
 }
@@ -1069,7 +1087,6 @@ footer .inner { max-width: 1440px; margin: 0 auto; }
 .foot-id {
   display: flex; flex-direction: column; gap: var(--s-4);
 }
-.foot-id img { height: 72px; width: auto; display: block; }
 .foot-id .tag {
   font: var(--mono); font-size: 11px; color: rgba(246,244,239,0.55);
   letter-spacing: 0.12em; line-height: 1.6;
@@ -1180,11 +1197,12 @@ footer .inner { max-width: 1440px; margin: 0 auto; }
   .social .sicon { width: 28px; height: 28px; }
   .social .sname { font-size: 16px; }
   /* Footer */
-  .foot-display { font-size: clamp(44px, 13vw, 96px); margin-bottom: var(--s-5); padding-bottom: var(--s-5); }
+  .foot-head { gap: var(--s-4); padding-bottom: var(--s-5); margin-bottom: var(--s-5); }
+  .foot-logo { max-height: 120px; }
+  .foot-display { font-size: clamp(44px, 13vw, 96px); }
   .foot-grid { grid-template-columns: 1fr; }
   .foot-grid .foot-col:not(:first-child) { display: none; }
   .foot-bottom { flex-direction: column; gap: var(--s-2); align-items: flex-start; }
-  .foot-id img { height: 56px; }
 }
 @media (max-width: 480px) {
   .hero-name h1 { font-size: clamp(96px, 28vw, 200px); }

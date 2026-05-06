@@ -883,14 +883,18 @@ export function Footer({ onNav }) {
   return (
     <footer className="site-foot">
       <div className="inner">
-        <h2 className="foot-display">
-          Let's build the <em>rails</em>.
-        </h2>
+
+        {/* Logo + tagline: logo is free of any grid constraint here */}
+        <div className="foot-head">
+          <img className="foot-logo" src="/assets/logo-wordmark-inverse.png" alt="Obi Emeka" />
+          <h2 className="foot-display">
+            Let's build the <em>rails</em>.
+          </h2>
+        </div>
 
         <div className="foot-grid">
           <div className="foot-col foot-id">
-            <img src="/assets/logo-wordmark-inverse.png" alt="Obi Emeka" />
-            <p style={{ color: 'rgba(246,244,239,0.7)', maxWidth: '32ch' }}>
+            <p>
               Founder &amp; CEO, WhiteRabbit Agro. Building OriginTrace and
               FarmWise. Based in Enugu, working everywhere African
               agriculture ships.
@@ -914,9 +918,9 @@ export function Footer({ onNav }) {
           <div className="foot-col">
             <h4>Ventures</h4>
             <ul>
-              <li><a href="#">WhiteRabbit Agro</a></li>
+              <li><a href="https://whiterabbitagro.com/" target="_blank" rel="noreferrer">WhiteRabbit Agro</a></li>
               <li><a href="https://origintrace.trade" target="_blank" rel="noreferrer">OriginTrace</a></li>
-              <li><a href="#">FarmWise</a></li>
+              <li><a href="https://farmwise.whiterabbitagro.com/" target="_blank" rel="noreferrer">FarmWise</a></li>
             </ul>
           </div>
           <div className="foot-col">
