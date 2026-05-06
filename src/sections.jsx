@@ -65,7 +65,7 @@ export function Nav({ onNav, onPaperSection }) {
         <div className="left">
           <img className="mono-mark" src="/assets/monogram.png" alt="Obi Emeka" />
         </div>
-        <nav>
+        <nav aria-label="Main navigation">
           <ul>
             {items.map((it) => (
               <li key={it.id}>
@@ -215,7 +215,7 @@ function PortraitFigure() {
 export function About() {
   const ref = useReveal()
   return (
-    <section className="section" id="about">
+    <section className="section" id="about" aria-label="About Obi Emeka">
       <div className="section-head reveal" ref={ref}>
         <div>
           <span className="lab">— 01 · About</span>
@@ -238,7 +238,7 @@ export function About() {
         <div className="about-portrait">
           <img
             src="/assets/obi-emeka-portrait.jpeg"
-            alt="Obi Emeka"
+            alt="Obi Emeka — Nigerian agri-tech founder and CEO of WhiteRabbit Agro, photographed in 2026"
             style={{
               position: 'absolute', inset: 0,
               width: '100%', height: '100%',
@@ -367,7 +367,7 @@ const VENTURES = [
 export function Ventures() {
   const [open, setOpen] = useState('origintrace')
   return (
-    <section className="ventures-section" id="ventures">
+    <section className="ventures-section" id="ventures" aria-label="Ventures and companies">
       <div className="section">
         <div className="section-head">
           <div>
@@ -557,7 +557,7 @@ export function Expertise() {
   ]
 
   return (
-    <section className="section" id="expertise">
+    <section className="section" id="expertise" aria-label="Areas of expertise">
       <div className="section-head">
         <div>
           <span className="lab">— 03 · Expertise</span>
@@ -622,7 +622,7 @@ export function Speaking({ onBookSpeaking }) {
   ]
 
   return (
-    <section className="section" id="speaking" style={{ borderTop: '1px solid var(--hairline-strong)' }}>
+    <section className="section" id="speaking" aria-label="Speaking topics and engagements" style={{ borderTop: '1px solid var(--hairline-strong)' }}>
       <div className="section-head">
         <div>
           <span className="lab">— 04 · Speaking</span>
