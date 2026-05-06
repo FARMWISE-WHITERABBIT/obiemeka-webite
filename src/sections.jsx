@@ -528,17 +528,12 @@ function PartnerLogo({ partner }) {
           src={partner.logo}
           alt={partner.short}
           onError={() => setImgFailed(true)}
-          style={{ maxHeight: '64px', maxWidth: '100%', objectFit: 'contain',
-                   filter: 'grayscale(1) brightness(0.4)', opacity: 0.7,
-                   transition: 'opacity .25s ease, filter .25s ease' }}
-          onMouseOver={(e) => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.filter = 'none'; }}
-          onMouseOut={(e) => { e.currentTarget.style.opacity = '0.7'; e.currentTarget.style.filter = 'grayscale(1) brightness(0.4)'; }}
         />
       </span>
     )
   }
   return (
-    <span className={`partner ${partner.acro ? 'acro' : ''}`}>{partner.short}</span>
+    <span className="partner partner-text">{partner.short}</span>
   )
 }
 
