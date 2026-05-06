@@ -625,7 +625,7 @@ export function Speaking({ onBookSpeaking }) {
     <section className="section" id="speaking" style={{ borderTop: '1px solid var(--hairline-strong)' }}>
       <div className="section-head">
         <div>
-          <span className="lab">— 05 · Speaking</span>
+          <span className="lab">— 04 · Speaking</span>
           <h2>
             Book Obi for a<br />
             <em>talk</em>, panel<br />
@@ -639,20 +639,17 @@ export function Speaking({ onBookSpeaking }) {
           conference or cooperative AGM.
         </p>
       </div>
-      <div className="expertise-grid">
+      <div className="speaking-topics">
         {topics.map((it) => (
-          <div className="expertise" key={it.n} onClick={() => onBookSpeaking(it.h)} style={{ cursor: 'pointer' }}>
-            <span className="e-num">— {it.n}</span>
-            <div>
+          <div className="speak-topic" key={it.n} onClick={() => onBookSpeaking(it.h)}>
+            <span className="st-num">{it.n}</span>
+            <div className="st-content">
               <h3>{it.h}</h3>
               <p>{it.p}</p>
             </div>
-            <span className="e-arrow" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 22 22" fill="none">
-                <path d="M7 11h8M11 7l4 4-4 4" stroke="currentColor" strokeWidth="1.7"
-                      strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </span>
+            <button className="st-cta" onClick={(e) => { e.stopPropagation(); onBookSpeaking(it.h) }}>
+              Book this topic
+            </button>
           </div>
         ))}
       </div>
@@ -724,7 +721,7 @@ export function Packages({ onPick }) {
       <div className="section">
         <div className="section-head">
           <div>
-            <span className="lab">— 04 · Engagements</span>
+            <span className="lab">— 05 · Engagements</span>
             <h2>
               Three ways<br />
               to <em>work together</em>.
