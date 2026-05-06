@@ -150,7 +150,7 @@ export function Hero({ onNav }) {
         </div>
         <div className="hero-quick">
           <b>The work</b>
-          Cocoa · Cashew · Sesame<br />
+          Commercial plantation development · Herbs &amp; Spices<br />
           EUDR / UK / US / CN / UAE<br />
           B2B SaaS · Agro real estate
         </div>
@@ -838,9 +838,9 @@ export function Social() {
           </h2>
         </div>
         <p className="lede">
-          Notes from the field — what's working in cocoa right now, where
-          EUDR is biting, what investors are asking. Pick the channel that
-          matches how you read.
+          Notes from the field — what's working in agriculture right now,
+          global trade compliance is changing, what investors are experiencing.
+          Pick the channel that matches how you interact online. Connect with me.
         </p>
       </div>
       <div className="social-grid">
