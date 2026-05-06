@@ -583,28 +583,59 @@ body.accent-green { --accent: #3DAE7A;       --accent-ink: var(--ink);   }
 /* ===== PRESS / PARTNERS STRIP ===== */
 .press {
   background: var(--bone);
-  padding: var(--s-7) var(--s-7);
+  padding: var(--s-6) 0 var(--s-7);
   border-top: 1px solid var(--hairline-strong);
   border-bottom: 1px solid var(--hairline-strong);
+  overflow: hidden;
 }
-.press .row {
-  max-width: 1440px; margin: 0 auto;
-  display: flex; align-items: center; justify-content: space-between;
-  gap: var(--s-5);
-}
-.press .label {
+.press-label {
   font: var(--mono); font-size: 11px; letter-spacing: 0.16em;
   color: var(--muted); text-transform: uppercase;
-  flex: 0 0 auto;
+  text-align: center;
+  margin: 0 0 var(--s-5);
 }
-.press .partners {
-  flex: 1;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--s-4);
+.press-marquee {
+  position: relative;
+  overflow: hidden;
+}
+.press-marquee::before,
+.press-marquee::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 120px;
+  z-index: 2;
+  pointer-events: none;
+}
+.press-marquee::before {
+  left: 0;
+  background: linear-gradient(to right, var(--bone) 0%, transparent 100%);
+}
+.press-marquee::after {
+  right: 0;
+  background: linear-gradient(to left, var(--bone) 0%, transparent 100%);
+}
+.press-track {
+  display: flex;
   align-items: center;
+  gap: 0;
+  animation: press-scroll 36s linear infinite;
+  width: max-content;
+}
+.press-track:hover { animation-play-state: paused; }
+@keyframes press-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 .press .partner {
+  flex: 0 0 auto;
+  width: 25vw;
+  max-width: 280px;
+  min-width: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--s-3) var(--s-5);
   font: 600 16px/1.05 var(--font-display);
   letter-spacing: -0.005em;
   color: var(--ink);
@@ -612,10 +643,7 @@ body.accent-green { --accent: #3DAE7A;       --accent-ink: var(--ink);   }
   transition: opacity .2s ease;
   text-align: center;
   white-space: nowrap;
-  font-feature-settings: "ss01";
 }
-.press .partner:hover { opacity: 1; }
-.press .partner.acro { font: 700 14px/1 var(--font-mono); letter-spacing: 0.08em; }
 
 /* ===== EXPERTISE ===== */
 .expertise-grid {
@@ -1122,7 +1150,6 @@ footer .inner { max-width: 1440px; margin: 0 auto; }
   .booking-side { position: static; }
   .social-grid { grid-template-columns: repeat(3, 1fr); }
   .foot-grid { grid-template-columns: 1fr 1fr; }
-  .press .partners { grid-template-columns: repeat(3, 1fr); }
   .section-head { grid-template-columns: 1fr 1.6fr; }
 }
 @media (max-width: 720px) {
@@ -1157,10 +1184,8 @@ footer .inner { max-width: 1440px; margin: 0 auto; }
   .venture .v-arrow { width: 44px; height: 44px; }
   .venture .v-meta { grid-column: auto; }
   .venture:hover { padding-left: 0; padding-right: 0; }
-  /* Press */
-  .press { padding: var(--s-5) var(--s-4); }
-  .press .row { flex-direction: column; align-items: flex-start; gap: var(--s-4); }
-  .press .partners { grid-template-columns: repeat(3, 1fr); width: 100%; }
+  /* Press — marquee shrinks logos on mobile to show ~2 at a time */
+  .press .partner { width: 50vw; min-width: 120px; }
   /* Expertise */
   .expertise { grid-template-columns: 40px 1fr auto; padding: var(--s-5) var(--s-3); }
   /* Speaking */

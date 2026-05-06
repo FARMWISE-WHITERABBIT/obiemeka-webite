@@ -462,7 +462,7 @@ const PRESS_PARTNERS = [
   {
     name: 'Union Bank',
     short: 'Union Bank',
-    logo: '/assets/partners/union-bank-nigeria4363.logowik.com.webp',
+    logo: '/assets/partners/union-bank.png',
     acro: false,
   },
   {
@@ -486,7 +486,7 @@ const PRESS_PARTNERS = [
   {
     name: 'Channels TV',
     short: 'Channels TV',
-    logo: '/assets/partners/Channels_TV.jpg',
+    logo: '/assets/partners/Channels_TV.png',
     acro: false,
   },
   {
@@ -504,13 +504,14 @@ const PRESS_PARTNERS = [
 ]
 
 export function Press() {
+  const doubled = [...PRESS_PARTNERS, ...PRESS_PARTNERS]
   return (
     <section className="press">
-      <div className="row">
-        <span className="label">— Featured / Partnered with</span>
-        <div className="partners">
-          {PRESS_PARTNERS.map((p) => (
-            <PartnerLogo key={p.name} partner={p} />
+      <p className="press-label">— Featured &amp; Partnered with</p>
+      <div className="press-marquee">
+        <div className="press-track">
+          {doubled.map((p, i) => (
+            <PartnerLogo key={`${p.name}-${i}`} partner={p} />
           ))}
         </div>
       </div>
@@ -522,16 +523,16 @@ function PartnerLogo({ partner }) {
   const [imgFailed, setImgFailed] = React.useState(false)
   if (partner.logo && !imgFailed) {
     return (
-      <span className={`partner ${partner.acro ? 'acro' : ''}`} title={partner.name}>
+      <span className="partner" title={partner.name}>
         <img
           src={partner.logo}
           alt={partner.short}
           onError={() => setImgFailed(true)}
-          style={{ maxHeight: '28px', maxWidth: '100%', objectFit: 'contain',
-                   filter: 'grayscale(1) contrast(0.7)', opacity: 0.65,
-                   transition: 'opacity .2s ease, filter .2s ease' }}
+          style={{ maxHeight: '64px', maxWidth: '100%', objectFit: 'contain',
+                   filter: 'grayscale(1) brightness(0.4)', opacity: 0.7,
+                   transition: 'opacity .25s ease, filter .25s ease' }}
           onMouseOver={(e) => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.filter = 'none'; }}
-          onMouseOut={(e) => { e.currentTarget.style.opacity = '0.65'; e.currentTarget.style.filter = 'grayscale(1) contrast(0.7)'; }}
+          onMouseOut={(e) => { e.currentTarget.style.opacity = '0.7'; e.currentTarget.style.filter = 'grayscale(1) brightness(0.4)'; }}
         />
       </span>
     )
