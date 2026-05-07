@@ -65,8 +65,8 @@ export default function App() {
       <Hero onNav={handleNav} />
       <StatsBar />
       <About />
-      <Ventures />
       <Press />
+      <Ventures />
       <Expertise />
       <Speaking onBookSpeaking={handleBookSpeaking} />
       <Packages onPick={handlePackagePick} />
