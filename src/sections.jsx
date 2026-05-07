@@ -677,7 +677,6 @@ const PACKAGES = [
   {
     id: 'discovery',
     num: '01',
-    tag: 'Paid entry · filters serious buyers',
     name: 'Discovery Call',
     price: '₦150,000',
     intl: '$100 USD',
@@ -695,7 +694,6 @@ const PACKAGES = [
   {
     id: 'compliance',
     num: '02',
-    tag: 'Export compliance specialist tier',
     name: 'Compliance Audit Session',
     price: '₦400,000',
     intl: '$265 USD',
@@ -731,7 +729,6 @@ const PACKAGES = [
   {
     id: 'investment',
     num: '04',
-    tag: 'WhiteRabbit Agro linked · diaspora investors',
     name: 'Agri-Investment Advisory Session',
     price: '₦600,000',
     intl: '$400 USD',
@@ -745,12 +742,10 @@ const PACKAGES = [
       'Introductions to operators or verified land agents if appropriate',
       '30-day follow-up access',
     ],
-    note: 'Obi discloses upfront that he operates WhiteRabbit Agro — advisory is objective regardless',
   },
   {
     id: 'retainer',
     num: '05',
-    tag: '2 slots only · 3-month minimum',
     name: 'Advisory Retainer',
     price: '₦850,000',
     intl: '$565 USD',
@@ -793,7 +788,7 @@ export function Packages({ onPick }) {
                  onClick={() => onPick(p.id)}>
               <div className="pkg-head">
                 <span className="pkg-num">— {p.num} / 05</span>
-                <span className="pkg-tag">{p.tag}</span>
+                {p.tag && <span className="pkg-tag">{p.tag}</span>}
               </div>
               <h3 className="pkg-name">{p.name}</h3>
               <div className="pkg-price">

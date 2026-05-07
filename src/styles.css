@@ -774,13 +774,22 @@ body.accent-green { --accent: #3DAE7A;       --accent-ink: var(--ink);   }
 .packages-section .section-head .lede b { color: var(--paper); }
 
 .packages {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
   gap: var(--s-4);
   margin-top: var(--s-6);
+  padding-bottom: var(--s-3);
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
 }
+.packages::-webkit-scrollbar { height: 4px; }
+.packages::-webkit-scrollbar-track { background: rgba(246,244,239,0.06); border-radius: 2px; }
+.packages::-webkit-scrollbar-thumb { background: rgba(246,244,239,0.2); border-radius: 2px; }
 .pkg {
   position: relative;
+  flex: 0 0 300px;
+  scroll-snap-align: start;
   background: rgba(246,244,239,0.04);
   border: 1px solid var(--hairline-inverse);
   border-radius: var(--r-3);
@@ -1158,7 +1167,7 @@ footer .inner { max-width: 1440px; margin: 0 auto; }
   .venture .v-meta { grid-column: 1 / -1; }
   .expertise-grid { grid-template-columns: 1fr; }
   .expertise:nth-child(odd) { border-right: 0; }
-  .packages { grid-template-columns: 1fr; }
+  .pkg { flex: 0 0 280px; }
   .booking { grid-template-columns: 1fr; }
   .booking-side { position: static; }
   .social-grid { grid-template-columns: repeat(3, 1fr); }
