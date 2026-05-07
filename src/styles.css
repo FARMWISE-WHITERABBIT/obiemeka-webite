@@ -783,6 +783,7 @@ body.accent-green { --accent: #3DAE7A;       --accent-ink: var(--ink);   }
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
 }
+.packages::after { content: ''; flex: 0 0 var(--s-5); }
 .packages::-webkit-scrollbar { height: 4px; }
 .packages::-webkit-scrollbar-track { background: rgba(246,244,239,0.06); border-radius: 2px; }
 .packages::-webkit-scrollbar-thumb { background: rgba(246,244,239,0.2); border-radius: 2px; }
@@ -834,6 +835,11 @@ body.accent-green { --accent: #3DAE7A;       --accent-ink: var(--ink);   }
 .pkg.featured .pkg-price .per { color: rgba(10,10,10,0.55); }
 .pkg-desc { font: 400 15px/1.55 var(--font-display); color: rgba(246,244,239,0.7); margin: 0; }
 .pkg.featured .pkg-desc { color: rgba(10,10,10,0.7); }
+.pkg-intl { font: var(--mono); font-size: 11px; letter-spacing: 0.1em; color: rgba(246,244,239,0.4); margin-top: -12px; }
+.pkg.featured .pkg-intl { color: rgba(10,10,10,0.45); }
+.pkg-note { font: 400 12px/1.5 var(--font-display); color: rgba(246,244,239,0.45); margin: 0; border-top: 1px solid rgba(246,244,239,0.1); padding-top: var(--s-3); }
+.pkg.featured .pkg-note { color: rgba(10,10,10,0.5); border-top-color: rgba(10,10,10,0.1); }
+.pkg-cta { cursor: pointer; }
 
 .pkg-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
 .pkg-list li {
@@ -1217,10 +1223,17 @@ footer .inner { max-width: 1440px; margin: 0 auto; }
   .st-content h3 { font-size: 22px; }
   .st-cta { display: none; }
   /* Packages */
-  .packages { margin-top: var(--s-4); gap: var(--s-3); }
+  .packages {
+    margin-top: var(--s-4);
+    gap: var(--s-3);
+    margin-inline: calc(-1 * var(--s-4));
+    padding-inline: var(--s-4);
+    scroll-padding-left: var(--s-4);
+  }
   .pkg { padding: var(--s-5); }
   .pkg-name { font-size: 26px; }
   .pkg-price .pp { font-size: 30px; }
+  .pkg-cta { width: 100%; box-sizing: border-box; }
   /* Booking */
   .booking { padding-top: var(--s-4); gap: var(--s-5); }
   .booking-side .num-card { padding: var(--s-5); }
@@ -1249,4 +1262,8 @@ footer .inner { max-width: 1440px; margin: 0 auto; }
   .about-credentials { grid-template-columns: 1fr; }
   .expertise { grid-template-columns: 1fr; }
   .expertise .e-num { display: none; }
+  /* Packages — near-full-width cards on small phones, ~32px peek of next */
+  .pkg { flex: 0 0 calc(100vw - 64px); }
+  .pkg-name { font-size: 22px; }
+  .pkg-price .pp { font-size: 26px; }
 }
