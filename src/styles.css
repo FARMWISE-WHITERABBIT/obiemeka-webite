@@ -1212,6 +1212,9 @@ footer .inner { max-width: 1440px; margin: 0 auto; }
   .venture .v-arrow { width: 44px; height: 44px; }
   .venture .v-meta { grid-column: auto; }
   .venture:hover { padding-left: 0; padding-right: 0; }
+  .venture-detail { grid-template-columns: 1fr; }
+  .venture-detail .vd-pad { grid-column: 1; }
+  .venture-detail .vd-grid { grid-template-columns: 1fr; gap: var(--s-5); }
   /* Press — marquee shrinks logos on mobile to show ~2 at a time */
   .press .partner { width: 50vw; min-width: 120px; }
   /* Expertise */
