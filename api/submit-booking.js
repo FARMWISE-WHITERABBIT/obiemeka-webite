@@ -2,10 +2,12 @@ import { createClient } from '@supabase/supabase-js'
 import { Resend } from 'resend'
 
 const SESSION_LABELS = {
-  discovery: 'Discovery Call — ₦50,000 · 60 min',
-  strategy:  'Strategy Session — ₦450,000 · 3 hrs cumulative',
-  retainer:  'Advisory Retainer — ₦400,000 / month',
-  speaking:  'Speaking Engagement — Quote on request',
+  discovery:  'Discovery Call — ₦150,000 · 45 min',
+  compliance: 'Compliance Audit Session — ₦400,000 · 2 hrs',
+  strategy:   'Export Strategy Session — ₦750,000 · 5 hrs cumulative',
+  investment: 'Agri-Investment Advisory Session — ₦600,000 · 3 hrs',
+  retainer:   'Advisory Retainer — ₦850,000 / month',
+  speaking:   'Speaking Engagement — Quote on request',
 }
 
 export default async function handler(req, res) {
