@@ -677,49 +677,94 @@ const PACKAGES = [
   {
     id: 'discovery',
     num: '01',
-    tag: '30 minutes',
+    tag: 'Paid entry · filters serious buyers',
     name: 'Discovery Call',
-    price: '₦50,000',
-    per: '· 30 min',
-    desc: 'A focused, paid intro call. Walk through your situation; leave with a frank assessment and direction — whether the next step is with me or someone else.',
+    price: '₦150,000',
+    intl: '$100 USD',
+    per: '· 45 min',
+    desc: 'A focused, paid intro call. Walk through your situation; leave with a frank assessment and 3 immediate written actions — whether the next step is with me or someone else.',
     items: [
-      '30-minute video or in-person call (Enugu)',
+      '45-minute video or in-person call (Enugu)',
       'Pre-read of any materials you share',
-      'Honest assessment of fit and approach',
-      'Short written follow-up with next steps',
+      'Honest fit assessment — does my expertise match the need',
+      'Directional framing of the problem',
+      'Written follow-up note with 3 immediate actions within 24hrs',
+    ],
+    note: 'One per organisation · Not credited toward a strategy session',
+  },
+  {
+    id: 'compliance',
+    num: '02',
+    tag: 'Export compliance specialist tier',
+    name: 'Compliance Audit Session',
+    price: '₦400,000',
+    intl: '$265 USD',
+    per: '· 2 hrs + written assessment',
+    desc: 'Live audit of your compliance position against one regulatory framework. Ends with a written gap assessment and prioritised 5-step remediation roadmap.',
+    items: [
+      'Pre-session intake questionnaire',
+      '2-hour live audit against one framework (EUDR, UK, US Lacey, China, or UAE)',
+      'Written compliance gap assessment within 48 hours',
+      'Prioritised 5-step remediation roadmap',
+      '30-day email follow-up access',
     ],
   },
   {
     id: 'strategy',
-    num: '02',
+    num: '03',
     tag: 'Most booked',
     featured: true,
-    name: 'Strategy Session',
-    price: '₦450,000',
+    name: 'Export Strategy Session',
+    price: '₦750,000',
+    intl: '$500 USD',
     per: '· 5 hrs cumulative',
-    desc: 'A deep, single-topic working engagement. Five cumulative hours, scheduled across one or more sittings, ending with a written, ranked plan.',
+    desc: 'The flagship engagement. Five cumulative working hours, a full written export strategy report, and a 14-day async follow-up window.',
     items: [
-      '5 hours cumulative working time (split as needed)',
+      '5 hours cumulative working time — split across sittings',
       'In-person in Enugu at no additional cost',
-      'Outside Enugu: client covers flight & accommodation',
-      'Pre-read review + written ranked next steps',
-      '14-day async follow-up window',
+      'Outside Enugu: client covers travel and accommodation',
+      'Full written export strategy report within 5 business days',
+      'Market selection, buyer profile, compliance pathway',
+      '14-day async follow-up via WhatsApp and email',
     ],
   },
   {
-    id: 'retainer',
-    num: '03',
-    tag: 'Limited slots',
-    name: 'Advisory Retainer',
-    price: '₦400,000',
-    per: '/ month',
-    desc: 'Ongoing advisory for founders, ministries, and operators who need a senior voice on tap.',
+    id: 'investment',
+    num: '04',
+    tag: 'WhiteRabbit Agro linked · diaspora investors',
+    name: 'Agri-Investment Advisory Session',
+    price: '₦600,000',
+    intl: '$400 USD',
+    per: '· 3 hrs + written brief',
+    desc: 'Structured advisory for investors evaluating Nigerian agri-land or commodity exposure. Includes a written investment brief and full conflict-of-interest disclosure.',
     items: [
-      'Two 60-minute sessions per month',
-      'Async access (Slack / WhatsApp / email)',
-      'Doc and deck review turnaround in 48h',
-      'Quarterly in-person if useful',
+      'Pre-session investor intake form',
+      '3-hour advisory session — video or in-person Enugu',
+      'Written investment brief: risk, returns, structure options, red flags',
+      'WhiteRabbit Agro plantation overview where relevant',
+      'Introductions to operators or verified land agents if appropriate',
+      '30-day follow-up access',
     ],
+    note: 'Obi discloses upfront that he operates WhiteRabbit Agro — advisory is objective regardless',
+  },
+  {
+    id: 'retainer',
+    num: '05',
+    tag: '2 slots only · 3-month minimum',
+    name: 'Advisory Retainer',
+    price: '₦850,000',
+    intl: '$565 USD',
+    per: '/ month',
+    desc: 'Ongoing senior advisory for founders, exporters and operators who need a senior voice on tap. Written application required — maximum 2 active clients.',
+    items: [
+      'Two 90-minute strategy sessions per month',
+      'Unlimited async access — WhatsApp, Slack, or email (24hr response)',
+      'Document and deck review with 48hr turnaround',
+      'Monthly written advisory note with priorities and recommendations',
+      'Quarterly in-person session in Enugu or client location',
+      'Network introductions where genuinely useful',
+    ],
+    note: 'Minimum 3 months · ₦2,550,000 total · invoiced monthly',
   },
 ]
 
@@ -731,14 +776,14 @@ export function Packages({ onPick }) {
           <div>
             <span className="lab">— 05 · Engagements</span>
             <h2>
-              Three ways<br />
+              Five ways<br />
               to <em>work together</em>.
             </h2>
           </div>
           <p className="lede">
-            Calibrated for the conversations I actually have — a focused intro call,
-            a single-problem strategy session, or a steady hand for
-            an ongoing engagement. <b>Pick the smallest one that fits.</b>
+            Calibrated for the conversations I actually have — a paid intro call,
+            a compliance audit, a full export strategy, an investor advisory, or
+            a steady hand for an ongoing engagement. <b>Pick the one that fits.</b>
           </p>
         </div>
 
@@ -747,7 +792,7 @@ export function Packages({ onPick }) {
             <div key={p.id} className={`pkg ${p.featured ? 'featured' : ''}`}
                  onClick={() => onPick(p.id)}>
               <div className="pkg-head">
-                <span className="pkg-num">— {p.num} / 03</span>
+                <span className="pkg-num">— {p.num} / 05</span>
                 <span className="pkg-tag">{p.tag}</span>
               </div>
               <h3 className="pkg-name">{p.name}</h3>
@@ -755,14 +800,18 @@ export function Packages({ onPick }) {
                 <span className="pp">{p.price}</span>
                 <span className="per">{p.per}</span>
               </div>
+              {p.intl && <div className="pkg-intl">{p.intl} · international</div>}
               <p className="pkg-desc">{p.desc}</p>
               <ul className="pkg-list">
                 {p.items.map((it, i) => <li key={i}>{it}</li>)}
               </ul>
+              {p.note && <p className="pkg-note">{p.note}</p>}
               <button className="pkg-cta"
                       onClick={(e) => { e.stopPropagation(); onPick(p.id) }}>
-                {p.id === 'discovery' ? 'Book the call →' :
-                 p.id === 'strategy'  ? 'Reserve a session →' :
+                {p.id === 'discovery'  ? 'Book the call →' :
+                 p.id === 'compliance' ? 'Book audit →' :
+                 p.id === 'strategy'   ? 'Reserve a session →' :
+                 p.id === 'investment' ? 'Book session →' :
                  'Apply for retainer →'}
               </button>
             </div>

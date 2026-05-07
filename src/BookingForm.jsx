@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react'
 
 export const SESSIONS = [
-  { id: 'discovery', name: 'Discovery Call',      price: '₦50,000 · 30 min' },
-  { id: 'strategy',  name: 'Strategy Session',    price: '₦450,000 · 5 hrs cumulative' },
-  { id: 'retainer',  name: 'Advisory Retainer',   price: '₦400,000 / month' },
-  { id: 'speaking',  name: 'Speaking Engagement', price: 'Quote on request' },
+  { id: 'discovery',  name: 'Discovery Call',                  price: '₦150,000 · 45 min' },
+  { id: 'compliance', name: 'Compliance Audit Session',         price: '₦400,000 · 2 hrs' },
+  { id: 'strategy',   name: 'Export Strategy Session',          price: '₦750,000 · 5 hrs cumulative' },
+  { id: 'investment', name: 'Agri-Investment Advisory Session', price: '₦600,000 · 3 hrs' },
+  { id: 'retainer',   name: 'Advisory Retainer',                price: '₦850,000 / month' },
+  { id: 'speaking',   name: 'Speaking Engagement',              price: 'Quote on request' },
 ]
 
 export const TOPICS = [
