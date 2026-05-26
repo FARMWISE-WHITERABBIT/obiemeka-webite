@@ -23,6 +23,8 @@ export const TOPICS = [
   "Other — I'll explain below",
 ]
 
+const REQUIRED_FIELDS = ['name', 'email', 'org', 'session', 'topic', 'challenge']
+
 const INITIAL = {
   name: '', email: '', org: '', role: '',
   session: 'discovery', topic: TOPICS[0],
@@ -37,15 +39,14 @@ export function BookingForm({ pickedSession, onPickSession }) {
   const [apiError, setApiError] = useState('')
 
   useEffect(() => {
-    if (pickedSession && pickedSession !== data.session) {
+    if (pickedSession) {
       setData((d) => ({ ...d, session: pickedSession }))
     }
   }, [pickedSession])
 
-  const required = ['name', 'email', 'org', 'session', 'topic', 'challenge']
   const progress = useMemo(() => {
-    const filled = required.filter((k) => String(data[k] || '').trim().length > 0).length
-    return Math.round((filled / required.length) * 100)
+    const filled = REQUIRED_FIELDS.filter((k) => String(data[k] || '').trim().length > 0).length
+    return Math.round((filled / REQUIRED_FIELDS.length) * 100)
   }, [data])
 
   function setField(k, v) {
@@ -104,8 +105,8 @@ export function BookingForm({ pickedSession, onPickSession }) {
         <h3>Got it. Talk soon.</h3>
         <p>
           A confirmation is on its way to <b>{data.email}</b>. Expect a reply
-          within 48 hours on weekdays. If you booked a Strategy Session, an
-          invoice and calendar invite follow in the same thread.
+          within 48 hours on weekdays. If you booked an Export Strategy Session,
+          an invoice and calendar invite follow in the same thread.
         </p>
         <div className="receipt">
           <div className="row"><span>Ref</span><span><b>{refNum}</b></span></div>
@@ -119,7 +120,7 @@ export function BookingForm({ pickedSession, onPickSession }) {
           <div className="row"><span>Status</span><span><b>Pending review</b></span></div>
         </div>
         <button className="btn btn-ink" style={{ alignSelf: 'flex-start' }}
-                onClick={() => { setStatus('idle'); setData({ ...INITIAL }) }}>
+                onClick={() => { setStatus('idle'); setData({ ...INITIAL, session: pickedSession || 'discovery' }) }}>
           Book another <span className="arrow" />
         </button>
       </div>
@@ -210,7 +211,7 @@ export function BookingForm({ pickedSession, onPickSession }) {
           border: '1px solid rgba(192,65,31,0.3)',
           borderRadius: 'var(--r-2)',
           color: 'var(--rust)',
-          font: 'var(--mono)',
+          fontFamily: 'var(--font-mono)',
           fontSize: '13px',
         }}>
           {apiError}
@@ -226,3 +227,4 @@ export function BookingForm({ pickedSession, onPickSession }) {
     </form>
   )
 }
+
