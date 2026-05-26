@@ -10,6 +10,17 @@ const SESSION_LABELS = {
   speaking:   'Speaking Engagement — Quote on request',
 }
 
+const VALID_SESSIONS = Object.keys(SESSION_LABELS)
+
+function escapeHtml(str) {
+  return String(str ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' })
@@ -17,17 +28,32 @@ export default async function handler(req, res) {
 
   // Parse body (Vercel passes it as a parsed object for JSON content-type)
   const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body
-  const { name, email, org, role, session, topic, challenge, timing } = body || {}
+
+  // Trim all string inputs
+  const name      = (body?.name      || '').trim()
+  const email     = (body?.email     || '').trim()
+  const org       = (body?.org       || '').trim()
+  const role      = (body?.role      || '').trim()
+  const session   = (body?.session   || '').trim()
+  const topic     = (body?.topic     || '').trim()
+  const challenge = (body?.challenge || '').trim()
+  const timing    = (body?.timing    || '').trim()
 
   // Server-side validation
   const missing = ['name', 'email', 'org', 'session', 'topic', 'challenge'].filter(
-    (k) => !body?.[k]?.trim()
+    (k) => !{ name, email, org, session, topic, challenge }[k]
   )
   if (missing.length) {
     return res.status(400).json({ error: `Missing fields: ${missing.join(', ')}` })
   }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return res.status(400).json({ error: 'Invalid email address' })
+  }
+  if (!VALID_SESSIONS.includes(session)) {
+    return res.status(400).json({ error: 'Invalid session type' })
+  }
+  if (challenge.length < 30) {
+    return res.status(400).json({ error: 'Please describe your challenge in a few sentences' })
   }
 
   const ref = 'OE-' + Math.floor(100000 + Math.random() * 900000)
@@ -89,13 +115,13 @@ export default async function handler(req, res) {
 function notificationHtml({ ref, name, email, org, role, session, topic, challenge, timing, submittedAt }) {
   const rows = [
     ['Ref',       ref],
-    ['Name',      name],
-    ['Email',     email],
-    ['Org',       org || '—'],
-    ['Role',      role || '—'],
-    ['Session',   SESSION_LABELS[session] ?? session],
-    ['Topic',     topic],
-    ['Timing',    timing || '—'],
+    ['Name',      escapeHtml(name)],
+    ['Email',     escapeHtml(email)],
+    ['Org',       escapeHtml(org) || '—'],
+    ['Role',      escapeHtml(role) || '—'],
+    ['Session',   escapeHtml(SESSION_LABELS[session] ?? session)],
+    ['Topic',     escapeHtml(topic)],
+    ['Timing',    escapeHtml(timing) || '—'],
     ['Submitted', submittedAt],
   ]
   return `<!DOCTYPE html>
@@ -131,11 +157,11 @@ function notificationHtml({ ref, name, email, org, role, session, topic, challen
         <p style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#6B6660;margin:0 0 12px;">
           — The challenge
         </p>
-        <p style="font-size:15px;line-height:1.6;color:#F6F4EF;margin:0;">${challenge.replace(/\n/g, '<br>')}</p>
+        <p style="font-size:15px;line-height:1.6;color:#F6F4EF;margin:0;">${escapeHtml(challenge).replace(/\n/g, '<br>')}</p>
       </div>
 
       <p style="font-size:13px;color:#6B6660;border-top:1px solid rgba(246,244,239,0.1);padding-top:24px;margin:0;">
-        Reply directly to <a href="mailto:${email}" style="color:#E8FF3A;">${email}</a>
+        Reply directly to <a href="mailto:${escapeHtml(email)}" style="color:#E8FF3A;">${escapeHtml(email)}</a>
       </p>
     </td></tr>
   </table>
@@ -144,7 +170,7 @@ function notificationHtml({ ref, name, email, org, role, session, topic, challen
 }
 
 function confirmationHtml({ ref, name, session, topic, timing }) {
-  const firstName = name.split(' ')[0]
+  const firstName = escapeHtml(name.split(' ')[0])
   return `<!DOCTYPE html>
 <html lang="en">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -169,9 +195,9 @@ function confirmationHtml({ ref, name, session, topic, timing }) {
                   color:rgba(246,244,239,0.5);margin:0 0 16px;">— Your booking receipt</p>
         ${[
           ['Ref',     ref],
-          ['Session', SESSION_LABELS[session] ?? session],
-          ['Topic',   topic],
-          ['Timing',  timing || '—'],
+          ['Session', escapeHtml(SESSION_LABELS[session] ?? session)],
+          ['Topic',   escapeHtml(topic)],
+          ['Timing',  escapeHtml(timing) || '—'],
           ['Status',  'Pending review'],
         ].map(([k, v]) => `
         <div style="display:flex;justify-content:space-between;padding:8px 0;
