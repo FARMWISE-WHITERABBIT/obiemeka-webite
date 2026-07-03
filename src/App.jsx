@@ -7,9 +7,18 @@ const TWEAK_DEFAULTS = {
   accent: 'green',
 }
 
+// Speaking-topic headings -> the matching option in BookingForm's TOPICS list
+const SPEAKING_TOPIC_MAP = {
+  'Export compliance & EUDR readiness': 'Speaking — Export compliance & EUDR',
+  'African agri-tech & investment': 'Speaking — African agri-tech & investment',
+  'Smallholder digitization': 'Speaking — Smallholder digitization',
+  'Agro real estate as an asset class': 'Speaking — Agro real estate',
+}
+
 export default function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS)
   const [pickedSession, setPickedSession] = useState(null)
+  const [pickedTopic, setPickedTopic] = useState(null)
   const [onPaper, setOnPaper] = useState(false)
 
   useEffect(() => {
@@ -27,7 +36,11 @@ export default function App() {
       const bg = getComputedStyle(section).backgroundColor
       const m = bg.match(/rgba?\(([^)]+)\)/)
       if (!m) { setOnPaper(true); return }
-      const [r, g, b] = m[1].split(',').map((x) => parseFloat(x))
+      const parts = m[1].split(',').map((x) => parseFloat(x))
+      const [r, g, b, a = 1] = parts
+      // Sections with no background (e.g. .section) report transparent — the
+      // page body itself is light, so treat "no color info" as light, not black.
+      if (a === 0) { setOnPaper(true); return }
       const lum = 0.299 * r + 0.587 * g + 0.114 * b
       setOnPaper(lum > 140)
     }
@@ -52,8 +65,11 @@ export default function App() {
     }, 50)
   }
 
-  function handleBookSpeaking() {
+  function handleBookSpeaking(heading) {
     setPickedSession('speaking')
+    if (heading && SPEAKING_TOPIC_MAP[heading]) {
+      setPickedTopic(SPEAKING_TOPIC_MAP[heading])
+    }
     setTimeout(() => {
       document.getElementById('book')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }, 50)
@@ -108,28 +124,30 @@ export default function App() {
               </div>
             </div>
           </div>
-          <BookingForm pickedSession={pickedSession} onPickSession={setPickedSession} />
+          <BookingForm pickedSession={pickedSession} onPickSession={setPickedSession} pickedTopic={pickedTopic} />
         </div>
       </section>
 
       <Social />
       <Footer onNav={handleNav} />
 
-      <TweaksPanel title="Tweaks">
-        <TweakSection label="Accent" subtitle="The one note in the system">
-          <TweakRadio
-            label="Accent color"
-            value={t.accent}
-            onChange={(v) => setTweak('accent', v)}
-            options={[
-              { value: 'green',  label: 'Green'  },
-              { value: 'aqua',   label: 'Aqua'   },
-              { value: 'citrus', label: 'Citrus' },
-              { value: 'rust',   label: 'Rust'   },
-            ]}
-          />
-        </TweakSection>
-      </TweaksPanel>
+      {import.meta.env.DEV && (
+        <TweaksPanel title="Tweaks">
+          <TweakSection label="Accent" subtitle="The one note in the system">
+            <TweakRadio
+              label="Accent color"
+              value={t.accent}
+              onChange={(v) => setTweak('accent', v)}
+              options={[
+                { value: 'green',  label: 'Green'  },
+                { value: 'aqua',   label: 'Aqua'   },
+                { value: 'citrus', label: 'Citrus' },
+                { value: 'rust',   label: 'Rust'   },
+              ]}
+            />
+          </TweakSection>
+        </TweaksPanel>
+      )}
     </>
   )
 }

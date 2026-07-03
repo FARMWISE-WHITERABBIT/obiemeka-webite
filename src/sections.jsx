@@ -985,9 +985,9 @@ export function Footer({ onNav }) {
           <div className="foot-col">
             <h4>Office</h4>
             <ul>
-              <li><a href="#">Enugu, Nigeria</a></li>
-              <li><a href="#">Lagos &amp; Abuja satellites</a></li>
-              <li><a href="#">Remote, by appt</a></li>
+              <li><span className="foot-static">Enugu, Nigeria</span></li>
+              <li><span className="foot-static">Lagos &amp; Abuja satellites</span></li>
+              <li><span className="foot-static">Remote, by appt</span></li>
             </ul>
           </div>
         </div>

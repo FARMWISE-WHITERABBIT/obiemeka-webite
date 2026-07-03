@@ -12,6 +12,14 @@ const SESSION_LABELS = {
 
 const VALID_SESSIONS = Object.keys(SESSION_LABELS)
 
+const MAX_LENGTHS = {
+  name: 200, email: 200, org: 200, role: 200,
+  topic: 200, timing: 200, challenge: 5000,
+}
+
+const EMAIL_RATE_LIMIT = { count: 3, windowMs: 60 * 60 * 1000 }   // 3 per email per hour
+const GLOBAL_RATE_LIMIT = { count: 20, windowMs: 10 * 60 * 1000 } // 20 total per 10 min
+
 function escapeHtml(str) {
   return String(str ?? '')
     .replace(/&/g, '&amp;')
@@ -27,7 +35,18 @@ export default async function handler(req, res) {
   }
 
   // Parse body (Vercel passes it as a parsed object for JSON content-type)
-  const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body
+  let body
+  try {
+    body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body
+  } catch {
+    return res.status(400).json({ error: 'Malformed request body' })
+  }
+
+  // Honeypot: a hidden field real users never fill in. Bots that auto-fill every
+  // input trip it — return a fake success so they don't retry with a smarter script.
+  if ((body?.nickname || '').trim()) {
+    return res.status(200).json({ ref: 'OE-' + Math.floor(100000 + Math.random() * 900000) })
+  }
 
   // Trim all string inputs
   const name      = (body?.name      || '').trim()
@@ -55,9 +74,17 @@ export default async function handler(req, res) {
   if (challenge.length < 30) {
     return res.status(400).json({ error: 'Please describe your challenge in a few sentences' })
   }
+  const tooLong = Object.entries(MAX_LENGTHS).find(
+    ([k, max]) => ({ name, email, org, role, topic, timing, challenge })[k]?.length > max
+  )
+  if (tooLong) {
+    return res.status(400).json({ error: `${tooLong[0]} is too long` })
+  }
 
-  const ref = 'OE-' + Math.floor(100000 + Math.random() * 900000)
-  const submittedAt = new Date().toUTCString()
+  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    console.error('Missing SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY env vars')
+    return res.status(500).json({ error: 'Could not save your request. Please try again.' })
+  }
 
   // ── Supabase ─────────────────────────────────────────────────────────────
   const supabase = createClient(
@@ -65,18 +92,49 @@ export default async function handler(req, res) {
     process.env.SUPABASE_SERVICE_ROLE_KEY
   )
 
-  const { error: dbError } = await supabase.from('bookings').insert({
-    ref_num:   ref,
-    name,
-    email,
-    org,
-    role:      role || null,
-    session,
-    topic,
-    challenge,
-    timing:    timing || 'Not specified',
-    status:    'pending',
-  })
+  // Rate limits: cap repeat submissions to the same email (stops using the form
+  // to spam an arbitrary victim) and total submissions site-wide (stops floods).
+  const emailWindowStart = new Date(Date.now() - EMAIL_RATE_LIMIT.windowMs).toISOString()
+  const { count: emailCount } = await supabase
+    .from('bookings')
+    .select('*', { count: 'exact', head: true })
+    .eq('email', email)
+    .gte('created_at', emailWindowStart)
+  if ((emailCount ?? 0) >= EMAIL_RATE_LIMIT.count) {
+    return res.status(429).json({ error: 'Too many requests for this email address. Please try again later.' })
+  }
+
+  const globalWindowStart = new Date(Date.now() - GLOBAL_RATE_LIMIT.windowMs).toISOString()
+  const { count: globalCount } = await supabase
+    .from('bookings')
+    .select('*', { count: 'exact', head: true })
+    .gte('created_at', globalWindowStart)
+  if ((globalCount ?? 0) >= GLOBAL_RATE_LIMIT.count) {
+    return res.status(429).json({ error: 'Too many requests right now. Please try again in a few minutes.' })
+  }
+
+  const submittedAt = new Date().toUTCString()
+
+  // ref_num is unique in the DB; regenerate and retry on the rare collision
+  // instead of hard-failing a valid submission.
+  let ref, dbError
+  for (let attempt = 0; attempt < 3; attempt++) {
+    ref = 'OE-' + Math.floor(100000 + Math.random() * 900000)
+    const { error } = await supabase.from('bookings').insert({
+      ref_num:   ref,
+      name,
+      email,
+      org,
+      role:      role || null,
+      session,
+      topic,
+      challenge,
+      timing:    timing || 'Not specified',
+      status:    'pending',
+    })
+    dbError = error
+    if (!dbError || dbError.code !== '23505') break
+  }
 
   if (dbError) {
     console.error('Supabase insert error:', dbError)
@@ -89,8 +147,7 @@ export default async function handler(req, res) {
     const fromAddr = process.env.EMAIL_FROM || 'onboarding@resend.dev'
     const notifyTo = process.env.NOTIFY_EMAIL || 'oe@obiemeka.com'
 
-    // Notification to Obi — runs first, don't await the second until this resolves
-    await Promise.allSettled([
+    const [notifyResult, confirmResult] = await Promise.allSettled([
       resend.emails.send({
         from:    `Obi Emeka Website <${fromAddr}>`,
         to:      notifyTo,
@@ -104,6 +161,12 @@ export default async function handler(req, res) {
         html:    confirmationHtml({ ref, name, session, topic, timing }),
       }),
     ])
+    if (notifyResult.status === 'rejected') {
+      console.error(`Notification email failed for booking ${ref}:`, notifyResult.reason)
+    }
+    if (confirmResult.status === 'rejected') {
+      console.error(`Confirmation email failed for booking ${ref}:`, confirmResult.reason)
+    }
   }
 
   return res.status(200).json({ ref })
