@@ -135,10 +135,11 @@ export function Hero({ onNav }) {
 
       <div className="hero-bottom">
         <p className="hero-bio">
-          Founder, CEO &amp; agri-tech operator building WhiteRabbit Agro,
-          OriginTrace and FarmWise — three platforms building the compliance,
-          traceability, and farm digitization infrastructure that connects
-          African agriculture to global markets.
+          The bottleneck in African agriculture isn't supply. It's the
+          infrastructure between farm and market. I've built three companies
+          closing that gap — compliance, traceability, farm digitization —
+          and I advise the exporters, investors and founders solving the
+          same problem.
         </p>
         <div className="hero-ctas">
           <button className="btn btn-primary" onClick={() => onNav('book')}>
@@ -149,10 +150,10 @@ export function Hero({ onNav }) {
           </button>
         </div>
         <div className="hero-quick">
-          <b>The work</b>
-          Commercial plantation development · Herbs &amp; Spices<br />
-          EUDR / UK / US / CN / UAE<br />
-          B2B SaaS · Agro real estate
+          <b>Who this is for</b>
+          Exporters chasing EUDR / UK / US / CN / UAE compliance<br />
+          Investors evaluating agro real estate &amp; agri-tech<br />
+          Cooperatives &amp; governments digitizing smallholder data
         </div>
       </div>
     </section>
@@ -168,7 +169,7 @@ export function StatsBar() {
     { n: '20', sup: '+', l: 'Hectares developed' },
     { n: '03', sup: '',  l: 'Active ventures' },
     { n: '05', sup: '',  l: 'Export markets' },
-    { n: '01', sup: '',  l: 'Clear mission' },
+    { n: '2018', sup: '', l: 'Operating since' },
   ]
 
   return (
@@ -891,8 +892,9 @@ export function Social() {
         </div>
         <p className="lede">
           Notes from the field — what's working in agriculture right now,
-          global trade compliance is changing, what investors are experiencing.
-          Pick the channel that matches how you interact online. Connect with me.
+          how global trade compliance is changing, and what investors are
+          seeing on the ground. <b>Pick the channel that matches how you
+          interact online.</b>
         </p>
       </div>
       <div className="social-grid">
@@ -985,9 +987,9 @@ export function Footer({ onNav }) {
           <div className="foot-col">
             <h4>Office</h4>
             <ul>
-              <li><a href="#">Enugu, Nigeria</a></li>
-              <li><a href="#">Lagos &amp; Abuja satellites</a></li>
-              <li><a href="#">Remote, by appt</a></li>
+              <li><span className="foot-static">Enugu, Nigeria</span></li>
+              <li><span className="foot-static">Lagos &amp; Abuja satellites</span></li>
+              <li><span className="foot-static">Remote, by appt</span></li>
             </ul>
           </div>
         </div>

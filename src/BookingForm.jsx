@@ -25,24 +25,58 @@ export const TOPICS = [
 
 const REQUIRED_FIELDS = ['name', 'email', 'org', 'session', 'topic', 'challenge']
 
+// Sessions with a fixed price are paid for via Flutterwave before the booking
+// is confirmed — keep this in sync with SESSION_PRICING in api/_lib/booking.js.
+const PAYABLE_SESSIONS = ['discovery', 'compliance', 'strategy', 'investment']
+
 const INITIAL = {
   name: '', email: '', org: '', role: '',
   session: 'discovery', topic: TOPICS[0],
   challenge: '', timing: 'Within 2 weeks',
+  nickname: '', // honeypot — real users never see or fill this
 }
 
-export function BookingForm({ pickedSession, onPickSession }) {
+export function BookingForm({ pickedSession, onPickSession, pickedTopic }) {
   const [data, setData] = useState({ ...INITIAL, session: pickedSession || 'discovery' })
   const [errors, setErrors] = useState({})
   const [status, setStatus] = useState('idle') // idle | loading | success | error
   const [refNum, setRefNum] = useState('')
   const [apiError, setApiError] = useState('')
+  const [paidReturn, setPaidReturn] = useState(false)
 
   useEffect(() => {
     if (pickedSession) {
       setData((d) => ({ ...d, session: pickedSession }))
     }
   }, [pickedSession])
+
+  useEffect(() => {
+    if (pickedTopic) {
+      setData((d) => ({ ...d, topic: pickedTopic }))
+    }
+  }, [pickedTopic])
+
+  // After a Flutterwave payment, /api/verify-payment redirects back here with
+  // ?booking=success|failed(&ref=...) — pick that up once on load.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const booking = params.get('booking')
+    if (!booking) return
+
+    if (booking === 'success') {
+      setRefNum(params.get('ref') || '')
+      setPaidReturn(true)
+      setStatus('success')
+    } else if (booking === 'failed') {
+      setStatus('error')
+      setApiError('Payment did not go through. Please try again — you have not been charged.')
+    }
+
+    params.delete('booking')
+    params.delete('ref')
+    const cleanUrl = window.location.pathname + (params.toString() ? `?${params}` : '') + window.location.hash
+    window.history.replaceState({}, '', cleanUrl)
+  }, [])
 
   const progress = useMemo(() => {
     const filled = REQUIRED_FIELDS.filter((k) => String(data[k] || '').trim().length > 0).length
@@ -58,7 +92,7 @@ export function BookingForm({ pickedSession, onPickSession }) {
     const e = {}
     if (!data.name.trim()) e.name = 'Required'
     if (!data.email.trim()) e.email = 'Required'
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) e.email = 'Looks invalid'
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) e.email = 'Looks invalid'
     if (!data.org.trim()) e.org = 'Required'
     if (!data.challenge.trim() || data.challenge.trim().length < 30)
       e.challenge = 'A few sentences, please'
@@ -68,6 +102,7 @@ export function BookingForm({ pickedSession, onPickSession }) {
 
   async function submit(ev) {
     ev.preventDefault()
+    if (status === 'loading') return
     if (!validate()) return
 
     setStatus('loading')
@@ -79,10 +114,15 @@ export function BookingForm({ pickedSession, onPickSession }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       })
-      const json = await res.json()
+      const json = await res.json().catch(() => ({}))
 
       if (!res.ok) {
         throw new Error(json.error || 'Something went wrong. Please try again.')
+      }
+
+      if (json.paymentUrl) {
+        window.location.href = json.paymentUrl
+        return
       }
 
       setRefNum(json.ref)
@@ -103,24 +143,36 @@ export function BookingForm({ pickedSession, onPickSession }) {
       <div className="form-success">
         <span className="caps" style={{ color: 'var(--ink)', opacity: 0.7 }}>— Confirmed</span>
         <h3>Got it. Talk soon.</h3>
-        <p>
-          A confirmation is on its way to <b>{data.email}</b>. Expect a reply
-          within 48 hours on weekdays. If you booked an Export Strategy Session,
-          an invoice and calendar invite follow in the same thread.
-        </p>
+        {paidReturn ? (
+          <p>
+            Payment received and your brief is in. A confirmation with your
+            receipt is on its way to your inbox. Expect a reply within 48
+            hours on weekdays.
+          </p>
+        ) : (
+          <p>
+            A confirmation is on its way to <b>{data.email}</b>. Expect a reply
+            within 48 hours on weekdays. If you booked an Export Strategy Session,
+            an invoice and calendar invite follow in the same thread.
+          </p>
+        )}
         <div className="receipt">
           <div className="row"><span>Ref</span><span><b>{refNum}</b></span></div>
-          <div className="row"><span>Name</span><span>{data.name}</span></div>
-          <div className="row"><span>Org</span><span>{data.org || '—'}</span></div>
-          <div className="row"><span>Session</span><span>{sessionMeta.name}</span></div>
-          <div className="row"><span>Topic</span>
-            <span style={{ maxWidth: '24ch', textAlign: 'right' }}>{data.topic}</span>
-          </div>
-          <div className="row"><span>Timing</span><span>{data.timing}</span></div>
-          <div className="row"><span>Status</span><span><b>Pending review</b></span></div>
+          {!paidReturn && (
+            <>
+              <div className="row"><span>Name</span><span>{data.name}</span></div>
+              <div className="row"><span>Org</span><span>{data.org || '—'}</span></div>
+              <div className="row"><span>Session</span><span>{sessionMeta.name}</span></div>
+              <div className="row"><span>Topic</span>
+                <span style={{ maxWidth: '24ch', textAlign: 'right' }}>{data.topic}</span>
+              </div>
+              <div className="row"><span>Timing</span><span>{data.timing}</span></div>
+            </>
+          )}
+          <div className="row"><span>Status</span><span><b>{paidReturn ? 'Paid · Pending review' : 'Pending review'}</b></span></div>
         </div>
         <button className="btn btn-ink" style={{ alignSelf: 'flex-start' }}
-                onClick={() => { setStatus('idle'); setData({ ...INITIAL, session: pickedSession || 'discovery' }) }}>
+                onClick={() => { setStatus('idle'); setPaidReturn(false); setData({ ...INITIAL, session: pickedSession || 'discovery' }) }}>
           Book another <span className="arrow" />
         </button>
       </div>
@@ -135,16 +187,22 @@ export function BookingForm({ pickedSession, onPickSession }) {
         <span>{progress}%</span>
       </div>
 
+      {/* Honeypot — hidden from real users, catches basic bots that auto-fill every field */}
+      <input type="text" name="nickname" value={data.nickname} tabIndex={-1} autoComplete="off"
+             aria-hidden="true"
+             style={{ position: 'absolute', left: '-9999px', width: '1px', height: '1px', overflow: 'hidden' }}
+             onChange={(e) => setField('nickname', e.target.value)} />
+
       <div className="field-row">
         <div className={`field ${errors.name ? 'error' : ''}`}>
           <label>Name</label>
-          <input value={data.name} placeholder="Your full name"
+          <input value={data.name} placeholder="Your full name" maxLength={200}
                  onChange={(e) => setField('name', e.target.value)} />
           {errors.name && <span className="err">{errors.name}</span>}
         </div>
         <div className={`field ${errors.email ? 'error' : ''}`}>
           <label>Email</label>
-          <input type="email" value={data.email} placeholder="you@org.com"
+          <input type="email" value={data.email} placeholder="you@org.com" maxLength={200}
                  onChange={(e) => setField('email', e.target.value)} />
           {errors.email && <span className="err">{errors.email}</span>}
         </div>
@@ -153,13 +211,13 @@ export function BookingForm({ pickedSession, onPickSession }) {
       <div className="field-row">
         <div className={`field ${errors.org ? 'error' : ''}`}>
           <label>Organisation</label>
-          <input value={data.org} placeholder="Company, ministry, cooperative…"
+          <input value={data.org} placeholder="Company, ministry, cooperative…" maxLength={200}
                  onChange={(e) => setField('org', e.target.value)} />
           {errors.org && <span className="err">{errors.org}</span>}
         </div>
         <div className="field">
           <label>Role / title</label>
-          <input value={data.role} placeholder="Founder, Director, etc. (optional)"
+          <input value={data.role} placeholder="Founder, Director, etc. (optional)" maxLength={200}
                  onChange={(e) => setField('role', e.target.value)} />
         </div>
       </div>
@@ -198,7 +256,7 @@ export function BookingForm({ pickedSession, onPickSession }) {
 
       <div className={`field ${errors.challenge ? 'error' : ''}`}>
         <label>The challenge</label>
-        <textarea rows="5" value={data.challenge}
+        <textarea rows="5" value={data.challenge} maxLength={5000}
           placeholder="A few sentences on the specific problem you'd like to work on. The more concrete, the better — paste a brief, link a deck, name the deadline."
           onChange={(e) => setField('challenge', e.target.value)} />
         {errors.challenge && <span className="err">{errors.challenge}</span>}
@@ -221,8 +279,16 @@ export function BookingForm({ pickedSession, onPickSession }) {
       <div className="form-actions">
         <button className="btn btn-primary" type="submit" disabled={status === 'loading'}
                 style={{ opacity: status === 'loading' ? 0.7 : 1 }}>
-          {status === 'loading' ? 'Sending…' : 'Send brief'} <span className="arrow" />
+          {status === 'loading'
+            ? 'Sending…'
+            : PAYABLE_SESSIONS.includes(data.session) ? 'Continue to payment' : 'Send brief'}
+          {' '}<span className="arrow" />
         </button>
+        {PAYABLE_SESSIONS.includes(data.session) && (
+          <p className="pkg-note" style={{ margin: '8px 0 0' }}>
+            You'll pay {sessionMeta.price.split('·')[0].trim()} via Flutterwave on the next screen — nothing is charged until then.
+          </p>
+        )}
       </div>
     </form>
   )
