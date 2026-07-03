@@ -1,4 +1,8 @@
--- Run this in your Supabase SQL editor (Dashboard → SQL Editor → New query)
+-- Full current schema, for reference / fresh manual setup in the Supabase SQL
+-- editor (Dashboard → SQL Editor → New query). The authoritative, applied
+-- history lives in supabase/migrations/ — that's what Supabase's GitHub
+-- integration replays to build preview-branch databases, so any future schema
+-- change should be added there as a new migration file, not just here.
 
 create table if not exists public.bookings (
   id                 uuid        default gen_random_uuid() primary key,
@@ -26,10 +30,3 @@ alter table public.bookings enable row level security;
 -- Optional: view new submissions sorted by date in the Supabase table editor
 create index if not exists bookings_created_at_idx on public.bookings (created_at desc);
 create index if not exists bookings_email_idx on public.bookings (email);
-
--- ── Migration for an existing table (skip if creating fresh) ─────────────────
--- alter table public.bookings add column if not exists payment_status text default 'not_required' not null;
--- alter table public.bookings add column if not exists amount numeric;
--- alter table public.bookings add column if not exists currency text;
--- alter table public.bookings add column if not exists flw_transaction_id text;
--- create index if not exists bookings_email_idx on public.bookings (email);
