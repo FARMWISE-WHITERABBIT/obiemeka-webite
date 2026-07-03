@@ -25,6 +25,10 @@ export const TOPICS = [
 
 const REQUIRED_FIELDS = ['name', 'email', 'org', 'session', 'topic', 'challenge']
 
+// Sessions with a fixed price are paid for via Flutterwave before the booking
+// is confirmed — keep this in sync with SESSION_PRICING in api/_lib/booking.js.
+const PAYABLE_SESSIONS = ['discovery', 'compliance', 'strategy', 'investment']
+
 const INITIAL = {
   name: '', email: '', org: '', role: '',
   session: 'discovery', topic: TOPICS[0],
@@ -38,6 +42,7 @@ export function BookingForm({ pickedSession, onPickSession, pickedTopic }) {
   const [status, setStatus] = useState('idle') // idle | loading | success | error
   const [refNum, setRefNum] = useState('')
   const [apiError, setApiError] = useState('')
+  const [paidReturn, setPaidReturn] = useState(false)
 
   useEffect(() => {
     if (pickedSession) {
@@ -50,6 +55,28 @@ export function BookingForm({ pickedSession, onPickSession, pickedTopic }) {
       setData((d) => ({ ...d, topic: pickedTopic }))
     }
   }, [pickedTopic])
+
+  // After a Flutterwave payment, /api/verify-payment redirects back here with
+  // ?booking=success|failed(&ref=...) — pick that up once on load.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const booking = params.get('booking')
+    if (!booking) return
+
+    if (booking === 'success') {
+      setRefNum(params.get('ref') || '')
+      setPaidReturn(true)
+      setStatus('success')
+    } else if (booking === 'failed') {
+      setStatus('error')
+      setApiError('Payment did not go through. Please try again — you have not been charged.')
+    }
+
+    params.delete('booking')
+    params.delete('ref')
+    const cleanUrl = window.location.pathname + (params.toString() ? `?${params}` : '') + window.location.hash
+    window.history.replaceState({}, '', cleanUrl)
+  }, [])
 
   const progress = useMemo(() => {
     const filled = REQUIRED_FIELDS.filter((k) => String(data[k] || '').trim().length > 0).length
@@ -93,6 +120,11 @@ export function BookingForm({ pickedSession, onPickSession, pickedTopic }) {
         throw new Error(json.error || 'Something went wrong. Please try again.')
       }
 
+      if (json.paymentUrl) {
+        window.location.href = json.paymentUrl
+        return
+      }
+
       setRefNum(json.ref)
       setStatus('success')
       setTimeout(() => {
@@ -111,24 +143,36 @@ export function BookingForm({ pickedSession, onPickSession, pickedTopic }) {
       <div className="form-success">
         <span className="caps" style={{ color: 'var(--ink)', opacity: 0.7 }}>— Confirmed</span>
         <h3>Got it. Talk soon.</h3>
-        <p>
-          A confirmation is on its way to <b>{data.email}</b>. Expect a reply
-          within 48 hours on weekdays. If you booked an Export Strategy Session,
-          an invoice and calendar invite follow in the same thread.
-        </p>
+        {paidReturn ? (
+          <p>
+            Payment received and your brief is in. A confirmation with your
+            receipt is on its way to your inbox. Expect a reply within 48
+            hours on weekdays.
+          </p>
+        ) : (
+          <p>
+            A confirmation is on its way to <b>{data.email}</b>. Expect a reply
+            within 48 hours on weekdays. If you booked an Export Strategy Session,
+            an invoice and calendar invite follow in the same thread.
+          </p>
+        )}
         <div className="receipt">
           <div className="row"><span>Ref</span><span><b>{refNum}</b></span></div>
-          <div className="row"><span>Name</span><span>{data.name}</span></div>
-          <div className="row"><span>Org</span><span>{data.org || '—'}</span></div>
-          <div className="row"><span>Session</span><span>{sessionMeta.name}</span></div>
-          <div className="row"><span>Topic</span>
-            <span style={{ maxWidth: '24ch', textAlign: 'right' }}>{data.topic}</span>
-          </div>
-          <div className="row"><span>Timing</span><span>{data.timing}</span></div>
-          <div className="row"><span>Status</span><span><b>Pending review</b></span></div>
+          {!paidReturn && (
+            <>
+              <div className="row"><span>Name</span><span>{data.name}</span></div>
+              <div className="row"><span>Org</span><span>{data.org || '—'}</span></div>
+              <div className="row"><span>Session</span><span>{sessionMeta.name}</span></div>
+              <div className="row"><span>Topic</span>
+                <span style={{ maxWidth: '24ch', textAlign: 'right' }}>{data.topic}</span>
+              </div>
+              <div className="row"><span>Timing</span><span>{data.timing}</span></div>
+            </>
+          )}
+          <div className="row"><span>Status</span><span><b>{paidReturn ? 'Paid · Pending review' : 'Pending review'}</b></span></div>
         </div>
         <button className="btn btn-ink" style={{ alignSelf: 'flex-start' }}
-                onClick={() => { setStatus('idle'); setData({ ...INITIAL, session: pickedSession || 'discovery' }) }}>
+                onClick={() => { setStatus('idle'); setPaidReturn(false); setData({ ...INITIAL, session: pickedSession || 'discovery' }) }}>
           Book another <span className="arrow" />
         </button>
       </div>
@@ -235,8 +279,16 @@ export function BookingForm({ pickedSession, onPickSession, pickedTopic }) {
       <div className="form-actions">
         <button className="btn btn-primary" type="submit" disabled={status === 'loading'}
                 style={{ opacity: status === 'loading' ? 0.7 : 1 }}>
-          {status === 'loading' ? 'Sending…' : 'Send brief'} <span className="arrow" />
+          {status === 'loading'
+            ? 'Sending…'
+            : PAYABLE_SESSIONS.includes(data.session) ? 'Continue to payment' : 'Send brief'}
+          {' '}<span className="arrow" />
         </button>
+        {PAYABLE_SESSIONS.includes(data.session) && (
+          <p className="pkg-note" style={{ margin: '8px 0 0' }}>
+            You'll pay {sessionMeta.price.split('·')[0].trim()} via Flutterwave on the next screen — nothing is charged until then.
+          </p>
+        )}
       </div>
     </form>
   )
