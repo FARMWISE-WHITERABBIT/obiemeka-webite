@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
+import { SCHEDULING_URLS } from './schedulingLinks'
 
 export const SESSIONS = [
   { id: 'discovery',  name: 'Discovery Call',                  price: '₦150,000 · 45 min' },
@@ -43,6 +44,7 @@ export function BookingForm({ pickedSession, onPickSession, pickedTopic }) {
   const [refNum, setRefNum] = useState('')
   const [apiError, setApiError] = useState('')
   const [paidReturn, setPaidReturn] = useState(false)
+  const [paidSession, setPaidSession] = useState('')
 
   useEffect(() => {
     if (pickedSession) {
@@ -65,6 +67,7 @@ export function BookingForm({ pickedSession, onPickSession, pickedTopic }) {
 
     if (booking === 'success') {
       setRefNum(params.get('ref') || '')
+      setPaidSession(params.get('session') || '')
       setPaidReturn(true)
       setStatus('success')
     } else if (booking === 'processing') {
@@ -80,6 +83,7 @@ export function BookingForm({ pickedSession, onPickSession, pickedTopic }) {
 
     params.delete('booking')
     params.delete('ref')
+    params.delete('session')
     const cleanUrl = window.location.pathname + (params.toString() ? `?${params}` : '') + window.location.hash
     window.history.replaceState({}, '', cleanUrl)
   }, [])
@@ -144,6 +148,8 @@ export function BookingForm({ pickedSession, onPickSession, pickedTopic }) {
 
   const sessionMeta = SESSIONS.find((s) => s.id === data.session) || SESSIONS[0]
 
+  const scheduleUrl = paidReturn ? SCHEDULING_URLS[paidSession] : ''
+
   if (status === 'success') {
     return (
       <div className="form-success">
@@ -152,8 +158,10 @@ export function BookingForm({ pickedSession, onPickSession, pickedTopic }) {
         {paidReturn ? (
           <p>
             Payment received and your brief is in. A confirmation with your
-            receipt is on its way to your inbox. Expect a reply within 48
-            hours on weekdays.
+            receipt is on its way to your inbox.
+            {scheduleUrl
+              ? ' Next step: pick a time for your session below.'
+              : ' Expect a reply within 48 hours on weekdays.'}
           </p>
         ) : (
           <p>
@@ -177,10 +185,17 @@ export function BookingForm({ pickedSession, onPickSession, pickedTopic }) {
           )}
           <div className="row"><span>Status</span><span><b>{paidReturn ? 'Paid · Pending review' : 'Pending review'}</b></span></div>
         </div>
-        <button className="btn btn-ink" style={{ alignSelf: 'flex-start' }}
-                onClick={() => { setStatus('idle'); setPaidReturn(false); setData({ ...INITIAL, session: pickedSession || 'discovery' }) }}>
-          Book another <span className="arrow" />
-        </button>
+        <div style={{ display: 'flex', gap: 'var(--s-3)', flexWrap: 'wrap' }}>
+          {scheduleUrl && (
+            <a className="btn btn-primary" href={scheduleUrl} target="_blank" rel="noreferrer">
+              Schedule your session <span className="arrow" />
+            </a>
+          )}
+          <button className="btn btn-ink"
+                  onClick={() => { setStatus('idle'); setPaidReturn(false); setPaidSession(''); setData({ ...INITIAL, session: pickedSession || 'discovery' }) }}>
+            Book another <span className="arrow" />
+          </button>
+        </div>
       </div>
     )
   }
