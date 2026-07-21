@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import { Resend } from 'resend'
+import { SCHEDULING_URLS } from '../../src/schedulingLinks.js'
 
 export const SESSION_LABELS = {
   discovery:  'Discovery Call — ₦150,000 · 45 min',
@@ -134,6 +135,7 @@ function notificationHtml({ ref, name, email, org, role, session, topic, challen
 
 function confirmationHtml({ ref, name, session, topic, timing, paid }) {
   const firstName = escapeHtml(name.split(' ')[0])
+  const scheduleUrl = paid ? SCHEDULING_URLS[session] : ''
   return `<!DOCTYPE html>
 <html lang="en">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -150,9 +152,20 @@ function confirmationHtml({ ref, name, session, topic, timing, paid }) {
       </h1>
       <p style="color:#6B6660;font-size:16px;line-height:1.6;margin:0 0 32px;">
         ${paid
-          ? 'Payment received and your brief is in. I read every one personally. Expect a reply within 48 hours on weekdays.'
+          ? `Payment received and your brief is in. I read every one personally.${scheduleUrl ? ' Next step: pick a time for your session using the button below.' : ' Expect a reply within 48 hours on weekdays.'}`
           : 'Your brief is in. I read every one personally. Expect a reply within 48 hours on weekdays — sooner if the brief is clear and the fit is obvious.'}
       </p>
+
+      ${scheduleUrl ? `
+      <table cellpadding="0" cellspacing="0" style="margin:0 0 32px;">
+        <tr><td style="border-radius:999px;background:#0A0A0A;">
+          <a href="${scheduleUrl}"
+             style="display:inline-block;padding:14px 28px;font-size:15px;font-weight:600;
+                    color:#E8FF3A;text-decoration:none;border-radius:999px;">
+            Schedule your session &rarr;
+          </a>
+        </td></tr>
+      </table>` : ''}
 
       <div style="background:#0A0A0A;color:#F6F4EF;border-radius:12px;padding:24px;margin-bottom:32px;">
         <p style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;
