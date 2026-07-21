@@ -32,15 +32,24 @@ export default async function handler(req, res) {
   // Already processed — e.g. the webhook beat this redirect to it.
   if (booking.payment_status === 'paid') return succeed(tx_ref)
 
-  if (status === 'cancelled' || !transaction_id) {
+  if (status === 'cancelled') {
     await supabase.from('bookings').update({ payment_status: 'failed' })
       .eq('ref_num', tx_ref).eq('payment_status', 'pending')
     return fail()
   }
 
+  // With a transaction_id (normal redirect) verify by id; without one, fall
+  // back to verify-by-reference. The fallback doubles as a manual repair path:
+  // hitting /api/verify-payment?tx_ref=OE-XXXXXX re-checks a booking against
+  // Flutterwave and completes it if the money actually landed. Safe to expose —
+  // the caller's input is never trusted, Flutterwave's answer is.
+  const verifyUrl = transaction_id
+    ? `https://api.flutterwave.com/v3/transactions/${transaction_id}/verify`
+    : `https://api.flutterwave.com/v3/transactions/verify_by_reference?tx_ref=${encodeURIComponent(tx_ref)}`
+
   let verifyJson
   try {
-    const verifyRes = await fetch(`https://api.flutterwave.com/v3/transactions/${transaction_id}/verify`, {
+    const verifyRes = await fetch(verifyUrl, {
       headers: { Authorization: `Bearer ${process.env.FLUTTERWAVE_SECRET_KEY}` },
     })
     verifyJson = await verifyRes.json()
@@ -80,7 +89,7 @@ export default async function handler(req, res) {
   // is included so a row wrongly stamped by an earlier redirect gets repaired.
   const { data: updated } = await supabase
     .from('bookings')
-    .update({ payment_status: 'paid', flw_transaction_id: String(transaction_id) })
+    .update({ payment_status: 'paid', flw_transaction_id: String(transaction_id || tx?.id || '') || null })
     .eq('ref_num', tx_ref)
     .in('payment_status', ['pending', 'failed'])
     .select()
