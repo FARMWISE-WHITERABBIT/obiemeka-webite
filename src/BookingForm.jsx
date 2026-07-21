@@ -57,7 +57,7 @@ export function BookingForm({ pickedSession, onPickSession, pickedTopic }) {
   }, [pickedTopic])
 
   // After a Flutterwave payment, /api/verify-payment redirects back here with
-  // ?booking=success|failed(&ref=...) — pick that up once on load.
+  // ?booking=success|processing|failed(&ref=...) — pick that up once on load.
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     const booking = params.get('booking')
@@ -67,6 +67,12 @@ export function BookingForm({ pickedSession, onPickSession, pickedTopic }) {
       setRefNum(params.get('ref') || '')
       setPaidReturn(true)
       setStatus('success')
+    } else if (booking === 'processing') {
+      // Payment (usually a bank transfer) is still settling — it will be
+      // confirmed by webhook and the receipt email once it lands.
+      const ref = params.get('ref') || ''
+      setStatus('error')
+      setApiError(`Your payment${ref ? ` (ref ${ref})` : ''} is still processing. If you completed the transfer, you'll receive a confirmation email once it settles — no need to pay again.`)
     } else if (booking === 'failed') {
       setStatus('error')
       setApiError('Payment did not go through. Please try again — you have not been charged.')

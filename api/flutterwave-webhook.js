@@ -61,11 +61,15 @@ export default async function handler(req, res) {
 
   if (!ok) return res.status(200).json({ received: true })
 
+  // 'failed' is included so this can repair a row wrongly stamped by an
+  // earlier redirect (e.g. a bank transfer that settled after the browser
+  // returned). Idempotency holds: only the caller that flips the row to
+  // paid sends emails.
   const { data: updated } = await supabase
     .from('bookings')
     .update({ payment_status: 'paid', flw_transaction_id: String(transactionId) })
     .eq('ref_num', txRef)
-    .eq('payment_status', 'pending')
+    .in('payment_status', ['pending', 'failed'])
     .select()
 
   if (updated && updated.length) {
