@@ -679,88 +679,154 @@ const PACKAGES = [
     id: 'discovery',
     num: '01',
     name: 'Discovery Call',
+    tag: 'Paid entry · filters serious buyers',
     price: '₦150,000',
     intl: '$100 USD',
     per: '· 45 min',
+    duration: '45 minutes · video or Enugu in-person',
     desc: 'A focused, paid intro call. Walk through your situation; leave with a frank assessment and 3 immediate written actions — whether the next step is with me or someone else.',
-    items: [
-      '45-minute video or in-person call (Enugu)',
+    included: [
+      '45-minute focused scoping call — video or in-person (Enugu)',
       'Pre-read of any materials you share',
       'Honest fit assessment — does my expertise match the need',
       'Directional framing of the problem',
       'Written follow-up note with 3 immediate actions within 24hrs',
     ],
-    note: 'One per organisation · Not credited toward a strategy session',
+    notIncluded: [
+      'Not a free consultation',
+      'Not a sales pitch for OriginTrace or FarmWise',
+      'One per organisation — not repeatable',
+      'Not credited toward a strategy session if you upgrade',
+    ],
+    idealFor: [
+      'Exporters unsure of compliance exposure',
+      'Investors sizing up agri-opportunities',
+      'Founders at early ideation stage',
+    ],
+    cta: 'Book the call →',
   },
   {
     id: 'compliance',
     num: '02',
     name: 'Compliance Audit Session',
+    tag: 'Export compliance specialist tier',
     price: '₦400,000',
     intl: '$265 USD',
     per: '· 2 hrs + written assessment',
+    duration: '2 hours + written gap assessment',
     desc: 'Live audit of your compliance position against one regulatory framework. Ends with a written gap assessment and prioritised 5-step remediation roadmap.',
-    items: [
+    included: [
       'Pre-session intake questionnaire',
       '2-hour live audit against one framework (EUDR, UK, US Lacey, China, or UAE)',
       'Written compliance gap assessment within 48 hours',
       'Prioritised 5-step remediation roadmap',
       '30-day email follow-up access',
     ],
+    outcomes: [
+      'Exact picture of your compliance gaps against a specific market',
+      'Specific document and data gaps named',
+      'Written roadmap you can act on without Obi',
+      'Honest view on whether OriginTrace solves your problem',
+    ],
+    idealFor: [
+      'Nigerian exporters preparing for the EU or UK market',
+      "Companies receiving buyer compliance requests they don't fully understand",
+    ],
+    cta: 'Book audit →',
   },
   {
     id: 'strategy',
     num: '03',
-    tag: 'Most booked',
+    tag: 'Flagship offer · highest demand',
+    badge: 'Most booked',
     featured: true,
     name: 'Export Strategy Session',
     price: '₦750,000',
     intl: '$500 USD',
     per: '· 5 hrs cumulative',
+    duration: '5 hrs cumulative · full written strategy report',
     desc: 'The flagship engagement. Five cumulative working hours, a full written export strategy report, and a 14-day async follow-up window.',
-    items: [
+    included: [
+      'Pre-session intake form and document review',
       '5 hours cumulative working time — split across sittings',
       'In-person in Enugu at no additional cost',
       'Outside Enugu: client covers travel and accommodation',
       'Full written export strategy report within 5 business days',
-      'Market selection, buyer profile, compliance pathway',
+      'Market selection rationale, buyer profile, compliance pathway',
       '14-day async follow-up via WhatsApp and email',
     ],
+    outcomes: [
+      'Documented export strategy — executable without Obi',
+      'Clear target market rationale and buyer profile',
+      'Compliance checklist for your specific product and markets',
+      'Commercial structure recommendation',
+      'Written deliverable to share with investors or partners',
+    ],
+    idealFor: [
+      'Exporters entering a new market',
+      'Producers approached by international buyers for the first time',
+      'Post-NEPC/GACON training follow-up',
+    ],
+    cta: 'Reserve a session →',
   },
   {
     id: 'investment',
     num: '04',
     name: 'Agri-Investment Advisory Session',
+    tag: 'WhiteRabbit Agro linked · diaspora investors',
     price: '₦600,000',
     intl: '$400 USD',
     per: '· 3 hrs + written brief',
+    duration: '3 hours + written investment brief',
     desc: 'Structured advisory for investors evaluating Nigerian agri-land or commodity exposure. Includes a written investment brief and full conflict-of-interest disclosure.',
-    items: [
+    included: [
       'Pre-session investor intake form',
-      '3-hour advisory session — video or in-person Enugu',
+      '3-hour structured advisory session — video or in-person Enugu',
       'Written investment brief: risk, returns, structure options, red flags',
-      'WhiteRabbit Agro plantation overview where relevant',
-      'Introductions to operators or verified land agents if appropriate',
+      'WhiteRabbit Agro plantation investment overview where relevant',
+      'Introduction to relevant operators or verified land agents if appropriate',
       '30-day follow-up access',
     ],
+    callout: {
+      title: 'Conflict of interest — disclosed upfront',
+      body: "Obi operates WhiteRabbit Agro. This advisory is objective regardless of that — if your best option isn't WhiteRabbit, he'll say so in writing. This transparency is the offer's core credibility.",
+    },
+    idealFor: [
+      'Diaspora investors evaluating Nigerian agri-land',
+      'HNIs sizing plantation or commodity exposure',
+      'Family offices with Africa agricultural interest',
+    ],
+    cta: 'Book session →',
   },
   {
     id: 'retainer',
     num: '05',
     name: 'Advisory Retainer',
+    tag: '2 slots only · 3-month minimum',
     price: '₦850,000',
     intl: '$565 USD',
     per: '/ month',
+    duration: 'Minimum 3 months · ₦2,550,000 total',
     desc: 'Ongoing senior advisory for founders, exporters and operators who need a senior voice on tap. Written application required — maximum 2 active clients.',
-    items: [
+    included: [
       'Two 90-minute strategy sessions per month',
-      'Unlimited async access — WhatsApp, Slack, or email (24hr response)',
+      'Unlimited async access — WhatsApp, Slack, email (24hr response, business days)',
       'Document and deck review with 48hr turnaround',
       'Monthly written advisory note with priorities and recommendations',
       'Quarterly in-person session in Enugu or client location',
       'Network introductions where genuinely useful',
     ],
-    note: 'Minimum 3 months · ₦2,550,000 total · invoiced monthly',
+    callout: {
+      title: 'Retainer terms',
+      body: 'Written application required — 3 qualifying questions. Maximum 2 active clients at any time. Invoiced monthly in advance on the 1st. No rollover of unused sessions. Obi reserves the right to decline renewal if fit has deteriorated.',
+    },
+    minimumNote: '3 months · ₦2,550,000 total · invoiced monthly. This is not negotiable. Problems worth sustained advisory take longer than 30 days. Clients who are serious about results commit to the minimum. Clients who want to test with one month are better served by the Export Strategy Session.',
+    idealFor: [
+      'Exporters actively building EU/UK market access',
+      'Agri-companies in active fundraising',
+      'Government agencies or ministries needing an ongoing senior advisory voice',
+    ],
+    cta: 'Apply for retainer →',
   },
 ]
 
@@ -787,6 +853,7 @@ export function Packages({ onPick }) {
           {PACKAGES.map((p) => (
             <div key={p.id} className={`pkg ${p.featured ? 'featured' : ''}`}
                  onClick={() => onPick(p.id)}>
+              {p.badge && <span className="pkg-badge">{p.badge}</span>}
               <div className="pkg-head">
                 <span className="pkg-num">— {p.num} / 05</span>
                 {p.tag && <span className="pkg-tag">{p.tag}</span>}
@@ -796,19 +863,59 @@ export function Packages({ onPick }) {
                 <span className="pp">{p.price}</span>
                 <span className="per">{p.per}</span>
               </div>
-              {p.intl && <div className="pkg-intl">{p.intl} · international</div>}
+              {p.intl && <div className="pkg-intl">{p.intl} international</div>}
+              {p.duration && <div className="pkg-duration">{p.duration}</div>}
               <p className="pkg-desc">{p.desc}</p>
-              <ul className="pkg-list">
-                {p.items.map((it, i) => <li key={i}>{it}</li>)}
-              </ul>
-              {p.note && <p className="pkg-note">{p.note}</p>}
+
+              <div>
+                <p className="pkg-sublabel">Included</p>
+                <ul className="pkg-list">
+                  {p.included.map((it, i) => <li key={i}>{it}</li>)}
+                </ul>
+              </div>
+
+              {p.outcomes && (
+                <div>
+                  <p className="pkg-sublabel">Outcomes</p>
+                  <ul className="pkg-list">
+                    {p.outcomes.map((it, i) => <li key={i}>{it}</li>)}
+                  </ul>
+                </div>
+              )}
+
+              {p.notIncluded && (
+                <div>
+                  <p className="pkg-sublabel">This is NOT</p>
+                  <ul className="pkg-list not">
+                    {p.notIncluded.map((it, i) => <li key={i}>{it}</li>)}
+                  </ul>
+                </div>
+              )}
+
+              {p.callout && (
+                <div className="pkg-callout">
+                  <span className="pkg-callout-title">{p.callout.title}</span>
+                  <p>{p.callout.body}</p>
+                </div>
+              )}
+
+              {p.minimumNote && (
+                <div className="pkg-callout warn">
+                  <span className="pkg-callout-title">Minimum commitment</span>
+                  <p>{p.minimumNote}</p>
+                </div>
+              )}
+
+              {p.idealFor && (
+                <p className="pkg-idealfor">
+                  <b>Ideal for</b>
+                  {p.idealFor.join(' · ')}
+                </p>
+              )}
+
               <button className="pkg-cta"
                       onClick={(e) => { e.stopPropagation(); onPick(p.id) }}>
-                {p.id === 'discovery'  ? 'Book the call →' :
-                 p.id === 'compliance' ? 'Book audit →' :
-                 p.id === 'strategy'   ? 'Reserve a session →' :
-                 p.id === 'investment' ? 'Book session →' :
-                 'Apply for retainer →'}
+                {p.cta}
               </button>
             </div>
           ))}
