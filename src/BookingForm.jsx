@@ -278,7 +278,7 @@ export function BookingForm({ pickedSession, onPickSession, pickedTopic }) {
       <div className={`field ${errors.challenge ? 'error' : ''}`}>
         <label>The challenge</label>
         <textarea rows="5" value={data.challenge} maxLength={5000}
-          placeholder="A few sentences on the specific problem you'd like to work on. The more concrete, the better — paste a brief, link a deck, name the deadline."
+          placeholder="A few sentences on the specific problem you'd like help with. The more concrete you can be — a brief, a deck, a deadline — the better."
           onChange={(e) => setField('challenge', e.target.value)} />
         {errors.challenge && <span className="err">{errors.challenge}</span>}
       </div>

@@ -92,15 +92,16 @@ export default function App() {
           <div>
             <span className="lab">— 06 · Book a consultation</span>
             <h2>
-              Tell me<br />
-              the <em>problem</em>.
+              What's the<br />
+              <em>problem</em>?
             </h2>
           </div>
           <p className="lede">
-            One brief, one human reading it on the other end. The more
-            specific you are about what's actually going wrong — and what
-            "fixed" looks like — the faster we can decide if I can help.
-            <b> If I can't, I'll tell you that, too.</b>
+            Every brief goes to a real person — me. The more specific you
+            can be about what's actually going wrong, and what a good
+            outcome looks like, the faster we can both tell whether I'm
+            the right person to help. If I'm not, I'll say so and try to
+            point you somewhere useful.
           </p>
         </div>
 
@@ -111,11 +112,12 @@ export default function App() {
                 <span>— Booking · 06</span>
                 <span>OE / 2026</span>
               </div>
-              <h3>Direct line, not a funnel.</h3>
+              <h3>You're talking directly to me.</h3>
               <p>
-                Briefs go straight to my inbox. No discovery sales team,
-                no qualification gate — just whether the work fits the
-                next two weeks of calendar.
+                Briefs come straight to my inbox, and I read every one
+                myself. There's no sales team and no qualification
+                process — I just check whether it fits what's already on
+                my calendar over the next couple of weeks.
               </p>
               <div className="when">
                 <span className="chip">Mon–Thu</span>

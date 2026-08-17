@@ -123,23 +123,24 @@ export function Hero({ onNav }) {
   return (
     <section className="hero">
       <div className="grain" />
-      <div className="accent-ring" />
-      <div className="accent-dot" />
 
-      <div className="hero-name">
-        <h1>
-          Obi<br />
-          Em<em>e</em>ka<span style={{ color: 'var(--accent)' }}>.</span>
+      <div className="hero-copy">
+        <span className="hero-eyebrow">
+          <span className="pulse" />
+          Founder &amp; CEO, WhiteRabbit Agro · OriginTrace · FarmWise
+        </span>
+        <h1 className="hero-title">
+          Obi Emeka<span style={{ color: 'var(--accent)' }}>.</span>
         </h1>
-      </div>
-
-      <div className="hero-bottom">
+        <p className="hero-tagline">
+          Building the infrastructure African agriculture ships on.
+        </p>
         <p className="hero-bio">
-          The bottleneck in African agriculture isn't supply. It's the
-          infrastructure between farm and market. I've built three companies
-          closing that gap — compliance, traceability, farm digitization —
-          and I advise the exporters, investors and founders solving the
-          same problem.
+          Getting African produce to market usually isn't a farming problem —
+          it's everything that happens after harvest: paperwork, compliance,
+          proof of where things came from. I've spent the last several years
+          building companies that fix that, and I now advise exporters,
+          investors and founders working through the same problem.
         </p>
         <div className="hero-ctas">
           <button className="btn btn-primary" onClick={() => onNav('book')}>
@@ -155,6 +156,13 @@ export function Hero({ onNav }) {
           Investors evaluating agro real estate &amp; agri-tech<br />
           Cooperatives &amp; governments digitizing smallholder data
         </div>
+      </div>
+
+      <div className="hero-photo">
+        <img
+          src="/assets/obi-emeka-portrait.jpeg"
+          alt="Obi Emeka, founder and CEO of WhiteRabbit Agro"
+        />
       </div>
     </section>
   )
@@ -221,9 +229,8 @@ export function About() {
         <div>
           <span className="lab">— 01 · About</span>
           <h2>
-            Building the rails<br />
-            <em>African agriculture</em><br />
-            ships on.
+            An operator<br />
+            who also <em>advises</em>.
           </h2>
         </div>
         <p className="lede">
@@ -259,16 +266,17 @@ export function About() {
 
         <div className="about-body">
           <p className="lede">
-            One operator, three companies, one thesis: the bottleneck
-            isn't African supply — it's the infrastructure between farm
-            and global market.
+            The pattern across all three: the constraint was never
+            African supply. It's the infrastructure between the farm
+            and the global market.
           </p>
           <p className="body-text">
-            Across cocoa plantations in Enugu State, B2B compliance
-            software for exporters, and digitization tools for
-            governments and cooperatives, the work is the same shape —
-            <b> remove the friction that keeps smallholder output from
-            crossing borders</b>, and price the value that emerges.
+            Whether it's cocoa plantations in Enugu State, compliance
+            software for exporters, or digitization tools for
+            governments and cooperatives, the underlying work doesn't
+            change — <b>remove the friction that keeps smallholder
+            output from crossing borders</b>, and capture the value
+            that unlocks.
           </p>
           <p className="body-text">
             He advises agri-tech founders on product strategy, structures
@@ -375,14 +383,14 @@ export function Ventures() {
             <span className="lab">— 02 · Ventures</span>
             <h2>
               Three companies.<br />
-              <em>One thesis.</em>
+              <em>One</em> idea.
             </h2>
           </div>
           <p className="lede">
             Each venture solves one cut of the same problem: getting
             African agricultural output to global markets at the speed,
-            standard and price the world now expects.
-            <b> Operated together, they compound.</b>
+            standard and price the world now expects — and running them
+            together means each one makes the others stronger.
           </p>
         </div>
 
@@ -556,7 +564,7 @@ export function Expertise() {
     {
       n: '03',
       h: 'Agri-tech product strategy',
-      p: 'Roadmap and positioning for B2B platforms serving exporters, cooperatives and ministries. What to build, what to buy, what to ignore in year one.',
+      p: 'Roadmap and positioning for B2B platforms serving exporters, cooperatives and ministries — deciding what to build, what to buy, and what to leave alone in year one.',
     },
     {
       n: '04',
@@ -571,14 +579,14 @@ export function Expertise() {
         <div>
           <span className="lab">— 03 · Expertise</span>
           <h2>
-            What I'm <em>good</em> at,<br />
-            and only that.
+            What I'm<br />
+            <em>good</em> at.
           </h2>
         </div>
         <p className="lede">
-          A short list. If your problem isn't on it, I'm probably not your
-          person — and I'll tell you who is. <b>Working with someone whose
-          edges are well-known beats working with a generalist.</b>
+          If your problem isn't on this list, I'm probably not the right
+          person for it — and I'd rather point you to someone who is than
+          take on work outside my depth.
         </p>
       </div>
 
@@ -684,7 +692,7 @@ const PACKAGES = [
     intl: '$100 USD',
     per: '· 45 min',
     duration: '45 minutes · video or Enugu in-person',
-    desc: 'A focused, paid intro call. Walk through your situation; leave with a frank assessment and 3 immediate written actions — whether the next step is with me or someone else.',
+    desc: "A focused, paid intro call where we walk through your situation and you leave with a frank assessment and three concrete next actions — whether or not the next step is with me.",
     included: [
       '45-minute focused scoping call — video or in-person (Enugu)',
       'Pre-read of any materials you share',
@@ -714,7 +722,7 @@ const PACKAGES = [
     intl: '$265 USD',
     per: '· 2 hrs + written assessment',
     duration: '2 hours + written gap assessment',
-    desc: 'Live audit of your compliance position against one regulatory framework. Ends with a written gap assessment and prioritised 5-step remediation roadmap.',
+    desc: 'A live audit of your compliance position against one regulatory framework, ending with a written gap assessment and a prioritised five-step remediation roadmap.',
     included: [
       'Pre-session intake questionnaire',
       '2-hour live audit against one framework (EUDR, UK, US Lacey, China, or UAE)',
@@ -745,7 +753,7 @@ const PACKAGES = [
     intl: '$500 USD',
     per: '· 5 hrs cumulative',
     duration: '5 hrs cumulative · full written strategy report',
-    desc: 'The flagship engagement. Five cumulative working hours, a full written export strategy report, and a 14-day async follow-up window.',
+    desc: 'The flagship engagement — five cumulative working hours that end in a full written export strategy report, plus a 14-day async follow-up window.',
     included: [
       'Pre-session intake form and document review',
       '5 hours cumulative working time — split across sittings',
@@ -778,7 +786,7 @@ const PACKAGES = [
     intl: '$400 USD',
     per: '· 3 hrs + written brief',
     duration: '3 hours + written investment brief',
-    desc: 'Structured advisory for investors evaluating Nigerian agri-land or commodity exposure. Includes a written investment brief and full conflict-of-interest disclosure.',
+    desc: 'Structured advisory for investors evaluating Nigerian agri-land or commodity exposure, including a written investment brief and a full conflict-of-interest disclosure.',
     included: [
       'Pre-session investor intake form',
       '3-hour structured advisory session — video or in-person Enugu',
@@ -807,7 +815,7 @@ const PACKAGES = [
     intl: '$565 USD',
     per: '/ month',
     duration: 'Minimum 3 months · ₦2,550,000 total',
-    desc: 'Ongoing senior advisory for founders, exporters and operators who need a senior voice on tap. Written application required — maximum 2 active clients.',
+    desc: 'Ongoing senior advisory for founders, exporters and operators who need a senior voice on tap. It requires a written application, and I only take on two active clients at a time.',
     included: [
       'Two 90-minute strategy sessions per month',
       'Unlimited async access — WhatsApp, Slack, email (24hr response, business days)',
@@ -845,7 +853,8 @@ export function Packages({ onPick }) {
           <p className="lede">
             Calibrated for the conversations I actually have — a paid intro call,
             a compliance audit, a full export strategy, an investor advisory, or
-            a steady hand for an ongoing engagement. <b>Pick the one that fits.</b>
+            a steady hand for an ongoing engagement. Take the one that matches
+            where you're at.
           </p>
         </div>
 
@@ -993,15 +1002,14 @@ export function Social() {
         <div>
           <span className="lab">— 07 · Connect</span>
           <h2>
-            Read along.<br />
-            <em>Argue back.</em>
+            Follow along,<br />
+            or say <em>hello</em>.
           </h2>
         </div>
         <p className="lede">
           Notes from the field — what's working in agriculture right now,
           how global trade compliance is changing, and what investors are
-          seeing on the ground. <b>Pick the channel that matches how you
-          interact online.</b>
+          seeing on the ground, shared across the platforms below.
         </p>
       </div>
       <div className="social-grid">
@@ -1103,7 +1111,7 @@ export function Footer({ onNav }) {
 
         <div className="foot-bottom">
           <span>© 2026 Obi Emeka · obiemeka.com</span>
-          <span>Built for repetition · Sharpened by use</span>
+          <span>Thanks for reading.</span>
         </div>
       </div>
     </footer>
