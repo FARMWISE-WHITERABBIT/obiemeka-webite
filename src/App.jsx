@@ -98,10 +98,9 @@ export default function App() {
           </div>
           <p className="lede">
             Every brief goes to a real person — me. The more specific you
-            can be about what's actually going wrong, and what a good
-            outcome looks like, the faster we can both tell whether I'm
-            the right person to help. If I'm not, I'll say so and try to
-            point you somewhere useful.
+            can be about what's going wrong, and what you want to happen
+            next, the faster we'll both know if I can help. If I can't,
+            I'll say so and try to point you somewhere useful.
           </p>
         </div>
 
