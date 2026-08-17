@@ -689,11 +689,11 @@ const PACKAGES = [
     id: 'discovery',
     num: '01',
     name: 'Discovery Call',
-    tag: 'Paid entry · filters serious buyers',
     price: '₦150,000',
     intl: '$100 USD',
     per: '· 45 min',
     duration: '45 minutes · video or Enugu in-person',
+    desc: "A focused, paid intro call where we walk through your situation and you leave with a frank assessment and three concrete next actions — whether or not the next step is with me.",
     included: [
       '45-minute focused scoping call — video or in-person (Enugu)',
       'Pre-read of any materials you share',
@@ -718,11 +718,11 @@ const PACKAGES = [
     id: 'compliance',
     num: '02',
     name: 'Compliance Audit Session',
-    tag: 'Export compliance specialist tier',
     price: '₦400,000',
     intl: '$265 USD',
     per: '· 2 hrs + written assessment',
     duration: '2 hours + written gap assessment',
+    desc: 'A live audit of your compliance position against one regulatory framework, ending with a written gap assessment and a prioritised five-step remediation roadmap.',
     included: [
       'Pre-session intake questionnaire',
       '2-hour live audit against one framework (EUDR, UK, US Lacey, China, or UAE)',
@@ -745,7 +745,6 @@ const PACKAGES = [
   {
     id: 'strategy',
     num: '03',
-    tag: 'Flagship offer · highest demand',
     badge: 'Most booked',
     featured: true,
     name: 'Export Strategy Session',
@@ -753,6 +752,7 @@ const PACKAGES = [
     intl: '$500 USD',
     per: '· 5 hrs cumulative',
     duration: '5 hrs cumulative · full written strategy report',
+    desc: 'The flagship engagement — five cumulative working hours that end in a full written export strategy report, plus a 14-day async follow-up window.',
     included: [
       'Pre-session intake form and document review',
       '5 hours cumulative working time — split across sittings',
@@ -780,11 +780,11 @@ const PACKAGES = [
     id: 'investment',
     num: '04',
     name: 'Agri-Investment Advisory Session',
-    tag: 'WhiteRabbit Agro linked · diaspora investors',
     price: '₦600,000',
     intl: '$400 USD',
     per: '· 3 hrs + written brief',
     duration: '3 hours + written investment brief',
+    desc: 'Structured advisory for investors evaluating Nigerian agri-land or commodity exposure, including a written investment brief and a full conflict-of-interest disclosure.',
     included: [
       'Pre-session investor intake form',
       '3-hour structured advisory session — video or in-person Enugu',
@@ -808,11 +808,11 @@ const PACKAGES = [
     id: 'retainer',
     num: '05',
     name: 'Advisory Retainer',
-    tag: '2 slots only · 3-month minimum',
     price: '₦850,000',
     intl: '$565 USD',
     per: '/ month',
     duration: 'Minimum 3 months · ₦2,550,000 total',
+    desc: 'Ongoing senior advisory for founders, exporters and operators who need a senior voice on tap. It requires a written application, and I only take on two active clients at a time.',
     included: [
       'Two 90-minute strategy sessions per month',
       'Unlimited async access — WhatsApp, Slack, email (24hr response, business days)',
@@ -860,10 +860,7 @@ export function Packages({ onPick }) {
             <div key={p.id} className={`pkg ${p.featured ? 'featured' : ''}`}
                  onClick={() => onPick(p.id)}>
               {p.badge && <span className="pkg-badge">{p.badge}</span>}
-              <div className="pkg-head">
-                <span className="pkg-num">— {p.num} / 05</span>
-                {p.tag && <span className="pkg-tag">{p.tag}</span>}
-              </div>
+              <span className="pkg-num">— {p.num} / 05</span>
               <h3 className="pkg-name">{p.name}</h3>
               <div className="pkg-price">
                 <span className="pp">{p.price}</span>
@@ -871,6 +868,7 @@ export function Packages({ onPick }) {
               </div>
               {p.intl && <div className="pkg-intl">{p.intl} international</div>}
               {p.duration && <div className="pkg-duration">{p.duration}</div>}
+              <p className="pkg-desc">{p.desc}</p>
 
               <div>
                 <p className="pkg-sublabel">Included</p>
