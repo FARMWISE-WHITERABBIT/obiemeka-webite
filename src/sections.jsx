@@ -123,23 +123,34 @@ export function Hero({ onNav }) {
   return (
     <section className="hero">
       <div className="grain" />
-      <div className="accent-ring" />
-      <div className="accent-dot" />
 
-      <div className="hero-name">
-        <h1>
-          Obi<br />
-          Em<em>e</em>ka<span style={{ color: 'var(--accent)' }}>.</span>
+      <div className="hero-top">
+        <span className="hero-eyebrow">
+          <span className="pulse" />
+          Founder and CEO — WhiteRabbit Agro, OriginTrace, FarmWise
+        </span>
+        <h1 className="hero-title">
+          Obi Emeka<span style={{ color: 'var(--accent)' }}>.</span>
         </h1>
+        <p className="hero-tagline">
+          I help African agriculture work better.
+        </p>
       </div>
 
-      <div className="hero-bottom">
+      <div className="hero-photo">
+        <img
+          src="/assets/obi-emeka-portrait.jpeg"
+          alt="Obi Emeka, founder and CEO of WhiteRabbit Agro"
+        />
+      </div>
+
+      <div className="hero-below">
         <p className="hero-bio">
-          The bottleneck in African agriculture isn't supply. It's the
-          infrastructure between farm and market. I've built three companies
-          closing that gap — compliance, traceability, farm digitization —
-          and I advise the exporters, investors and founders solving the
-          same problem.
+          Most of the problems in African agriculture happen after harvest —
+          paperwork, rules, and proving where the produce came from. I've
+          spent the last few years building companies that solve these
+          problems, and I now advise exporters, investors and founders
+          facing the same challenges.
         </p>
         <div className="hero-ctas">
           <button className="btn btn-primary" onClick={() => onNav('book')}>
@@ -150,10 +161,10 @@ export function Hero({ onNav }) {
           </button>
         </div>
         <div className="hero-quick">
-          <b>Who this is for</b>
-          Exporters chasing EUDR / UK / US / CN / UAE compliance<br />
-          Investors evaluating agro real estate &amp; agri-tech<br />
-          Cooperatives &amp; governments digitizing smallholder data
+          <b>People I work with</b>
+          Exporters who need to meet EU, UK, US, China or UAE rules<br />
+          Investors looking at agriculture real estate and technology<br />
+          Cooperatives and governments who want to digitize farmer data
         </div>
       </div>
     </section>
@@ -221,17 +232,16 @@ export function About() {
         <div>
           <span className="lab">— 01 · About</span>
           <h2>
-            Building the rails<br />
-            <em>African agriculture</em><br />
-            ships on.
+            A quick<br />
+            <em>introduction</em>.
           </h2>
         </div>
         <p className="lede">
-          <b>Obi Emeka</b> is a Nigerian entrepreneur, CEO and agri-tech founder
+          <b>Obi Emeka</b> is a Nigerian entrepreneur and agri-tech founder
           based in Enugu. He runs <b>WhiteRabbit Agro</b>, founded
-          <b> OriginTrace</b> and <b>FarmWise</b>, and consults on the
-          export-compliance and digitization problems that decide whether
-          African commodities reach the world or stop at the port.
+          <b> OriginTrace</b> and <b>FarmWise</b>, and helps exporters solve
+          the compliance and technology problems that can stop their goods
+          from reaching other countries.
         </p>
       </div>
 
@@ -259,22 +269,22 @@ export function About() {
 
         <div className="about-body">
           <p className="lede">
-            One operator, three companies, one thesis: the bottleneck
-            isn't African supply — it's the infrastructure between farm
-            and global market.
+            All three companies solve the same kind of problem. African
+            farms already produce enough — the hard part is everything
+            that happens between the farm and the market.
           </p>
           <p className="body-text">
-            Across cocoa plantations in Enugu State, B2B compliance
-            software for exporters, and digitization tools for
-            governments and cooperatives, the work is the same shape —
-            <b> remove the friction that keeps smallholder output from
-            crossing borders</b>, and price the value that emerges.
+            Whether it's cocoa farms in Enugu State, compliance software
+            for exporters, or digital tools for governments and
+            cooperatives, the work is always the same —
+            <b> remove whatever is stopping small farmers' goods from
+            reaching other countries</b>, and help them earn more from it.
           </p>
           <p className="body-text">
-            He advises agri-tech founders on product strategy, structures
-            agro real estate development &amp; management vehicles, and
-            speaks regularly on export compliance and the future of African
-            export trade.
+            He also advises agri-tech founders on product strategy, helps
+            set up and manage agriculture real estate projects, and speaks
+            regularly about export compliance and the future of African
+            trade.
           </p>
 
           <div className="about-credentials">
@@ -375,14 +385,14 @@ export function Ventures() {
             <span className="lab">— 02 · Ventures</span>
             <h2>
               Three companies.<br />
-              <em>One thesis.</em>
+              <em>One</em> idea.
             </h2>
           </div>
           <p className="lede">
-            Each venture solves one cut of the same problem: getting
-            African agricultural output to global markets at the speed,
-            standard and price the world now expects.
-            <b> Operated together, they compound.</b>
+            Each company solves one part of the same problem — helping
+            African farm produce reach the world fast enough, at the
+            right standard, and at a fair price. Running all three
+            together makes each one stronger.
           </p>
         </div>
 
@@ -546,22 +556,22 @@ export function Expertise() {
     {
       n: '01',
       h: 'Export compliance strategy',
-      p: 'EUDR, UK Forest Risk Commodities, US, China, UAE — building the documentation, traceability and due-diligence stack that lets African product clear customs anywhere it sells.',
+      p: 'For EUDR, UK, US, China and UAE rules — I help build the paperwork, tracking and checks that let African products clear customs in any of these markets.',
     },
     {
       n: '02',
       h: 'Agro real estate development & management',
-      p: 'Designing and operating agro real estate vehicles end-to-end — plot allocation, development, harvest, export sales, distribution, and investor revenue share.',
+      p: 'Setting up and running agriculture real estate projects from start to finish — allocating plots, developing the land, harvesting, exporting, distributing, and sharing profits with investors.',
     },
     {
       n: '03',
       h: 'Agri-tech product strategy',
-      p: 'Roadmap and positioning for B2B platforms serving exporters, cooperatives and ministries. What to build, what to buy, what to ignore in year one.',
+      p: 'Helping B2B platforms for exporters, cooperatives and government offices decide what to build, what to buy, and what to skip in their first year.',
     },
     {
       n: '04',
       h: 'Supply-chain traceability',
-      p: "Plot-to-port data architectures: geo-located farms, batch-level provenance, audit-ready reporting that survives a buyer's compliance team.",
+      p: "Building systems that track farm produce from the plot to the port — showing exactly where it came from, in a way that passes a buyer's compliance checks.",
     },
   ]
 
@@ -571,14 +581,14 @@ export function Expertise() {
         <div>
           <span className="lab">— 03 · Expertise</span>
           <h2>
-            What I'm <em>good</em> at,<br />
-            and only that.
+            What I'm<br />
+            <em>good</em> at.
           </h2>
         </div>
         <p className="lede">
-          A short list. If your problem isn't on it, I'm probably not your
-          person — and I'll tell you who is. <b>Working with someone whose
-          edges are well-known beats working with a generalist.</b>
+          If your problem isn't on this list, I'm probably not the right
+          person to help — and I'd rather send you to someone who is than
+          take on work I'm not suited for.
         </p>
       </div>
 
@@ -611,22 +621,22 @@ export function Speaking({ onBookSpeaking }) {
     {
       n: '01',
       h: 'Export compliance & EUDR readiness',
-      p: 'For ministries, exporters and trade conferences. What the new regulatory regimes actually require, where most operators get tripped up, and the playbook for getting compliant in 90 days.',
+      p: 'For ministries, exporters and trade conferences. What the new rules actually require, where most people run into trouble, and a clear plan for getting compliant in 90 days.',
     },
     {
       n: '02',
       h: 'African agri-tech & investment',
-      p: "For investor forums, accelerators and founder summits. What's actually working in the space — and what raises money but doesn't solve the problem.",
+      p: "For investor forums, accelerators and founder summits. What's actually working in this space — and what raises money without solving the real problem.",
     },
     {
       n: '03',
       h: 'Smallholder digitization',
-      p: 'For governments, donors and cooperatives. How to take a paper-based farmer registry and turn it into something that unlocks credit, contracts and premium markets.',
+      p: 'For governments, donors and cooperatives. How to turn a paper-based farmer registry into something that unlocks credit, contracts and better markets.',
     },
     {
       n: '04',
       h: 'Agro real estate as an asset class',
-      p: 'For investor audiences and family offices. How vertically integrated agro real estate compares to traditional farmland investment, and the structures that make it work.',
+      p: 'For investor audiences and family offices. How agro real estate compares to traditional farmland investment, and how to structure it so it works.',
     },
   ]
 
@@ -682,15 +692,27 @@ const PACKAGES = [
     price: '₦150,000',
     intl: '$100 USD',
     per: '· 45 min',
-    desc: 'A focused, paid intro call. Walk through your situation; leave with a frank assessment and 3 immediate written actions — whether the next step is with me or someone else.',
-    items: [
-      '45-minute video or in-person call (Enugu)',
+    duration: '45 minutes · video or Enugu in-person',
+    desc: "A focused, paid intro call where we walk through your situation and you leave with a frank assessment and three concrete next actions — whether or not the next step is with me.",
+    included: [
+      '45-minute focused scoping call — video or in-person (Enugu)',
       'Pre-read of any materials you share',
       'Honest fit assessment — does my expertise match the need',
       'Directional framing of the problem',
       'Written follow-up note with 3 immediate actions within 24hrs',
     ],
-    note: 'One per organisation · Not credited toward a strategy session',
+    notIncluded: [
+      'Not a free consultation',
+      'Not a sales pitch for OriginTrace or FarmWise',
+      'One per organisation — not repeatable',
+      'Not credited toward a strategy session if you upgrade',
+    ],
+    idealFor: [
+      'Exporters unsure of compliance exposure',
+      'Investors sizing up agri-opportunities',
+      'Founders at early ideation stage',
+    ],
+    cta: 'Book the call →',
   },
   {
     id: 'compliance',
@@ -699,33 +721,60 @@ const PACKAGES = [
     price: '₦400,000',
     intl: '$265 USD',
     per: '· 2 hrs + written assessment',
-    desc: 'Live audit of your compliance position against one regulatory framework. Ends with a written gap assessment and prioritised 5-step remediation roadmap.',
-    items: [
+    duration: '2 hours + written gap assessment',
+    desc: 'A live audit of your compliance position against one regulatory framework, ending with a written gap assessment and a prioritised five-step remediation roadmap.',
+    included: [
       'Pre-session intake questionnaire',
       '2-hour live audit against one framework (EUDR, UK, US Lacey, China, or UAE)',
       'Written compliance gap assessment within 48 hours',
       'Prioritised 5-step remediation roadmap',
       '30-day email follow-up access',
     ],
+    outcomes: [
+      'Exact picture of your compliance gaps against a specific market',
+      'Specific document and data gaps named',
+      'Written roadmap you can act on without Obi',
+      'Honest view on whether OriginTrace solves your problem',
+    ],
+    idealFor: [
+      'Nigerian exporters preparing for the EU or UK market',
+      "Companies receiving buyer compliance requests they don't fully understand",
+    ],
+    cta: 'Book audit →',
   },
   {
     id: 'strategy',
     num: '03',
-    tag: 'Most booked',
+    badge: 'Most booked',
     featured: true,
     name: 'Export Strategy Session',
     price: '₦750,000',
     intl: '$500 USD',
     per: '· 5 hrs cumulative',
-    desc: 'The flagship engagement. Five cumulative working hours, a full written export strategy report, and a 14-day async follow-up window.',
-    items: [
+    duration: '5 hrs cumulative · full written strategy report',
+    desc: 'The flagship engagement — five cumulative working hours that end in a full written export strategy report, plus a 14-day async follow-up window.',
+    included: [
+      'Pre-session intake form and document review',
       '5 hours cumulative working time — split across sittings',
       'In-person in Enugu at no additional cost',
       'Outside Enugu: client covers travel and accommodation',
       'Full written export strategy report within 5 business days',
-      'Market selection, buyer profile, compliance pathway',
+      'Market selection rationale, buyer profile, compliance pathway',
       '14-day async follow-up via WhatsApp and email',
     ],
+    outcomes: [
+      'Documented export strategy — executable without Obi',
+      'Clear target market rationale and buyer profile',
+      'Compliance checklist for your specific product and markets',
+      'Commercial structure recommendation',
+      'Written deliverable to share with investors or partners',
+    ],
+    idealFor: [
+      'Exporters entering a new market',
+      'Producers approached by international buyers for the first time',
+      'Post-NEPC/GACON training follow-up',
+    ],
+    cta: 'Reserve a session →',
   },
   {
     id: 'investment',
@@ -734,15 +783,26 @@ const PACKAGES = [
     price: '₦600,000',
     intl: '$400 USD',
     per: '· 3 hrs + written brief',
-    desc: 'Structured advisory for investors evaluating Nigerian agri-land or commodity exposure. Includes a written investment brief and full conflict-of-interest disclosure.',
-    items: [
+    duration: '3 hours + written investment brief',
+    desc: 'Structured advisory for investors evaluating Nigerian agri-land or commodity exposure, including a written investment brief and a full conflict-of-interest disclosure.',
+    included: [
       'Pre-session investor intake form',
-      '3-hour advisory session — video or in-person Enugu',
+      '3-hour structured advisory session — video or in-person Enugu',
       'Written investment brief: risk, returns, structure options, red flags',
-      'WhiteRabbit Agro plantation overview where relevant',
-      'Introductions to operators or verified land agents if appropriate',
+      'WhiteRabbit Agro plantation investment overview where relevant',
+      'Introduction to relevant operators or verified land agents if appropriate',
       '30-day follow-up access',
     ],
+    callout: {
+      title: 'Conflict of interest — disclosed upfront',
+      body: "Obi operates WhiteRabbit Agro. This advisory is objective regardless of that — if your best option isn't WhiteRabbit, he'll say so in writing. This transparency is the offer's core credibility.",
+    },
+    idealFor: [
+      'Diaspora investors evaluating Nigerian agri-land',
+      'HNIs sizing plantation or commodity exposure',
+      'Family offices with Africa agricultural interest',
+    ],
+    cta: 'Book session →',
   },
   {
     id: 'retainer',
@@ -751,16 +811,27 @@ const PACKAGES = [
     price: '₦850,000',
     intl: '$565 USD',
     per: '/ month',
-    desc: 'Ongoing senior advisory for founders, exporters and operators who need a senior voice on tap. Written application required — maximum 2 active clients.',
-    items: [
+    duration: 'Minimum 3 months · ₦2,550,000 total',
+    desc: 'Ongoing senior advisory for founders, exporters and operators who need a senior voice on tap. It requires a written application, and I only take on two active clients at a time.',
+    included: [
       'Two 90-minute strategy sessions per month',
-      'Unlimited async access — WhatsApp, Slack, or email (24hr response)',
+      'Unlimited async access — WhatsApp, Slack, email (24hr response, business days)',
       'Document and deck review with 48hr turnaround',
       'Monthly written advisory note with priorities and recommendations',
       'Quarterly in-person session in Enugu or client location',
       'Network introductions where genuinely useful',
     ],
-    note: 'Minimum 3 months · ₦2,550,000 total · invoiced monthly',
+    callout: {
+      title: 'Retainer terms',
+      body: 'Written application required — 3 qualifying questions. Maximum 2 active clients at any time. Invoiced monthly in advance on the 1st. No rollover of unused sessions. Obi reserves the right to decline renewal if fit has deteriorated.',
+    },
+    minimumNote: '3 months · ₦2,550,000 total · invoiced monthly. This is not negotiable. Problems worth sustained advisory take longer than 30 days. Clients who are serious about results commit to the minimum. Clients who want to test with one month are better served by the Export Strategy Session.',
+    idealFor: [
+      'Exporters actively building EU/UK market access',
+      'Agri-companies in active fundraising',
+      'Government agencies or ministries needing an ongoing senior advisory voice',
+    ],
+    cta: 'Apply for retainer →',
   },
 ]
 
@@ -777,9 +848,10 @@ export function Packages({ onPick }) {
             </h2>
           </div>
           <p className="lede">
-            Calibrated for the conversations I actually have — a paid intro call,
-            a compliance audit, a full export strategy, an investor advisory, or
-            a steady hand for an ongoing engagement. <b>Pick the one that fits.</b>
+            These are built around the conversations I actually have — a paid
+            intro call, a compliance audit, a full export strategy, an
+            investor advisory, or ongoing support. Pick whichever fits where
+            you are.
           </p>
         </div>
 
@@ -787,28 +859,66 @@ export function Packages({ onPick }) {
           {PACKAGES.map((p) => (
             <div key={p.id} className={`pkg ${p.featured ? 'featured' : ''}`}
                  onClick={() => onPick(p.id)}>
-              <div className="pkg-head">
-                <span className="pkg-num">— {p.num} / 05</span>
-                {p.tag && <span className="pkg-tag">{p.tag}</span>}
-              </div>
+              {p.badge && <span className="pkg-badge">{p.badge}</span>}
+              <span className="pkg-num">— {p.num} / 05</span>
               <h3 className="pkg-name">{p.name}</h3>
               <div className="pkg-price">
                 <span className="pp">{p.price}</span>
                 <span className="per">{p.per}</span>
               </div>
-              {p.intl && <div className="pkg-intl">{p.intl} · international</div>}
+              {p.intl && <div className="pkg-intl">{p.intl} international</div>}
+              {p.duration && <div className="pkg-duration">{p.duration}</div>}
               <p className="pkg-desc">{p.desc}</p>
-              <ul className="pkg-list">
-                {p.items.map((it, i) => <li key={i}>{it}</li>)}
-              </ul>
-              {p.note && <p className="pkg-note">{p.note}</p>}
+
+              <div>
+                <p className="pkg-sublabel">Included</p>
+                <ul className="pkg-list">
+                  {p.included.map((it, i) => <li key={i}>{it}</li>)}
+                </ul>
+              </div>
+
+              {p.outcomes && (
+                <div>
+                  <p className="pkg-sublabel">Outcomes</p>
+                  <ul className="pkg-list">
+                    {p.outcomes.map((it, i) => <li key={i}>{it}</li>)}
+                  </ul>
+                </div>
+              )}
+
+              {p.notIncluded && (
+                <div>
+                  <p className="pkg-sublabel">This is NOT</p>
+                  <ul className="pkg-list not">
+                    {p.notIncluded.map((it, i) => <li key={i}>{it}</li>)}
+                  </ul>
+                </div>
+              )}
+
+              {p.callout && (
+                <div className="pkg-callout">
+                  <span className="pkg-callout-title">{p.callout.title}</span>
+                  <p>{p.callout.body}</p>
+                </div>
+              )}
+
+              {p.minimumNote && (
+                <div className="pkg-callout warn">
+                  <span className="pkg-callout-title">Minimum commitment</span>
+                  <p>{p.minimumNote}</p>
+                </div>
+              )}
+
+              {p.idealFor && (
+                <p className="pkg-idealfor">
+                  <b>Ideal for</b>
+                  {p.idealFor.join(' · ')}
+                </p>
+              )}
+
               <button className="pkg-cta"
                       onClick={(e) => { e.stopPropagation(); onPick(p.id) }}>
-                {p.id === 'discovery'  ? 'Book the call →' :
-                 p.id === 'compliance' ? 'Book audit →' :
-                 p.id === 'strategy'   ? 'Reserve a session →' :
-                 p.id === 'investment' ? 'Book session →' :
-                 'Apply for retainer →'}
+                {p.cta}
               </button>
             </div>
           ))}
@@ -886,15 +996,14 @@ export function Social() {
         <div>
           <span className="lab">— 07 · Connect</span>
           <h2>
-            Read along.<br />
-            <em>Argue back.</em>
+            Follow along,<br />
+            or say <em>hello</em>.
           </h2>
         </div>
         <p className="lede">
-          Notes from the field — what's working in agriculture right now,
-          how global trade compliance is changing, and what investors are
-          seeing on the ground. <b>Pick the channel that matches how you
-          interact online.</b>
+          Updates on what's working in agriculture right now, how trade
+          rules are changing, and what investors are seeing on the
+          ground — shared across the platforms below.
         </p>
       </div>
       <div className="social-grid">
@@ -939,16 +1048,16 @@ export function Footer({ onNav }) {
       <div className="inner">
 
         <h2 className="foot-display">
-          Let's build the <em>rails</em>.
+          Let's <em>work together</em>.
         </h2>
 
         <div className="foot-grid">
           <div className="foot-col foot-id">
             <img className="foot-logo" src="/assets/logo-wordmark-inverse.png" alt="Obi Emeka" />
             <p>
-              Founder &amp; CEO, WhiteRabbit Agro. Building OriginTrace and
-              FarmWise. Based in Enugu, working everywhere African
-              agriculture ships.
+              Founder and CEO of WhiteRabbit Agro. Also built OriginTrace
+              and FarmWise. Based in Enugu, Nigeria, and working with
+              people across Africa's agriculture and export industry.
             </p>
             <span className="tag">
               oe@obiemeka.com<br />
@@ -996,7 +1105,7 @@ export function Footer({ onNav }) {
 
         <div className="foot-bottom">
           <span>© 2026 Obi Emeka · obiemeka.com</span>
-          <span>Built for repetition · Sharpened by use</span>
+          <span>Thanks for reading.</span>
         </div>
       </div>
     </footer>
