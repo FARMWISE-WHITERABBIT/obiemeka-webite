@@ -12,8 +12,8 @@ export function GreenCircleCTA({ campaign, topic, variant = 'end' }) {
     campaign,
   })
   const label = topic
-    ? `If ${topic} is something you're actively dealing with, The Green Circle is where operators, investors, and founders in this space compare notes — free to join.`
-    : `The Green Circle is where operators, investors, and founders solving this exact kind of problem compare notes — free to join.`
+    ? `If ${topic} is something you're actively dealing with, The Green Circle is where operators, investors, and founders in this space compare notes. Free to join.`
+    : `The Green Circle is where operators, investors, and founders solving this exact kind of problem compare notes. Free to join.`
 
   return (
     <div className={`gc-cta gc-cta-${variant}`}>

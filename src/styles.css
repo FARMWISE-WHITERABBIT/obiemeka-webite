@@ -1239,6 +1239,11 @@ footer .inner { max-width: 1440px; margin: 0 auto; }
 @media (max-width: 720px) {
   .shell, .section { padding-left: var(--s-4); padding-right: var(--s-4); }
   .section { padding-top: var(--s-7); padding-bottom: var(--s-7); }
+  /* .section is the first element under the fixed nav on standalone pages
+     (blog index, blog post, Green Circle) — var(--s-7) alone (48px) is
+     shorter than the mobile nav's rendered height (~73px), so without this
+     the nav overlaps the page's own heading. */
+  .page-top { padding-top: 108px; }
   .hero { padding: 100px var(--s-4) var(--s-6); gap: var(--s-5); }
   .hero-photo { min-height: 300px; }
   .hero-title { font-size: clamp(38px, 13vw, 72px); }
@@ -1371,9 +1376,9 @@ footer .inner { max-width: 1440px; margin: 0 auto; }
   display: flex; flex-direction: column; gap: var(--s-3);
   align-items: flex-start;
 }
-.gc-popup-logo { width: 72px; height: 72px; border-radius: var(--r-pill); }
-.gc-landing-logo { width: 108px; height: 108px; border-radius: var(--r-pill); margin-bottom: var(--s-5); }
-.gc-confirm-logo { width: 68px; height: 68px; border-radius: var(--r-pill); margin-bottom: var(--s-2); }
+.gc-popup-logo { width: 96px; height: 96px; border-radius: var(--r-pill); }
+.gc-landing-logo { width: 148px; height: 148px; border-radius: var(--r-pill); margin-bottom: var(--s-5); }
+.gc-confirm-logo { width: 92px; height: 92px; border-radius: var(--r-pill); margin-bottom: var(--s-2); }
 .gc-popup-lab { color: var(--muted); }
 
 .gc-summary {
@@ -1483,5 +1488,5 @@ footer .inner { max-width: 1440px; margin: 0 auto; }
   .gc-popup { padding: var(--s-6) var(--s-4) var(--s-5); }
   .gc-gallery img { flex-basis: 200px; width: 200px; max-width: 200px; }
   .gc-summary p { font-size: 16px; }
-  .gc-landing-logo { width: 96px; height: 96px; }
+  .gc-landing-logo { width: 128px; height: 128px; }
 }
