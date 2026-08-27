@@ -46,10 +46,15 @@ create table if not exists public.green_circle_signups (
   utm_campaign   text,
   utm_content    text,
   landing_path   text,
-  referrer       text
+  referrer       text,
+  status         text        not null default 'pending' check (status in ('pending', 'approved', 'declined')),
+  approval_token text        not null,  -- powers the one-click approve/decline link in the admin notification email
+  approved_at    timestamptz
 );
 
 alter table public.green_circle_signups enable row level security;
 
 create index if not exists green_circle_signups_created_at_idx on public.green_circle_signups (created_at desc);
 create index if not exists green_circle_signups_utm_source_idx on public.green_circle_signups (utm_source);
+create unique index if not exists green_circle_signups_approval_token_idx on public.green_circle_signups (approval_token);
+create index if not exists green_circle_signups_status_idx on public.green_circle_signups (status);

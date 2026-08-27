@@ -4,9 +4,20 @@ import { Nav, Footer } from '../sections'
 import { useSectionNav } from '../useSectionNav'
 import { captureUtmFromLocation } from '../lib/utm'
 
-const WHATSAPP_LINK = import.meta.env.VITE_GREEN_CIRCLE_WHATSAPP_LINK || ''
-
 const INITIAL = { name: '', email: '', phone: '', nickname: '' }
+
+// Curated from a past Green Circle networking event — real photos, not
+// stock imagery, to back up the "this is a real community" claim.
+const GALLERY_IMAGES = [
+  '/assets/SaveClip.App_475377846_18266977000264868_837989137282366220_n.jpg',
+  '/assets/SaveClip.App_475429121_18266977198264868_6731562200085084235_n.jpg',
+  '/assets/SaveClip.App_475932438_18266977183264868_8671090709736923101_n.jpg',
+  '/assets/SaveClip.App_476223735_18266977099264868_3229623713515563170_n.jpg',
+  '/assets/SaveClip.App_476349246_18266977024264868_4445487833371868203_n.jpg',
+  '/assets/SaveClip.App_476575189_18266977150264868_7523304046837873502_n.jpg',
+  '/assets/SaveClip.App_476619602_18266977039264868_5745297464963985581_n.jpg',
+  '/assets/SaveClip.App_476747268_18266976973264868_8581438430631720840_n.jpg',
+]
 
 export default function GreenCircle() {
   const onNav = useSectionNav()
@@ -108,6 +119,16 @@ export default function GreenCircle() {
             <p>Workshops and conversations with people working across farming, processing, finance, investment, technology, logistics and export.</p>
           </div>
           <div className="gc-feature">
+            <span className="gc-feature-emoji" aria-hidden="true">🎯</span>
+            <h3>Accountability partners</h3>
+            <p>Founders and operators run into the same wall alone — no one checking whether the plan from last month actually happened. Find people in the same weight class to answer to.</p>
+          </div>
+          <div className="gc-feature">
+            <span className="gc-feature-emoji" aria-hidden="true">🧭</span>
+            <h3>A growth-based identity</h3>
+            <p>Being surrounded by people building at your level changes how you see your own work — this is a community to grow into, not just a channel to read.</p>
+          </div>
+          <div className="gc-feature">
             <span className="gc-feature-emoji" aria-hidden="true">🛡️</span>
             <h3>Value that compounds</h3>
             <p>As the network grows, so does what it's worth — more expertise, more opportunities, more partnerships, more access for everyone already in it.</p>
@@ -117,6 +138,20 @@ export default function GreenCircle() {
             <h3>The ambition</h3>
             <p>To build one of the largest, most valuable vetted agriculture networks connecting operators, investors, professionals and diaspora across Africa and beyond.</p>
           </div>
+        </div>
+
+        <div className="gc-gallery-head">
+          <span className="lab">— In person</span>
+          <p className="lede" style={{ maxWidth: '48ch' }}>
+            The WhatsApp group is the everyday layer — it's backed by real
+            networking events where members actually meet, present, and
+            argue about ideas in the same room.
+          </p>
+        </div>
+        <div className="gc-gallery">
+          {GALLERY_IMAGES.map((src) => (
+            <img key={src} src={src} alt="Green Circle networking event" loading="lazy" />
+          ))}
         </div>
 
         <div className="gc-grid">
@@ -200,7 +235,7 @@ export default function GreenCircle() {
                     {status === 'loading' ? 'Joining…' : 'Join Community'} <span className="arrow" />
                   </button>
                   <p className="pkg-note" style={{ margin: '8px 0 0' }}>
-                    Free. No spam. You'll get a WhatsApp invite link next — not a newsletter signup.
+                    Free. No spam. Signups are reviewed — you'll get the WhatsApp invite by email once approved, not a newsletter signup.
                   </p>
                 </div>
               </form>
@@ -218,24 +253,16 @@ function ConfirmationCard({ name }) {
   return (
     <div className="form-success">
       <img className="gc-confirm-logo" src="/assets/green-circle-logo.png" alt="The Green Circle" />
-      <span className="caps" style={{ color: 'var(--ink)', opacity: 0.7 }}>— You're in</span>
+      <span className="caps" style={{ color: 'var(--ink)', opacity: 0.7 }}>— In review</span>
       <h3>Got it, {firstName || 'welcome'}.</h3>
       <p>
-        You're on the list. The Green Circle itself lives on WhatsApp — hit
-        the button below to join the group. You're choosing to join, so
-        nothing happens on our end until you tap it.
+        You're on the list. Signups are reviewed to keep the group focused
+        as it grows — once yours is approved, the WhatsApp Community invite
+        link lands straight in your inbox. No further steps on your end
+        until then.
       </p>
-      {WHATSAPP_LINK ? (
-        <a className="btn btn-primary" href={WHATSAPP_LINK} target="_blank" rel="noreferrer">
-          Join the Green Circle WhatsApp Community <span className="arrow" />
-        </a>
-      ) : (
-        <p className="pkg-note">
-          WhatsApp invite link isn't configured yet — set VITE_GREEN_CIRCLE_WHATSAPP_LINK.
-        </p>
-      )}
       <p style={{ marginTop: 'var(--s-4)' }}>
-        <Link to="/blog" className="btn btn-ghost">Read the journal <span className="arrow" /></Link>
+        <Link to="/blog" className="btn btn-ghost">Read the journal while you wait <span className="arrow" /></Link>
       </p>
     </div>
   )
