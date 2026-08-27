@@ -2,7 +2,22 @@ import crypto from 'node:crypto'
 import { Resend } from 'resend'
 import { getSupabase, escapeHtml } from './_lib/booking.js'
 
-const MAX_LENGTHS = { name: 200, email: 200, phone: 40, utm_source: 100, utm_medium: 100, utm_campaign: 100, utm_content: 100, landingPath: 300, referrer: 500 }
+const MAX_LENGTHS = { name: 200, email: 200, phone: 40, memberType: 40, goal: 1000, utm_source: 100, utm_medium: 100, utm_campaign: 100, utm_content: 100, landingPath: 300, referrer: 500 }
+
+const VALID_MEMBER_TYPES = [
+  'diaspora-investor', 'nigeria-investor', 'agribusiness-owner',
+  'agritech-founder', 'agritech-enthusiast', 'ag-professional', 'other',
+]
+
+const MEMBER_TYPE_LABELS = {
+  'diaspora-investor': 'Diaspora investor',
+  'nigeria-investor': 'Nigeria-based investor',
+  'agribusiness-owner': 'Agribusiness owner / operator',
+  'agritech-founder': 'Agri-tech startup founder',
+  'agritech-enthusiast': 'Agri-tech enthusiast',
+  'ag-professional': 'Agricultural professional / consultant',
+  'other': 'Other',
+}
 
 const EMAIL_RATE_LIMIT = { count: 3, windowMs: 60 * 60 * 1000 }   // 3 per email per hour
 const GLOBAL_RATE_LIMIT = { count: 30, windowMs: 10 * 60 * 1000 } // 30 total per 10 min
@@ -27,6 +42,8 @@ export default async function handler(req, res) {
   const name        = (body?.name        || '').trim()
   const email       = (body?.email       || '').trim().toLowerCase()
   const phone       = (body?.phone       || '').trim()
+  const memberType  = (body?.memberType  || '').trim()
+  const goal        = (body?.goal        || '').trim()
   const utm_source  = (body?.utm_source  || '').trim()
   const utm_medium  = (body?.utm_medium  || '').trim()
   const utm_campaign= (body?.utm_campaign|| '').trim()
@@ -40,8 +57,14 @@ export default async function handler(req, res) {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return res.status(400).json({ error: 'Invalid email address' })
   }
+  if (!VALID_MEMBER_TYPES.includes(memberType)) {
+    return res.status(400).json({ error: 'Please select which of these you are' })
+  }
+  if (goal.length < 15) {
+    return res.status(400).json({ error: 'Please say a bit more about what you\'re hoping to get out of it' })
+  }
   const tooLong = Object.entries(MAX_LENGTHS).find(
-    ([k, max]) => ({ name, email, phone, utm_source, utm_medium, utm_campaign, utm_content, landingPath, referrer })[k]?.length > max
+    ([k, max]) => ({ name, email, phone, memberType, goal, utm_source, utm_medium, utm_campaign, utm_content, landingPath, referrer })[k]?.length > max
   )
   if (tooLong) {
     return res.status(400).json({ error: `${tooLong[0]} is too long` })
@@ -81,6 +104,8 @@ export default async function handler(req, res) {
   const attributionFields = {
     name,
     phone: phone || null,
+    member_type: memberType,
+    goal,
     utm_source: utm_source || null,
     utm_medium: utm_medium || null,
     utm_campaign: utm_campaign || null,
@@ -129,7 +154,7 @@ async function sendAdminNotification(signup) {
   const fromAddr = process.env.EMAIL_FROM || 'onboarding@resend.dev'
   const notifyTo = process.env.NOTIFY_EMAIL || 'oe@obiemeka.com'
   const siteUrl = process.env.SITE_URL || 'https://obiemeka.com'
-  const { id, name, email, phone, utm_source, utm_medium, utm_campaign, approval_token, created_at } = signup
+  const { id, name, email, phone, member_type, goal, utm_source, utm_medium, utm_campaign, approval_token, created_at } = signup
   const submittedAt = new Date(created_at || Date.now()).toUTCString()
   const approveUrl = `${siteUrl}/api/approve-green-circle?id=${id}&token=${approval_token}&action=approve`
   const declineUrl = `${siteUrl}/api/approve-green-circle?id=${id}&token=${approval_token}&action=decline`
@@ -139,18 +164,19 @@ async function sendAdminNotification(signup) {
       from:    `Obi Emeka Website <${fromAddr}>`,
       to:      notifyTo,
       subject: `Review: new Green Circle signup from ${name}`,
-      html:    notificationHtml({ name, email, phone, utm_source, utm_medium, utm_campaign, submittedAt, approveUrl, declineUrl }),
+      html:    notificationHtml({ name, email, phone, member_type, goal, utm_source, utm_medium, utm_campaign, submittedAt, approveUrl, declineUrl }),
     })
   } catch (err) {
     console.error('Green Circle admin notification failed:', err)
   }
 }
 
-function notificationHtml({ name, email, phone, utm_source, utm_medium, utm_campaign, submittedAt, approveUrl, declineUrl }) {
+function notificationHtml({ name, email, phone, member_type, goal, utm_source, utm_medium, utm_campaign, submittedAt, approveUrl, declineUrl }) {
   const rows = [
     ['Name', escapeHtml(name)],
     ['Email', escapeHtml(email)],
     ['Phone', escapeHtml(phone) || '—'],
+    ['Member type', escapeHtml(MEMBER_TYPE_LABELS[member_type] || member_type)],
     ['Source', escapeHtml(utm_source) || '—'],
     ['Medium', escapeHtml(utm_medium) || '—'],
     ['Campaign', escapeHtml(utm_campaign) || '—'],
@@ -170,6 +196,14 @@ function notificationHtml({ name, email, phone, utm_source, utm_medium, utm_camp
       <p style="color:#6B6660;font-size:15px;margin:0 0 24px;">
         Approving emails them the WhatsApp invite immediately. Declining sends nothing — they're just left off the list.
       </p>
+
+      <div style="background:rgba(246,244,239,0.06);border:1px solid rgba(246,244,239,0.1);
+                  border-radius:12px;padding:20px 24px;margin-bottom:32px;">
+        <p style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#6B6660;margin:0 0 12px;">
+          — What they're hoping to get out of it
+        </p>
+        <p style="font-size:15px;line-height:1.6;color:#F6F4EF;margin:0;">${escapeHtml(goal).replace(/\n/g, '<br>')}</p>
+      </div>
 
       <table cellpadding="0" cellspacing="0" style="margin:0 0 32px;">
         <tr>

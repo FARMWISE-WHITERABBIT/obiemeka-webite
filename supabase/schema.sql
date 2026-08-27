@@ -47,6 +47,8 @@ create table if not exists public.green_circle_signups (
   utm_content    text,
   landing_path   text,
   referrer       text,
+  member_type    text        not null,  -- diaspora-investor | nigeria-investor | agribusiness-owner | agritech-founder | agritech-enthusiast | ag-professional | other
+  goal           text        not null,  -- what they're hoping to get out of the community — the actual vetting input
   status         text        not null default 'pending' check (status in ('pending', 'approved', 'declined')),
   approval_token text        not null,  -- powers the one-click approve/decline link in the admin notification email
   approved_at    timestamptz
