@@ -167,9 +167,10 @@ export default function GreenCircle() {
               </div>
               <h3>Investors, operators, entrepreneurs.</h3>
               <p>
-                If you're solving a real problem in African agriculture,
-                this is for you. It's not a general audience — that's what
-                keeps it useful.
+                Investors sizing up the opportunity, operators running the
+                day-to-day, and entrepreneurs building something new — if
+                African agriculture is where you're putting your time or
+                your money, this is for you.
               </p>
               <div className="when">
                 <span className="chip">Investors</span>
@@ -184,9 +185,7 @@ export default function GreenCircle() {
               </div>
               <p style={{ margin: 0 }}>
                 Submitting this form puts you on the list. Once it's
-                reviewed, you'll get a WhatsApp invite by email —
-                <b> it's a WhatsApp group, not a newsletter</b>, so nothing
-                lands in your inbox until that invite does.
+                reviewed, you'll get a WhatsApp invite by email.
               </p>
             </div>
           </div>
