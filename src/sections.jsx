@@ -1086,7 +1086,7 @@ export function Footer({ onNav }) {
               <li><a href="#packages"  onClick={(e) => { e.preventDefault(); onNav('packages') }}>Engagements</a></li>
               <li><a href="#book"      onClick={(e) => { e.preventDefault(); onNav('book') }}>Book a call</a></li>
               <li><Link to="/blog">Journal</Link></li>
-              <li><Link to="/green-circle">The Green Circle</Link></li>
+              <li><Link to="/greencircle-community">The Green Circle</Link></li>
             </ul>
           </div>
           <div className="foot-col">

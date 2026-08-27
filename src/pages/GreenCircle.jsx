@@ -4,9 +4,28 @@ import { Nav, Footer } from '../sections'
 import { useSectionNav } from '../useSectionNav'
 import { captureUtmFromLocation } from '../lib/utm'
 
-const WHATSAPP_LINK = import.meta.env.VITE_GREEN_CIRCLE_WHATSAPP_LINK || ''
-
 const INITIAL = { name: '', email: '', phone: '', nickname: '' }
+
+// From a past Green Circle networking event — real photos, not stock
+// imagery, to back up the "this is a real community" claim.
+const GALLERY_IMAGES = [
+  '/assets/SaveClip.App_475377846_18266977000264868_837989137282366220_n.jpg',
+  '/assets/SaveClip.App_475429121_18266977198264868_6731562200085084235_n.jpg',
+  '/assets/SaveClip.App_475932438_18266977183264868_8671090709736923101_n.jpg',
+  '/assets/SaveClip.App_475954876_18266977027264868_343253638841141803_n.jpg',
+  '/assets/SaveClip.App_475992369_18266977060264868_3154779318020706322_n.jpg',
+  '/assets/SaveClip.App_476223735_18266977099264868_3229623713515563170_n.jpg',
+  '/assets/SaveClip.App_476234111_18266976952264868_7395538410015496527_n.jpg',
+  '/assets/SaveClip.App_476342974_18266976964264868_2586949881839520511_n.jpg',
+  '/assets/SaveClip.App_476349246_18266977024264868_4445487833371868203_n.jpg',
+  '/assets/SaveClip.App_476418969_18266977069264868_1960487380620007820_n.jpg',
+  '/assets/SaveClip.App_476562421_18266977087264868_2175444977803350782_n.jpg',
+  '/assets/SaveClip.App_476575189_18266977150264868_7523304046837873502_n.jpg',
+  '/assets/SaveClip.App_476616910_18266977168264868_6765207802815623650_n.jpg',
+  '/assets/SaveClip.App_476619602_18266977039264868_5745297464963985581_n.jpg',
+  '/assets/SaveClip.App_476627066_18266977048264868_4998975550904757456_n.jpg',
+  '/assets/SaveClip.App_476747268_18266976973264868_8581438430631720840_n.jpg',
+]
 
 export default function GreenCircle() {
   const onNav = useSectionNav()
@@ -66,42 +85,67 @@ export default function GreenCircle() {
   return (
     <>
       <Nav onPaperSection />
-      <section className="section gc-landing" id="green-circle" aria-label="Join The Green Circle">
-        <div className="section-head">
+      <section className="section gc-landing" id="greencircle-community" aria-label="Join The Green Circle">
+        <div className="section-head" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+          <img className="gc-landing-logo" src="/assets/green-circle-logo.png" alt="The Green Circle" />
           <div>
-            <img className="gc-landing-logo" src="/assets/green-circle-logo.png" alt="The Green Circle" />
             <span className="lab">— The Green Circle</span>
             <h2>
-              Investors, operators,<br />
-              founders — <em>one room</em>.
+              A place to<br />
+              <em>compare notes</em>.
             </h2>
           </div>
           <p className="lede">
-            A free WhatsApp community for people actively solving problems in
-            African agriculture — not a generic farming group. Built around
-            the same operator credibility behind WhiteRabbit Agro's plantation
-            operations and OriginTrace's export compliance work.
+            I run a plantation and a compliance platform, so most of what I
+            know about African agriculture I learned by doing it, not
+            reading about it. The Green Circle is a free WhatsApp group for
+            investors, operators, and entrepreneurs who want the same —
+            people who've actually run into the problem you're working on,
+            not a generic agriculture feed.
           </p>
         </div>
 
+        <div className="gc-summary">
+          <p>
+            Members trade what's actually working — deals, hiring,
+            compliance headaches, where the money's moving right now. When
+            something useful comes up, a grant, a training, someone worth
+            knowing, it gets passed around instead of sitting in an inbox.
+            A few people have started using it to find accountability
+            partners, which wasn't the original plan, but it's turned into
+            one of the better reasons to be in it.
+          </p>
+        </div>
+
+        <div className="gc-gallery-head">
+          <span className="lab">— In person</span>
+          <p className="lede" style={{ maxWidth: '48ch' }}>
+            Photos from a past Green Circle meetup.
+          </p>
+        </div>
+        <div className="gc-gallery">
+          {GALLERY_IMAGES.map((src) => (
+            <img key={src} src={src} alt="Green Circle networking event" loading="lazy" />
+          ))}
+        </div>
+
         <div className="gc-grid">
-          <div className="gc-side">
+          <div className="booking-side">
             <div className="num-card">
               <div className="nc-head">
                 <span>— Who it's for</span>
                 <span>OE / 2026</span>
               </div>
-              <h3>Not another agriculture group.</h3>
+              <h3>Investors, operators, entrepreneurs.</h3>
               <p>
-                The Green Circle is for investors sizing up agri-opportunities,
-                operators running the day-to-day, and founders building in the
-                space — people who want peers who've actually done the work,
-                not a generic feed.
+                If you're solving a real problem in African agriculture,
+                this is for you. It's not a general audience — that's what
+                keeps it useful.
               </p>
               <div className="when">
                 <span className="chip">Investors</span>
                 <span className="chip">Operators</span>
-                <span className="chip">Founders</span>
+                <span className="chip">Entrepreneurs</span>
               </div>
             </div>
 
@@ -110,10 +154,10 @@ export default function GreenCircle() {
                 <span>— What happens next</span>
               </div>
               <p style={{ margin: 0 }}>
-                Submitting this form adds you to Obi's list — that's step one.
-                Step two is a WhatsApp Community invite link on the next
-                screen. <b>This is a WhatsApp group, not an email newsletter</b> —
-                you'll join it yourself, on your own terms.
+                Submitting this form puts you on the list. Once it's
+                reviewed, you'll get a WhatsApp invite by email —
+                <b> it's a WhatsApp group, not a newsletter</b>, so nothing
+                lands in your inbox until that invite does.
               </p>
             </div>
           </div>
@@ -162,7 +206,7 @@ export default function GreenCircle() {
                     {status === 'loading' ? 'Joining…' : 'Join Community'} <span className="arrow" />
                   </button>
                   <p className="pkg-note" style={{ margin: '8px 0 0' }}>
-                    Free. No spam. You'll get a WhatsApp invite link next — not a newsletter signup.
+                    Free. Signups are reviewed, so it's not instant — you'll get the WhatsApp invite by email once yours goes through.
                   </p>
                 </div>
               </form>
@@ -180,24 +224,14 @@ function ConfirmationCard({ name }) {
   return (
     <div className="form-success">
       <img className="gc-confirm-logo" src="/assets/green-circle-logo.png" alt="The Green Circle" />
-      <span className="caps" style={{ color: 'var(--ink)', opacity: 0.7 }}>— You're in</span>
+      <span className="caps" style={{ color: 'var(--ink)', opacity: 0.7 }}>— In review</span>
       <h3>Got it, {firstName || 'welcome'}.</h3>
       <p>
-        You're on the list. The Green Circle itself lives on WhatsApp — hit
-        the button below to join the group. You're choosing to join, so
-        nothing happens on our end until you tap it.
+        You're on the list. Once it's reviewed, the WhatsApp invite goes to
+        your email — nothing else to do until then.
       </p>
-      {WHATSAPP_LINK ? (
-        <a className="btn btn-primary" href={WHATSAPP_LINK} target="_blank" rel="noreferrer">
-          Join the Green Circle WhatsApp Community <span className="arrow" />
-        </a>
-      ) : (
-        <p className="pkg-note">
-          WhatsApp invite link isn't configured yet — set VITE_GREEN_CIRCLE_WHATSAPP_LINK.
-        </p>
-      )}
       <p style={{ marginTop: 'var(--s-4)' }}>
-        <Link to="/blog" className="btn btn-ghost">Read the journal <span className="arrow" /></Link>
+        <Link to="/blog" className="btn btn-ghost">Read the journal while you wait <span className="arrow" /></Link>
       </p>
     </div>
   )

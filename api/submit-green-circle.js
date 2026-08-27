@@ -1,3 +1,4 @@
+import crypto from 'node:crypto'
 import { Resend } from 'resend'
 import { getSupabase, escapeHtml } from './_lib/booking.js'
 
@@ -73,68 +74,79 @@ export default async function handler(req, res) {
   }
 
   // Person is in the database the moment they submit, independent of whether
-  // they go on to actually join the WhatsApp group. A repeat signup with the
-  // same email upserts (refreshes attribution) instead of erroring.
-  const { data: inserted, error: dbError } = await supabase
+  // they're approved. A repeat signup with the same email refreshes their
+  // attribution/contact fields but never touches status or approval_token —
+  // resubmitting can't reset an already-reviewed application back to pending,
+  // and won't invalidate an approve link already sent to Obi.
+  const attributionFields = {
+    name,
+    phone: phone || null,
+    utm_source: utm_source || null,
+    utm_medium: utm_medium || null,
+    utm_campaign: utm_campaign || null,
+    utm_content: utm_content || null,
+    landing_path: landingPath || null,
+    referrer: referrer || null,
+  }
+
+  const { data: existing } = await supabase
     .from('green_circle_signups')
-    .upsert({
-      name, email,
-      phone: phone || null,
-      utm_source: utm_source || null,
-      utm_medium: utm_medium || null,
-      utm_campaign: utm_campaign || null,
-      utm_content: utm_content || null,
-      landing_path: landingPath || null,
-      referrer: referrer || null,
-    }, { onConflict: 'email' })
-    .select()
-    .single()
+    .select('id')
+    .eq('email', email)
+    .maybeSingle()
+
+  let signup, dbError
+  if (existing) {
+    const { data, error } = await supabase
+      .from('green_circle_signups')
+      .update(attributionFields)
+      .eq('email', email)
+      .select()
+      .single()
+    signup = data; dbError = error
+  } else {
+    const { data, error } = await supabase
+      .from('green_circle_signups')
+      .insert({ ...attributionFields, email, approval_token: crypto.randomBytes(24).toString('hex') })
+      .select()
+      .single()
+    signup = data; dbError = error
+  }
 
   if (dbError) {
     console.error('Supabase insert error:', dbError)
     return res.status(500).json({ error: 'Could not save your request. Please try again.' })
   }
 
-  await sendGreenCircleEmails(inserted)
+  await sendAdminNotification(signup)
   return res.status(200).json({ ok: true })
 }
 
-async function sendGreenCircleEmails(signup) {
+async function sendAdminNotification(signup) {
   if (!process.env.RESEND_API_KEY) return
 
   const resend = new Resend(process.env.RESEND_API_KEY)
   const fromAddr = process.env.EMAIL_FROM || 'onboarding@resend.dev'
   const notifyTo = process.env.NOTIFY_EMAIL || 'oe@obiemeka.com'
-  const whatsappLink = process.env.VITE_GREEN_CIRCLE_WHATSAPP_LINK || ''
-  const { name, email, phone, utm_source, utm_medium, utm_campaign, created_at } = signup
+  const siteUrl = process.env.SITE_URL || 'https://obiemeka.com'
+  const { id, name, email, phone, utm_source, utm_medium, utm_campaign, approval_token, created_at } = signup
   const submittedAt = new Date(created_at || Date.now()).toUTCString()
+  const approveUrl = `${siteUrl}/api/approve-green-circle?id=${id}&token=${approval_token}&action=approve`
+  const declineUrl = `${siteUrl}/api/approve-green-circle?id=${id}&token=${approval_token}&action=decline`
 
-  const sends = [
-    resend.emails.send({
+  try {
+    await resend.emails.send({
       from:    `Obi Emeka Website <${fromAddr}>`,
       to:      notifyTo,
-      subject: `New Green Circle signup from ${name}`,
-      html:    notificationHtml({ name, email, phone, utm_source, utm_medium, utm_campaign, submittedAt }),
-    }),
-  ]
-
-  // Email doubles as a backup delivery path for the WhatsApp link, in case
-  // the visitor closes the tab before clicking through on the confirmation
-  // page itself.
-  if (whatsappLink) {
-    sends.push(resend.emails.send({
-      from:    `Obi Emeka <${fromAddr}>`,
-      to:      email,
-      subject: 'Your Green Circle WhatsApp invite',
-      html:    confirmationHtml({ name, whatsappLink }),
-    }))
+      subject: `Review: new Green Circle signup from ${name}`,
+      html:    notificationHtml({ name, email, phone, utm_source, utm_medium, utm_campaign, submittedAt, approveUrl, declineUrl }),
+    })
+  } catch (err) {
+    console.error('Green Circle admin notification failed:', err)
   }
-
-  const results = await Promise.allSettled(sends)
-  results.forEach((r) => { if (r.status === 'rejected') console.error('Green Circle email failed:', r.reason) })
 }
 
-function notificationHtml({ name, email, phone, utm_source, utm_medium, utm_campaign, submittedAt }) {
+function notificationHtml({ name, email, phone, utm_source, utm_medium, utm_campaign, submittedAt, approveUrl, declineUrl }) {
   const rows = [
     ['Name', escapeHtml(name)],
     ['Email', escapeHtml(email)],
@@ -153,10 +165,33 @@ function notificationHtml({ name, email, phone, utm_source, utm_medium, utm_camp
         — obiemeka.com / Green Circle
       </p>
       <h1 style="font-size:36px;font-weight:800;letter-spacing:-0.03em;margin:0 0 8px;line-height:1;">
-        New signup.
+        Review this signup.
       </h1>
+      <p style="color:#6B6660;font-size:15px;margin:0 0 24px;">
+        Approving emails them the WhatsApp invite immediately. Declining sends nothing — they're just left off the list.
+      </p>
+
+      <table cellpadding="0" cellspacing="0" style="margin:0 0 32px;">
+        <tr>
+          <td style="border-radius:999px;background:#E8FF3A;padding-right:12px;">
+            <a href="${approveUrl}"
+               style="display:inline-block;padding:14px 28px;font-size:15px;font-weight:700;
+                      color:#0A0A0A;text-decoration:none;border-radius:999px;">
+              Approve &rarr;
+            </a>
+          </td>
+          <td style="border-radius:999px;border:1px solid rgba(246,244,239,0.25);">
+            <a href="${declineUrl}"
+               style="display:inline-block;padding:13px 27px;font-size:15px;font-weight:600;
+                      color:#F6F4EF;text-decoration:none;border-radius:999px;">
+              Decline
+            </a>
+          </td>
+        </tr>
+      </table>
+
       <table width="100%" cellpadding="0" cellspacing="0"
-             style="border:1px solid rgba(246,244,239,0.1);border-radius:12px;overflow:hidden;margin:24px 0;">
+             style="border:1px solid rgba(246,244,239,0.1);border-radius:12px;overflow:hidden;margin-bottom:32px;">
         ${rows.map(([k, v], i) => `
         <tr style="background:${i % 2 === 0 ? 'rgba(246,244,239,0.04)' : 'transparent'};">
           <td style="padding:12px 16px;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;
@@ -164,40 +199,9 @@ function notificationHtml({ name, email, phone, utm_source, utm_medium, utm_camp
           <td style="padding:12px 16px;font-size:14px;color:#F6F4EF;">${v}</td>
         </tr>`).join('')}
       </table>
-    </td></tr>
-  </table>
-</body></html>`
-}
 
-function confirmationHtml({ name, whatsappLink }) {
-  const firstName = escapeHtml((name || '').split(' ')[0])
-  return `<!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"></head>
-<body style="margin:0;padding:0;background:#F6F4EF;font-family:system-ui,sans-serif;color:#0A0A0A;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="max-width:640px;margin:40px auto;">
-    <tr><td style="padding:0 24px;">
-      <p style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#6B6660;margin:0 0 32px;">
-        — Obi Emeka · The Green Circle
-      </p>
-      <h1 style="font-size:36px;font-weight:800;letter-spacing:-0.03em;margin:0 0 8px;line-height:1;">
-        You're in, ${firstName}.
-      </h1>
-      <p style="color:#6B6660;font-size:16px;line-height:1.6;margin:0 0 32px;">
-        Tap below to join the WhatsApp Community — this is where The Green
-        Circle actually lives, not your inbox.
-      </p>
-      <table cellpadding="0" cellspacing="0" style="margin:0 0 32px;">
-        <tr><td style="border-radius:999px;background:#0A0A0A;">
-          <a href="${escapeHtml(whatsappLink)}"
-             style="display:inline-block;padding:14px 28px;font-size:15px;font-weight:600;
-                    color:#E8FF3A;text-decoration:none;border-radius:999px;">
-            Join the WhatsApp Community &rarr;
-          </a>
-        </td></tr>
-      </table>
-      <p style="font-size:12px;color:#6B6660;border-top:1px solid rgba(10,10,10,0.1);
-                padding-top:24px;margin:32px 0 0;">
-        <a href="https://obiemeka.com" style="color:#0A0A0A;">obiemeka.com</a>
+      <p style="font-size:13px;color:#6B6660;border-top:1px solid rgba(246,244,239,0.1);padding-top:24px;margin:0;">
+        Reply directly to <a href="mailto:${escapeHtml(email)}" style="color:#E8FF3A;">${escapeHtml(email)}</a>
       </p>
     </td></tr>
   </table>

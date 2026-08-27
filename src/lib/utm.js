@@ -1,11 +1,11 @@
 // Shared UTM helpers — Component 5 (funnel tracking).
 //
-// Every entry point that sends traffic to /green-circle (exit popup, each
+// Every entry point that sends traffic to /greencircle-community (exit popup, each
 // blog post's CTA, each YouTube description link) tags its link with UTM
 // params so signups can be attributed back to the source. This module reads
 // whatever UTM params are on the current URL, persists them across the visit
 // (sessionStorage) so they survive the two-step capture -> confirm flow, and
-// builds outbound /green-circle links carrying a given entry point's tags.
+// builds outbound /greencircle-community links carrying a given entry point's tags.
 
 const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content']
 const STORAGE_KEY = 'oe_utm_v1'
@@ -29,7 +29,7 @@ export function captureUtmFromLocation() {
   return {}
 }
 
-// Builds a /green-circle URL tagged for a specific entry point, e.g.
+// Builds a /greencircle-community URL tagged for a specific entry point, e.g.
 // buildGreenCircleLink({ source: 'blog', medium: 'cta-end', campaign: 'my-post-slug' })
 export function buildGreenCircleLink({ source, medium, campaign, content } = {}) {
   const params = new URLSearchParams()
@@ -38,5 +38,5 @@ export function buildGreenCircleLink({ source, medium, campaign, content } = {})
   if (campaign) params.set('utm_campaign', campaign)
   if (content) params.set('utm_content', content)
   const qs = params.toString()
-  return '/green-circle' + (qs ? `?${qs}` : '')
+  return '/greencircle-community' + (qs ? `?${qs}` : '')
 }

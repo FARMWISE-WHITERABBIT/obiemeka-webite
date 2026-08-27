@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Routes, Route, useLocation } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { Analytics } from '@vercel/analytics/react'
 import Home from './pages/Home'
 import GreenCircle from './pages/GreenCircle'
@@ -10,6 +10,14 @@ import { TweaksPanel, TweakSection, TweakRadio, useTweaks } from './TweaksPanel'
 
 const TWEAK_DEFAULTS = {
   accent: 'green',
+}
+
+// /green-circle was the page's slug before it moved to /greencircle-community —
+// keep the old path working (with UTM params intact) for anything already
+// linking to it.
+function RedirectPreservingSearch({ to }) {
+  const location = useLocation()
+  return <Navigate to={to + location.search} replace />
 }
 
 export default function App() {
@@ -31,13 +39,14 @@ export default function App() {
     <>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/green-circle" element={<GreenCircle />} />
+        <Route path="/greencircle-community" element={<GreenCircle />} />
+        <Route path="/green-circle" element={<RedirectPreservingSearch to="/greencircle-community" />} />
         <Route path="/blog" element={<BlogIndex />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="*" element={<Home />} />
       </Routes>
 
-      {location.pathname !== '/green-circle' && <ExitIntentPopup />}
+      {location.pathname !== '/greencircle-community' && <ExitIntentPopup />}
 
       {import.meta.env.DEV && (
         <TweaksPanel title="Tweaks">
