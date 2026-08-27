@@ -1376,16 +1376,12 @@ footer .inner { max-width: 1440px; margin: 0 auto; }
 .gc-confirm-logo { width: 68px; height: 68px; border-radius: var(--r-pill); margin-bottom: var(--s-2); }
 .gc-popup-lab { color: var(--muted); }
 
-.gc-features {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-4);
-  margin: var(--s-6) 0 var(--s-7);
+.gc-summary {
+  max-width: 68ch; margin: var(--s-6) 0 var(--s-7);
+  display: flex; flex-direction: column; gap: var(--s-4);
 }
-.gc-feature {
-  border: 1px solid var(--hairline-strong); border-radius: var(--r-3);
-  padding: var(--s-5); display: flex; flex-direction: column; gap: var(--s-2);
-}
-.gc-feature .gc-feature-emoji { font-size: 26px; line-height: 1; }
-.gc-feature h3 { margin: 0; font: 700 18px/1.25 var(--font-display); letter-spacing: -0.01em; }
+.gc-summary p { margin: 0; font: 400 18px/1.6 var(--font-display); color: var(--muted); }
+.gc-summary p b { color: var(--ink); font-weight: 600; }
 
 .gc-gallery-head { margin-bottom: var(--s-4); display: flex; flex-direction: column; gap: var(--s-2); }
 .gc-gallery {
@@ -1396,7 +1392,6 @@ footer .inner { max-width: 1440px; margin: 0 auto; }
   width: 100%; aspect-ratio: 4 / 5; object-fit: cover;
   border-radius: var(--r-2); display: block; background: var(--bone);
 }
-.gc-feature p { margin: 0; font: var(--body); font-size: 14.5px; color: var(--muted); }
 .gc-popup h3 { margin: 0; font: 700 clamp(24px, 3.4vw, 30px)/1.15 var(--font-display); letter-spacing: -0.02em; }
 .gc-popup p { margin: 0; font: var(--body); color: var(--muted); }
 .gc-popup-close {
@@ -1473,13 +1468,12 @@ footer .inner { max-width: 1440px; margin: 0 auto; }
 @media (max-width: 1100px) {
   .gc-grid { grid-template-columns: 1fr; }
   .blog-grid { grid-template-columns: repeat(2, 1fr); }
-  .gc-features { grid-template-columns: repeat(2, 1fr); }
   .gc-gallery { grid-template-columns: repeat(3, 1fr); }
 }
 @media (max-width: 720px) {
   .blog-grid { grid-template-columns: 1fr; }
   .gc-popup { padding: var(--s-6) var(--s-4) var(--s-5); }
-  .gc-features { grid-template-columns: 1fr; }
   .gc-gallery { grid-template-columns: repeat(2, 1fr); }
+  .gc-summary p { font-size: 16px; }
   .gc-landing-logo { width: 96px; height: 96px; }
 }

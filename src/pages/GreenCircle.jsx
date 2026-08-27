@@ -6,16 +6,24 @@ import { captureUtmFromLocation } from '../lib/utm'
 
 const INITIAL = { name: '', email: '', phone: '', nickname: '' }
 
-// Curated from a past Green Circle networking event — real photos, not
-// stock imagery, to back up the "this is a real community" claim.
+// From a past Green Circle networking event — real photos, not stock
+// imagery, to back up the "this is a real community" claim.
 const GALLERY_IMAGES = [
   '/assets/SaveClip.App_475377846_18266977000264868_837989137282366220_n.jpg',
   '/assets/SaveClip.App_475429121_18266977198264868_6731562200085084235_n.jpg',
   '/assets/SaveClip.App_475932438_18266977183264868_8671090709736923101_n.jpg',
+  '/assets/SaveClip.App_475954876_18266977027264868_343253638841141803_n.jpg',
+  '/assets/SaveClip.App_475992369_18266977060264868_3154779318020706322_n.jpg',
   '/assets/SaveClip.App_476223735_18266977099264868_3229623713515563170_n.jpg',
+  '/assets/SaveClip.App_476234111_18266976952264868_7395538410015496527_n.jpg',
+  '/assets/SaveClip.App_476342974_18266976964264868_2586949881839520511_n.jpg',
   '/assets/SaveClip.App_476349246_18266977024264868_4445487833371868203_n.jpg',
+  '/assets/SaveClip.App_476418969_18266977069264868_1960487380620007820_n.jpg',
+  '/assets/SaveClip.App_476562421_18266977087264868_2175444977803350782_n.jpg',
   '/assets/SaveClip.App_476575189_18266977150264868_7523304046837873502_n.jpg',
+  '/assets/SaveClip.App_476616910_18266977168264868_6765207802815623650_n.jpg',
   '/assets/SaveClip.App_476619602_18266977039264868_5745297464963985581_n.jpg',
+  '/assets/SaveClip.App_476627066_18266977048264868_4998975550904757456_n.jpg',
   '/assets/SaveClip.App_476747268_18266976973264868_8581438430631720840_n.jpg',
 ]
 
@@ -97,47 +105,28 @@ export default function GreenCircle() {
           </p>
         </div>
 
-        <div className="gc-features">
-          <div className="gc-feature">
-            <span className="gc-feature-emoji" aria-hidden="true">🤝</span>
-            <h3>Real introductions</h3>
-            <p>Curated intros and guided networking with people actually working the problem — the kind of relationships that turn into partnerships, investment, and market access, not just contacts.</p>
-          </div>
-          <div className="gc-feature">
-            <span className="gc-feature-emoji" aria-hidden="true">📈</span>
-            <h3>Market intelligence</h3>
-            <p>Curated market updates, funding programmes, grants and opportunities — so you hear about what matters while it's still actionable.</p>
-          </div>
-          <div className="gc-feature">
-            <span className="gc-feature-emoji" aria-hidden="true">📚</span>
-            <h3>A working library</h3>
-            <p>Templates, guides, training material and session recordings built to support better decisions and stronger execution — not a folder of stale links.</p>
-          </div>
-          <div className="gc-feature">
-            <span className="gc-feature-emoji" aria-hidden="true">🎤</span>
-            <h3>Guest sessions</h3>
-            <p>Workshops and conversations with people working across farming, processing, finance, investment, technology, logistics and export.</p>
-          </div>
-          <div className="gc-feature">
-            <span className="gc-feature-emoji" aria-hidden="true">🎯</span>
-            <h3>Accountability partners</h3>
-            <p>Founders and operators run into the same wall alone — no one checking whether the plan from last month actually happened. Find people in the same weight class to answer to.</p>
-          </div>
-          <div className="gc-feature">
-            <span className="gc-feature-emoji" aria-hidden="true">🧭</span>
-            <h3>A growth-based identity</h3>
-            <p>Being surrounded by people building at your level changes how you see your own work — this is a community to grow into, not just a channel to read.</p>
-          </div>
-          <div className="gc-feature">
-            <span className="gc-feature-emoji" aria-hidden="true">🛡️</span>
-            <h3>Value that compounds</h3>
-            <p>As the network grows, so does what it's worth — more expertise, more opportunities, more partnerships, more access for everyone already in it.</p>
-          </div>
-          <div className="gc-feature">
-            <span className="gc-feature-emoji" aria-hidden="true">🌍</span>
-            <h3>The ambition</h3>
-            <p>To build one of the largest, most valuable vetted agriculture networks connecting operators, investors, professionals and diaspora across Africa and beyond.</p>
-          </div>
+        <div className="gc-summary">
+          <p>
+            Inside: curated introductions and guided networking with people
+            actually working the problem — relationships that turn into
+            partnerships, investment, and market access, not just contacts.
+            Market updates, funding programmes and grants before they're old
+            news. A working library of templates, guides, training material
+            and session recordings. Guest sessions and workshops with people
+            across farming, processing, finance, investment, technology,
+            logistics and export.
+          </p>
+          <p>
+            Beyond the tactics, it's where founders and operators find
+            accountability partners — people to answer to, not just
+            network with — and a growth-based identity that comes from
+            being surrounded by others building at your level. As the
+            network grows, so does its value: more expertise, more
+            opportunities, more access for everyone already in it. The
+            ambition is to build one of the largest, most valuable vetted
+            agriculture networks connecting operators, investors,
+            professionals and diaspora across Africa and beyond.
+          </p>
         </div>
 
         <div className="gc-gallery-head">
