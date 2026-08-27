@@ -35,7 +35,7 @@ export default function BlogPost() {
   return (
     <>
       <Nav onPaperSection />
-      <article className="section blog-post">
+      <article className="section blog-post page-top">
         <div className="blog-post-head">
           <Link to="/blog" className="caps blog-post-back">← Journal</Link>
           {post.date && <span className="caps blog-post-date">{formatDate(post.date)}</span>}
