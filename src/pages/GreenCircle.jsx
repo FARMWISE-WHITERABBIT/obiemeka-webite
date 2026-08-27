@@ -63,6 +63,10 @@ export default function GreenCircle() {
     document.title = 'Join The Green Circle | Obi Emeka'
   }, [])
 
+  function scrollToJoin() {
+    document.getElementById('gc-join')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
   function setField(k, v) {
     setData((d) => ({ ...d, [k]: v }))
     if (errors[k]) setErrors((e) => ({ ...e, [k]: undefined }))
@@ -123,15 +127,20 @@ export default function GreenCircle() {
           <p className="lede">
             I run a commercial plantation in Enugu State and an export trade
             compliance platform, so most of what I know about African
-            agriculture I learned by doing it, not reading about it. The
-            Green Circle is a community for investors, operators, and
+            agriculture I learned by doing it, not reading about it.
+          </p>
+          <button type="button" className="btn btn-primary" onClick={scrollToJoin}>
+            Join the Green Circle <span className="arrow" />
+          </button>
+        </div>
+
+        <div className="gc-summary">
+          <p>
+            The Green Circle is a community for investors, operators, and
             entrepreneurs who want to tap into the potential of the African
             agricultural industry and build with the right network around
             them.
           </p>
-        </div>
-
-        <div className="gc-summary">
           <p>
             Investors, operators and entrepreneurs get access to what's
             actually working. Practical on-the-ground trips, agricultural
@@ -158,7 +167,7 @@ export default function GreenCircle() {
           ))}
         </div>
 
-        <div className="gc-grid">
+        <div className="gc-grid" id="gc-join">
           <div className="booking-side">
             <div className="num-card">
               <div className="nc-head">
