@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { Analytics } from '@vercel/analytics/react'
 import { Nav, Hero, StatsBar, About, Ventures, Press, Expertise, Speaking, Packages, Social, Footer } from './sections'
 import { BookingForm } from './BookingForm'
 import { TweaksPanel, TweakSection, TweakRadio, useTweaks } from './TweaksPanel'
@@ -149,6 +150,8 @@ export default function App() {
           </TweakSection>
         </TweaksPanel>
       )}
+
+      <Analytics />
     </>
   )
 }
