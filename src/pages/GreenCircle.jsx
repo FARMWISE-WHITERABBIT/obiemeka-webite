@@ -91,50 +91,36 @@ export default function GreenCircle() {
           <div>
             <span className="lab">— The Green Circle</span>
             <h2>
-              Investors, operators,<br />
-              founders — <em>one room</em>.
+              A place to<br />
+              <em>compare notes</em>.
             </h2>
           </div>
           <p className="lede">
-            A free WhatsApp community for farmers, agribusiness founders,
-            investors, landowners, professionals and diaspora members active
-            in Nigerian and African agriculture — not a generic farming
-            group. Built around the same operator credibility behind
-            WhiteRabbit Agro's plantation operations and OriginTrace's export
-            compliance work.
+            I run a plantation and a compliance platform, so most of what I
+            know about African agriculture I learned by doing it, not
+            reading about it. The Green Circle is a free WhatsApp group for
+            investors, operators, and entrepreneurs who want the same —
+            people who've actually run into the problem you're working on,
+            not a generic agriculture feed.
           </p>
         </div>
 
         <div className="gc-summary">
           <p>
-            Inside: curated introductions and guided networking with people
-            actually working the problem — relationships that turn into
-            partnerships, investment, and market access, not just contacts.
-            Market updates, funding programmes and grants before they're old
-            news. A working library of templates, guides, training material
-            and session recordings. Guest sessions and workshops with people
-            across farming, processing, finance, investment, technology,
-            logistics and export.
-          </p>
-          <p>
-            Beyond the tactics, it's where founders and operators find
-            accountability partners — people to answer to, not just
-            network with — and a growth-based identity that comes from
-            being surrounded by others building at your level. As the
-            network grows, so does its value: more expertise, more
-            opportunities, more access for everyone already in it. The
-            ambition is to build one of the largest, most valuable vetted
-            agriculture networks connecting operators, investors,
-            professionals and diaspora across Africa and beyond.
+            Members trade what's actually working — deals, hiring,
+            compliance headaches, where the money's moving right now. When
+            something useful comes up, a grant, a training, someone worth
+            knowing, it gets passed around instead of sitting in an inbox.
+            A few people have started using it to find accountability
+            partners, which wasn't the original plan, but it's turned into
+            one of the better reasons to be in it.
           </p>
         </div>
 
         <div className="gc-gallery-head">
           <span className="lab">— In person</span>
           <p className="lede" style={{ maxWidth: '48ch' }}>
-            The WhatsApp group is the everyday layer — it's backed by real
-            networking events where members actually meet, present, and
-            argue about ideas in the same room.
+            Photos from a past Green Circle meetup.
           </p>
         </div>
         <div className="gc-gallery">
@@ -150,19 +136,16 @@ export default function GreenCircle() {
                 <span>— Who it's for</span>
                 <span>OE / 2026</span>
               </div>
-              <h3>Not another agriculture group.</h3>
+              <h3>Investors, operators, entrepreneurs.</h3>
               <p>
-                Farmers, agribusiness founders, investors, landowners,
-                professionals and diaspora members active in Nigerian and
-                African agriculture — people who want peers who've actually
-                done the work, not a generic feed.
+                If you're solving a real problem in African agriculture,
+                this is for you. It's not a general audience — that's what
+                keeps it useful.
               </p>
               <div className="when">
-                <span className="chip">Farmers</span>
-                <span className="chip">Founders</span>
                 <span className="chip">Investors</span>
-                <span className="chip">Landowners</span>
-                <span className="chip">Diaspora</span>
+                <span className="chip">Operators</span>
+                <span className="chip">Entrepreneurs</span>
               </div>
             </div>
 
@@ -171,11 +154,10 @@ export default function GreenCircle() {
                 <span>— What happens next</span>
               </div>
               <p style={{ margin: 0 }}>
-                Submitting this form adds you to Obi's list — that's step one.
-                Step two is a WhatsApp Community invite link on the next
-                screen. <b>This is a WhatsApp group, not an email newsletter</b> —
-                you'll join it yourself, on your own terms. Signups are
-                reviewed to keep the group focused as it grows.
+                Submitting this form puts you on the list. Once it's
+                reviewed, you'll get a WhatsApp invite by email —
+                <b> it's a WhatsApp group, not a newsletter</b>, so nothing
+                lands in your inbox until that invite does.
               </p>
             </div>
           </div>
@@ -224,7 +206,7 @@ export default function GreenCircle() {
                     {status === 'loading' ? 'Joining…' : 'Join Community'} <span className="arrow" />
                   </button>
                   <p className="pkg-note" style={{ margin: '8px 0 0' }}>
-                    Free. No spam. Signups are reviewed — you'll get the WhatsApp invite by email once approved, not a newsletter signup.
+                    Free. Signups are reviewed, so it's not instant — you'll get the WhatsApp invite by email once yours goes through.
                   </p>
                 </div>
               </form>
@@ -245,10 +227,8 @@ function ConfirmationCard({ name }) {
       <span className="caps" style={{ color: 'var(--ink)', opacity: 0.7 }}>— In review</span>
       <h3>Got it, {firstName || 'welcome'}.</h3>
       <p>
-        You're on the list. Signups are reviewed to keep the group focused
-        as it grows — once yours is approved, the WhatsApp Community invite
-        link lands straight in your inbox. No further steps on your end
-        until then.
+        You're on the list. Once it's reviewed, the WhatsApp invite goes to
+        your email — nothing else to do until then.
       </p>
       <p style={{ marginTop: 'var(--s-4)' }}>
         <Link to="/blog" className="btn btn-ghost">Read the journal while you wait <span className="arrow" /></Link>

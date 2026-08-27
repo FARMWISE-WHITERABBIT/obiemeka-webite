@@ -77,11 +77,11 @@ export function ExitIntentPopup() {
         <button className="gc-popup-close" aria-label="Close" onClick={() => setVisible(false)}>×</button>
         <img className="gc-popup-logo" src="/assets/green-circle-logo.png" alt="The Green Circle" />
         <span className="caps gc-popup-lab">— Before you go</span>
-        <h3>Investors, operators, founders — same problems, one room.</h3>
+        <h3>A place to compare notes.</h3>
         <p>
-          The Green Circle is a free WhatsApp community for people solving
-          African agriculture's hardest problems — compliance, capital,
-          operations. No pitch decks, no spam. Just people comparing notes.
+          The Green Circle is a free WhatsApp group for investors,
+          operators, and entrepreneurs working on real problems in African
+          agriculture. Free to join.
         </p>
         <a className="btn btn-primary" href={href} onClick={() => setVisible(false)}>
           Join The Green Circle <span className="arrow" />
