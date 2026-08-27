@@ -4,7 +4,30 @@ import { Nav, Footer } from '../sections'
 import { useSectionNav } from '../useSectionNav'
 import { captureUtmFromLocation } from '../lib/utm'
 
-const INITIAL = { name: '', email: '', phone: '', nickname: '' }
+const INITIAL = { name: '', email: '', phone: '', memberType: '', goal: '', nickname: '' }
+
+// What we actually need to vet a signup — who they are, and what they're
+// looking for. The goal placeholder changes with the category so the
+// question feels specific instead of generic.
+const MEMBER_TYPES = [
+  { value: 'diaspora-investor', label: 'Diaspora investor' },
+  { value: 'nigeria-investor', label: 'Nigeria-based investor' },
+  { value: 'agribusiness-owner', label: 'Agribusiness owner / operator' },
+  { value: 'agritech-founder', label: 'Agri-tech startup founder' },
+  { value: 'agritech-enthusiast', label: 'Agri-tech enthusiast' },
+  { value: 'ag-professional', label: 'Agricultural professional / consultant' },
+  { value: 'other', label: 'Other' },
+]
+
+const GOAL_PLACEHOLDERS = {
+  'diaspora-investor': 'What are you looking to invest in, or learn more about?',
+  'nigeria-investor': 'What are you looking to invest in, or learn more about?',
+  'agribusiness-owner': "What would help your business right now — funding, partners, market access?",
+  'agritech-founder': 'What are you building, and what would help you most right now?',
+  'agritech-enthusiast': 'What draws you to this space, and what are you hoping to learn?',
+  'ag-professional': 'What kind of work are you looking to connect around?',
+  'other': 'What are you hoping to get out of The Green Circle?',
+}
 
 // From a past Green Circle networking event — real photos, not stock
 // imagery, to back up the "this is a real community" claim.
@@ -50,6 +73,8 @@ export default function GreenCircle() {
     if (!data.name.trim()) e.name = 'Required'
     if (!data.email.trim()) e.email = 'Required'
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) e.email = 'Looks invalid'
+    if (!data.memberType) e.memberType = 'Required'
+    if (!data.goal.trim() || data.goal.trim().length < 15) e.goal = 'A sentence or two, please'
     setErrors(e)
     return Object.keys(e).length === 0
   }
@@ -96,24 +121,28 @@ export default function GreenCircle() {
             </h2>
           </div>
           <p className="lede">
-            I run a plantation and a compliance platform, so most of what I
-            know about African agriculture I learned by doing it, not
-            reading about it. The Green Circle is a free WhatsApp group for
-            investors, operators, and entrepreneurs who want the same —
-            people who've actually run into the problem you're working on,
-            not a generic agriculture feed.
+            I run a commercial plantation in Enugu State and an export trade
+            compliance platform, so most of what I know about African
+            agriculture I learned by doing it, not reading about it. The
+            Green Circle is a community for investors, operators, and
+            entrepreneurs who want to tap into the potential of the African
+            agricultural industry and build with the right network around
+            them.
           </p>
         </div>
 
         <div className="gc-summary">
           <p>
-            Members trade what's actually working — deals, hiring,
-            compliance headaches, where the money's moving right now. When
-            something useful comes up, a grant, a training, someone worth
-            knowing, it gets passed around instead of sitting in an inbox.
-            A few people have started using it to find accountability
-            partners, which wasn't the original plan, but it's turned into
-            one of the better reasons to be in it.
+            Investors, operators and entrepreneurs get access to what's
+            actually working — practical on-the-ground trips, agricultural
+            business deals, hiring opportunities, trade secrets, industry
+            updates, and where the money's moving right now. When something
+            useful comes up, a grant, a training, someone worth knowing, it
+            gets passed around instead of sitting in an inbox. For
+            entrepreneurs, building a business or an agri-tech startup can
+            be a lonely journey — the Green Circle also serves as your
+            accountability partners, which wasn't the original plan, but
+            it's turned into one of the better reasons to be in it.
           </p>
         </div>
 
@@ -188,6 +217,23 @@ export default function GreenCircle() {
                   <label>WhatsApp number (optional)</label>
                   <input value={data.phone} placeholder="+234…" maxLength={40}
                          onChange={(e) => setField('phone', e.target.value)} />
+                </div>
+
+                <div className={`field ${errors.memberType ? 'error' : ''}`}>
+                  <label>Which of these are you?</label>
+                  <select value={data.memberType} onChange={(e) => setField('memberType', e.target.value)}>
+                    <option value="" disabled>Select one</option>
+                    {MEMBER_TYPES.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
+                  </select>
+                  {errors.memberType && <span className="err">{errors.memberType}</span>}
+                </div>
+
+                <div className={`field ${errors.goal ? 'error' : ''}`}>
+                  <label>What are you hoping to get out of it?</label>
+                  <textarea rows="3" value={data.goal} maxLength={1000}
+                    placeholder={data.memberType ? GOAL_PLACEHOLDERS[data.memberType] : 'What are you hoping to get out of The Green Circle?'}
+                    onChange={(e) => setField('goal', e.target.value)} />
+                  {errors.goal && <span className="err">{errors.goal}</span>}
                 </div>
 
                 {status === 'error' && (
