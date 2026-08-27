@@ -3,7 +3,7 @@ import { buildGreenCircleLink } from './lib/utm'
 
 // Fixed CTA block for the end of every blog post (and, on longer posts,
 // an inline/sticky variant mid-post) — Component 1's per-post requirement.
-// Every instance links to /green-circle tagged with UTM params identifying
+// Every instance links to /greencircle-community tagged with UTM params identifying
 // exactly which post and which position it came from (Component 5).
 export function GreenCircleCTA({ campaign, topic, variant = 'end' }) {
   const href = buildGreenCircleLink({

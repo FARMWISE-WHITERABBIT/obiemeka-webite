@@ -66,10 +66,10 @@ export default function GreenCircle() {
   return (
     <>
       <Nav onPaperSection />
-      <section className="section gc-landing" id="green-circle" aria-label="Join The Green Circle">
-        <div className="section-head">
+      <section className="section gc-landing" id="greencircle-community" aria-label="Join The Green Circle">
+        <div className="section-head" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+          <img className="gc-landing-logo" src="/assets/green-circle-logo.png" alt="The Green Circle" />
           <div>
-            <img className="gc-landing-logo" src="/assets/green-circle-logo.png" alt="The Green Circle" />
             <span className="lab">— The Green Circle</span>
             <h2>
               Investors, operators,<br />
@@ -77,15 +77,50 @@ export default function GreenCircle() {
             </h2>
           </div>
           <p className="lede">
-            A free WhatsApp community for people actively solving problems in
-            African agriculture — not a generic farming group. Built around
-            the same operator credibility behind WhiteRabbit Agro's plantation
-            operations and OriginTrace's export compliance work.
+            A free WhatsApp community for farmers, agribusiness founders,
+            investors, landowners, professionals and diaspora members active
+            in Nigerian and African agriculture — not a generic farming
+            group. Built around the same operator credibility behind
+            WhiteRabbit Agro's plantation operations and OriginTrace's export
+            compliance work.
           </p>
         </div>
 
+        <div className="gc-features">
+          <div className="gc-feature">
+            <span className="gc-feature-emoji" aria-hidden="true">🤝</span>
+            <h3>Real introductions</h3>
+            <p>Curated intros and guided networking with people actually working the problem — the kind of relationships that turn into partnerships, investment, and market access, not just contacts.</p>
+          </div>
+          <div className="gc-feature">
+            <span className="gc-feature-emoji" aria-hidden="true">📈</span>
+            <h3>Market intelligence</h3>
+            <p>Curated market updates, funding programmes, grants and opportunities — so you hear about what matters while it's still actionable.</p>
+          </div>
+          <div className="gc-feature">
+            <span className="gc-feature-emoji" aria-hidden="true">📚</span>
+            <h3>A working library</h3>
+            <p>Templates, guides, training material and session recordings built to support better decisions and stronger execution — not a folder of stale links.</p>
+          </div>
+          <div className="gc-feature">
+            <span className="gc-feature-emoji" aria-hidden="true">🎤</span>
+            <h3>Guest sessions</h3>
+            <p>Workshops and conversations with people working across farming, processing, finance, investment, technology, logistics and export.</p>
+          </div>
+          <div className="gc-feature">
+            <span className="gc-feature-emoji" aria-hidden="true">🛡️</span>
+            <h3>Value that compounds</h3>
+            <p>As the network grows, so does what it's worth — more expertise, more opportunities, more partnerships, more access for everyone already in it.</p>
+          </div>
+          <div className="gc-feature">
+            <span className="gc-feature-emoji" aria-hidden="true">🌍</span>
+            <h3>The ambition</h3>
+            <p>To build one of the largest, most valuable vetted agriculture networks connecting operators, investors, professionals and diaspora across Africa and beyond.</p>
+          </div>
+        </div>
+
         <div className="gc-grid">
-          <div className="gc-side">
+          <div className="booking-side">
             <div className="num-card">
               <div className="nc-head">
                 <span>— Who it's for</span>
@@ -93,15 +128,17 @@ export default function GreenCircle() {
               </div>
               <h3>Not another agriculture group.</h3>
               <p>
-                The Green Circle is for investors sizing up agri-opportunities,
-                operators running the day-to-day, and founders building in the
-                space — people who want peers who've actually done the work,
-                not a generic feed.
+                Farmers, agribusiness founders, investors, landowners,
+                professionals and diaspora members active in Nigerian and
+                African agriculture — people who want peers who've actually
+                done the work, not a generic feed.
               </p>
               <div className="when">
-                <span className="chip">Investors</span>
-                <span className="chip">Operators</span>
+                <span className="chip">Farmers</span>
                 <span className="chip">Founders</span>
+                <span className="chip">Investors</span>
+                <span className="chip">Landowners</span>
+                <span className="chip">Diaspora</span>
               </div>
             </div>
 
@@ -113,7 +150,8 @@ export default function GreenCircle() {
                 Submitting this form adds you to Obi's list — that's step one.
                 Step two is a WhatsApp Community invite link on the next
                 screen. <b>This is a WhatsApp group, not an email newsletter</b> —
-                you'll join it yourself, on your own terms.
+                you'll join it yourself, on your own terms. Signups are
+                reviewed to keep the group focused as it grows.
               </p>
             </div>
           </div>
