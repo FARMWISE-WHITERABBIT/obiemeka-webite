@@ -1371,6 +1371,9 @@ footer .inner { max-width: 1440px; margin: 0 auto; }
   display: flex; flex-direction: column; gap: var(--s-3);
   align-items: flex-start;
 }
+.gc-popup-logo { width: 56px; height: 56px; border-radius: var(--r-pill); }
+.gc-landing-logo { width: 64px; height: 64px; border-radius: var(--r-pill); margin-bottom: var(--s-4); }
+.gc-confirm-logo { width: 48px; height: 48px; border-radius: var(--r-pill); }
 .gc-popup-lab { color: var(--muted); }
 .gc-popup h3 { margin: 0; font: 700 clamp(24px, 3.4vw, 30px)/1.15 var(--font-display); letter-spacing: -0.02em; }
 .gc-popup p { margin: 0; font: var(--body); color: var(--muted); }

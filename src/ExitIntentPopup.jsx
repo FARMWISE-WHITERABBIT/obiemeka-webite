@@ -75,6 +75,7 @@ export function ExitIntentPopup() {
     <div className="gc-popup-overlay" role="dialog" aria-modal="true" aria-label="Join The Green Circle">
       <div className="gc-popup">
         <button className="gc-popup-close" aria-label="Close" onClick={() => setVisible(false)}>×</button>
+        <img className="gc-popup-logo" src="/assets/green-circle-logo.png" alt="The Green Circle" />
         <span className="caps gc-popup-lab">— Before you go</span>
         <h3>Investors, operators, founders — same problems, one room.</h3>
         <p>

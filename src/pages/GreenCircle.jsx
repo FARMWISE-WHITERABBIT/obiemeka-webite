@@ -69,6 +69,7 @@ export default function GreenCircle() {
       <section className="section gc-landing" id="green-circle" aria-label="Join The Green Circle">
         <div className="section-head">
           <div>
+            <img className="gc-landing-logo" src="/assets/green-circle-logo.png" alt="The Green Circle" />
             <span className="lab">— The Green Circle</span>
             <h2>
               Investors, operators,<br />
@@ -178,6 +179,7 @@ function ConfirmationCard({ name }) {
   const firstName = (name || '').split(' ')[0]
   return (
     <div className="form-success">
+      <img className="gc-confirm-logo" src="/assets/green-circle-logo.png" alt="The Green Circle" />
       <span className="caps" style={{ color: 'var(--ink)', opacity: 0.7 }}>— You're in</span>
       <h3>Got it, {firstName || 'welcome'}.</h3>
       <p>
