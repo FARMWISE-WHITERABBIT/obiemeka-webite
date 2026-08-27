@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
 
 /* =============================================================
    useReveal — IntersectionObserver-driven reveal hook
@@ -50,6 +51,7 @@ export function Nav({ onNav, onPaperSection }) {
     { id: 'expertise',label: 'Expertise' },
     { id: 'speaking', label: 'Speaking' },
     { id: 'packages', label: 'Packages' },
+    { to: '/blog',    label: 'Journal' },
     { id: 'connect',  label: 'Connect' },
   ]
 
@@ -63,15 +65,21 @@ export function Nav({ onNav, onPaperSection }) {
       <header className={`nav ${solid ? 'solid' : ''} ${onPaperSection ? 'on-paper' : ''}`}
               style={{ zIndex: 50 }}>
         <div className="left">
-          <img className="mono-mark" src="/assets/monogram.png" alt="Obi Emeka" />
+          <Link to="/" aria-label="Obi Emeka — home">
+            <img className="mono-mark" src="/assets/monogram.png" alt="Obi Emeka" />
+          </Link>
         </div>
         <nav aria-label="Main navigation">
           <ul>
             {items.map((it) => (
-              <li key={it.id}>
-                <a href={`#${it.id}`} onClick={(e) => { e.preventDefault(); navTo(it.id) }}>
-                  {it.label}
-                </a>
+              <li key={it.to || it.id}>
+                {it.to ? (
+                  <Link to={it.to} onClick={() => setMobileOpen(false)}>{it.label}</Link>
+                ) : (
+                  <a href={`#${it.id}`} onClick={(e) => { e.preventDefault(); navTo(it.id) }}>
+                    {it.label}
+                  </a>
+                )}
               </li>
             ))}
           </ul>
@@ -94,10 +102,14 @@ export function Nav({ onNav, onPaperSection }) {
         <nav>
           <ul>
             {items.map((it) => (
-              <li key={it.id}>
-                <a href={`#${it.id}`} onClick={(e) => { e.preventDefault(); navTo(it.id) }}>
-                  {it.label}
-                </a>
+              <li key={it.to || it.id}>
+                {it.to ? (
+                  <Link to={it.to} onClick={() => setMobileOpen(false)}>{it.label}</Link>
+                ) : (
+                  <a href={`#${it.id}`} onClick={(e) => { e.preventDefault(); navTo(it.id) }}>
+                    {it.label}
+                  </a>
+                )}
               </li>
             ))}
           </ul>
@@ -1073,6 +1085,8 @@ export function Footer({ onNav }) {
               <li><a href="#speaking"  onClick={(e) => { e.preventDefault(); onNav('speaking') }}>Speaking</a></li>
               <li><a href="#packages"  onClick={(e) => { e.preventDefault(); onNav('packages') }}>Engagements</a></li>
               <li><a href="#book"      onClick={(e) => { e.preventDefault(); onNav('book') }}>Book a call</a></li>
+              <li><Link to="/blog">Journal</Link></li>
+              <li><Link to="/green-circle">The Green Circle</Link></li>
             </ul>
           </div>
           <div className="foot-col">

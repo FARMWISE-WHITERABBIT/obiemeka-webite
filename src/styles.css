@@ -1328,3 +1328,128 @@ footer .inner { max-width: 1440px; margin: 0 auto; }
   .pkg-name { font-size: 22px; }
   .pkg-price .pp { font-size: 26px; }
 }
+
+/* =============================================================
+   GREEN CIRCLE — landing page, CTA blocks, exit-intent popup
+   ============================================================= */
+.gc-grid {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: var(--s-6);
+  align-items: start;
+}
+.booking-side-form { min-width: 0; }
+
+.gc-cta {
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--r-3);
+  padding: var(--s-6);
+  margin: var(--s-6) 0;
+  background: var(--paper);
+  display: flex; flex-direction: column; gap: var(--s-3);
+  align-items: flex-start;
+}
+.gc-cta-inline { background: var(--bone); }
+.gc-cta-lab { color: var(--muted); }
+.gc-cta p { margin: 0; font: var(--body); max-width: 60ch; }
+
+.gc-popup-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(10,10,10,0.55);
+  display: flex; align-items: center; justify-content: center;
+  padding: var(--s-5);
+  animation: gcFadeIn .18s ease-out;
+}
+@keyframes gcFadeIn { from { opacity: 0; } to { opacity: 1; } }
+.gc-popup {
+  position: relative;
+  max-width: 480px; width: 100%;
+  background: var(--paper);
+  border-radius: var(--r-4);
+  padding: var(--s-7) var(--s-6) var(--s-6);
+  box-shadow: var(--shadow-pop);
+  display: flex; flex-direction: column; gap: var(--s-3);
+  align-items: flex-start;
+}
+.gc-popup-lab { color: var(--muted); }
+.gc-popup h3 { margin: 0; font: 700 clamp(24px, 3.4vw, 30px)/1.15 var(--font-display); letter-spacing: -0.02em; }
+.gc-popup p { margin: 0; font: var(--body); color: var(--muted); }
+.gc-popup-close {
+  position: absolute; top: var(--s-4); right: var(--s-4);
+  width: 32px; height: 32px; border-radius: var(--r-pill);
+  border: 1px solid var(--hairline-strong); background: transparent;
+  font-size: 18px; line-height: 1; cursor: pointer; color: var(--ink);
+}
+
+/* =============================================================
+   YOUTUBE EMBED
+   ============================================================= */
+.yt-embed {
+  position: relative; width: 100%; aspect-ratio: 16 / 9;
+  border-radius: var(--r-3); overflow: hidden; margin: var(--s-5) 0;
+  background: var(--ink);
+}
+.yt-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.yt-embed-facade {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  background-size: cover; background-position: center;
+  border: 0; cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.yt-embed-facade::before {
+  content: ''; position: absolute; inset: 0; background: rgba(10,10,10,0.25);
+}
+.yt-play {
+  position: relative; width: 64px; height: 64px; border-radius: var(--r-pill);
+  background: var(--paper); color: var(--ink);
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* =============================================================
+   BLOG
+   ============================================================= */
+.blog-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-5);
+}
+.blog-card {
+  display: flex; flex-direction: column;
+  border: 1px solid var(--hairline-strong); border-radius: var(--r-3);
+  overflow: hidden; text-decoration: none; color: var(--ink);
+  transition: border-color .2s ease;
+}
+.blog-card:hover { border-color: var(--hairline-inverse, var(--ink)); }
+.blog-card-image { aspect-ratio: 16 / 10; overflow: hidden; background: var(--bone); }
+.blog-card-image img { width: 100%; height: 100%; object-fit: cover; }
+.blog-card-body { padding: var(--s-5); display: flex; flex-direction: column; gap: var(--s-2); flex: 1; }
+.blog-card-date { color: var(--muted); }
+.blog-card-body h3 { margin: 0; font: 700 22px/1.2 var(--font-display); letter-spacing: -0.01em; }
+.blog-card-body p { margin: 0; font: var(--body); color: var(--muted); flex: 1; }
+.blog-card-read { font: var(--mono); font-size: 12px; letter-spacing: 0.06em; display: inline-flex; align-items: center; gap: 6px; }
+
+.blog-post { max-width: 760px; margin: 0 auto; }
+.blog-post-head { display: flex; flex-direction: column; gap: var(--s-3); margin-bottom: var(--s-5); }
+.blog-post-back { color: var(--muted); text-decoration: none; }
+.blog-post-date { color: var(--muted); }
+.blog-post-head h1 { margin: 0; font: var(--display-m); letter-spacing: -0.02em; }
+.blog-post-image { border-radius: var(--r-3); overflow: hidden; margin-bottom: var(--s-5); }
+.blog-post-image img { width: 100%; display: block; }
+.blog-post-body { font: var(--body); }
+.blog-post-body :first-child { margin-top: 0; }
+.blog-post-body h2 { font: 700 26px/1.25 var(--font-display); letter-spacing: -0.01em; margin: var(--s-6) 0 var(--s-3); }
+.blog-post-body h3 { font: 700 20px/1.3 var(--font-display); margin: var(--s-5) 0 var(--s-2); }
+.blog-post-body p { margin: 0 0 var(--s-4); }
+.blog-post-body ul, .blog-post-body ol { margin: 0 0 var(--s-4); padding-left: 1.2em; }
+.blog-post-body li { margin-bottom: var(--s-2); }
+.blog-post-body a { color: var(--ink); text-decoration-color: var(--hairline-strong); }
+.blog-post-body blockquote {
+  margin: var(--s-4) 0; padding: var(--s-3) var(--s-5);
+  border-left: 3px solid var(--ink); color: var(--muted); font-style: italic;
+}
+
+@media (max-width: 1100px) {
+  .gc-grid { grid-template-columns: 1fr; }
+  .blog-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 720px) {
+  .blog-grid { grid-template-columns: 1fr; }
+  .gc-popup { padding: var(--s-6) var(--s-4) var(--s-5); }
+}

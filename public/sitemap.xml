@@ -8,4 +8,34 @@
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en-NG" href="https://obiemeka.com/" />
   </url>
+  <url>
+    <loc>https://obiemeka.com/green-circle</loc>
+    <lastmod>2026-08-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://obiemeka.com/blog</loc>
+    <lastmod>2026-08-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://obiemeka.com/blog/eudr-compliance-checklist</loc>
+    <lastmod>2026-06-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://obiemeka.com/blog/agro-real-estate-as-an-asset-class</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://obiemeka.com/blog/smallholder-digitization-what-works</loc>
+    <lastmod>2026-04-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
 </urlset>
