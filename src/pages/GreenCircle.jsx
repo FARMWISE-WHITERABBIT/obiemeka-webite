@@ -115,32 +115,51 @@ export default function GreenCircle() {
     <>
       <Nav onPaperSection />
       <section className="section gc-landing page-top" id="greencircle-community" aria-label="Join The Green Circle">
-        <div className="section-head" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-          <img className="gc-landing-logo" src="/assets/green-circle-logo.png" alt="The Green Circle" />
-          <div>
-            <span className="lab">— The Green Circle</span>
+        <div className="about gc-hero">
+          <div className="about-portrait">
+            <img
+              src="/assets/SaveClip.App_476747268_18266976973264868_8581438430631720840_n.jpg"
+              alt="A Green Circle networking event"
+              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+            />
+          </div>
+          <div className="about-body">
+            <img className="gc-landing-logo" src="/assets/green-circle-logo.png" alt="The Green Circle" />
+            <span className="lab">— 01 · The Green Circle</span>
             <h2>
               Investors, operators,<br />
               founders. <em>One room</em>.
             </h2>
+            <p className="lede">
+              I run a commercial plantation in Enugu State and an export trade
+              compliance platform, so most of what I know about African
+              agriculture I learned by doing it, not reading about it.
+            </p>
+            <div className="about-actions">
+              <button type="button" className="btn btn-primary" onClick={scrollToJoin}>
+                Join the Green Circle <span className="arrow" />
+              </button>
+            </div>
           </div>
-          <p className="lede">
-            I run a commercial plantation in Enugu State and an export trade
-            compliance platform, so most of what I know about African
-            agriculture I learned by doing it, not reading about it.
-          </p>
-          <button type="button" className="btn btn-primary" onClick={scrollToJoin}>
-            Join the Green Circle <span className="arrow" />
-          </button>
         </div>
 
-        <div className="gc-summary">
-          <p>
+        <div className="section-head">
+          <div>
+            <span className="lab">— 02 · What you get</span>
+            <h2>
+              Real access,<br />
+              <em>real people</em>.
+            </h2>
+          </div>
+          <p className="lede">
             The Green Circle is a community for investors, operators, and
             entrepreneurs who want to tap into the potential of the African
             agricultural industry and build with the right network around
             them.
           </p>
+        </div>
+
+        <div className="gc-summary">
           <p>
             Investors, operators and entrepreneurs get access to what's
             actually working. Practical on-the-ground trips, agricultural
@@ -167,7 +186,21 @@ export default function GreenCircle() {
           ))}
         </div>
 
-        <div className="gc-grid" id="gc-join">
+        <div className="section-head" id="gc-join">
+          <div>
+            <span className="lab">— 03 · Join</span>
+            <h2>
+              Ready to<br />
+              <em>join</em>?
+            </h2>
+          </div>
+          <p className="lede">
+            One form. A few questions about who you are and what you're
+            after, so the invite actually goes to the right people.
+          </p>
+        </div>
+
+        <div className="gc-grid">
           <div className="booking-side">
             <div className="num-card">
               <div className="nc-head">

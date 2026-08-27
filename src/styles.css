@@ -1381,14 +1381,38 @@ footer .inner { max-width: 1440px; margin: 0 auto; }
 .gc-confirm-logo { width: 92px; height: 92px; border-radius: var(--r-pill); margin-bottom: var(--s-2); }
 .gc-popup-lab { color: var(--muted); }
 
+.gc-hero { margin-bottom: var(--s-8); }
+.gc-hero .gc-landing-logo { margin-bottom: var(--s-4); }
+/* .about-body's h2/lab are normally styled via ".section-head h2"/".section-head .lab" —
+   reused here outside that wrapper for the hero's photo+text layout, scaled for the
+   narrower column instead of a full-width section-head. */
+.about-body .lab {
+  font: var(--caps); letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--muted);
+  display: flex; align-items: center; gap: 10px;
+}
+.about-body .lab::before {
+  content: ""; width: 24px; height: 1px; background: var(--ink); opacity: 0.6;
+}
+.about-body h2 {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(32px, 3.6vw, 52px); line-height: 0.98; letter-spacing: -0.03em;
+  margin: var(--s-3) 0 0;
+}
+.about-body h2 em { font-style: italic; color: var(--accent); font-weight: 700; }
+
 .gc-summary {
-  max-width: 68ch; margin: var(--s-6) 0 var(--s-7);
+  max-width: 68ch; margin: 0 0 var(--s-7);
   display: flex; flex-direction: column; gap: var(--s-4);
 }
 .gc-summary p { margin: 0; font: 400 18px/1.6 var(--font-display); color: var(--muted); }
 .gc-summary p b { color: var(--ink); font-weight: 600; }
 
 .gc-gallery-head { margin-bottom: var(--s-4); display: flex; flex-direction: column; gap: var(--s-2); }
+.gc-gallery-head .lab {
+  font: var(--mono); font-size: 11px; letter-spacing: 0.16em;
+  color: var(--muted); text-transform: uppercase;
+}
 .gc-gallery {
   display: flex; flex-direction: row;
   overflow-x: auto; gap: var(--s-3);
