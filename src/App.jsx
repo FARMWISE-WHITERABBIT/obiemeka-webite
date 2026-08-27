@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
+import { Analytics } from '@vercel/analytics/react'
 import Home from './pages/Home'
 import GreenCircle from './pages/GreenCircle'
 import BlogIndex from './pages/BlogIndex'
@@ -55,6 +56,8 @@ export default function App() {
           </TweakSection>
         </TweaksPanel>
       )}
+
+      <Analytics />
     </>
   )
 }
