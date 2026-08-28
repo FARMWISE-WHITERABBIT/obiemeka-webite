@@ -188,14 +188,6 @@ export default function GreenCircle() {
           </p>
         </div>
 
-        <div className="gc-summary">
-          <p>
-            I run a commercial plantation in Enugu State and an export trade
-            compliance platform, so most of what I know about African
-            agriculture I learned by doing it, not reading about it.
-          </p>
-        </div>
-
         <div className="expertise-grid gc-benefits">
           {BENEFITS.map((it) => (
             <div className="expertise" key={it.n}>
