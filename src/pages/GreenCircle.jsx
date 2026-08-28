@@ -124,9 +124,8 @@ export default function GreenCircle() {
               founders. <em>One room</em>.
             </h2>
             <p className="lede">
-              I run a commercial plantation in Enugu State and an export trade
-              compliance platform, so most of what I know about African
-              agriculture I learned by doing it, not reading about it.
+              A free community for investors, operators, and entrepreneurs
+              building in African agriculture.
             </p>
             <div className="about-actions">
               <button type="button" className="btn btn-primary" onClick={scrollToJoin}>
@@ -161,6 +160,9 @@ export default function GreenCircle() {
 
         <div className="gc-summary">
           <p>
+            I run a commercial plantation in Enugu State and an export trade
+            compliance platform myself, so most of what I know about African
+            agriculture I learned by doing it, not reading about it.
             Investors, operators and entrepreneurs get access to what's
             actually working. Practical on-the-ground trips, agricultural
             business deals, hiring opportunities, trade secrets, industry
