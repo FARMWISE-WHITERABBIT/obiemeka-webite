@@ -116,13 +116,6 @@ export default function GreenCircle() {
       <Nav onPaperSection />
       <section className="section gc-landing page-top" id="greencircle-community" aria-label="Join The Green Circle">
         <div className="about gc-hero">
-          <div className="about-portrait">
-            <img
-              src="/assets/SaveClip.App_476747268_18266976973264868_8581438430631720840_n.jpg"
-              alt="A Green Circle networking event"
-              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
-            />
-          </div>
           <div className="about-body">
             <img className="gc-landing-logo" src="/assets/green-circle-logo.png" alt="The Green Circle" />
             <span className="lab">— 01 · The Green Circle</span>
@@ -140,6 +133,13 @@ export default function GreenCircle() {
                 Join the Green Circle <span className="arrow" />
               </button>
             </div>
+          </div>
+          <div className="about-portrait">
+            <img
+              src="/assets/SaveClip.App_476747268_18266976973264868_8581438430631720840_n.jpg"
+              alt="A Green Circle networking event"
+              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+            />
           </div>
         </div>
 
