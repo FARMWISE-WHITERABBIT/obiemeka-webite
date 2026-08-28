@@ -6,6 +6,39 @@ import { captureUtmFromLocation } from '../lib/utm'
 
 const INITIAL = { name: '', email: '', phone: '', memberType: '', goal: '', nickname: '' }
 
+const BENEFITS = [
+  {
+    n: '01',
+    h: 'Real connections',
+    p: 'Introductions and conversations with people actually solving the same problems, not just names sitting in a group chat.',
+  },
+  {
+    n: '02',
+    h: 'Industry intelligence',
+    p: 'Funding programmes, grants, and industry updates, shared while they still matter, not after everyone else has already acted on them.',
+  },
+  {
+    n: '03',
+    h: 'Events and learning',
+    p: 'Webinars and sessions with people working across farming, processing, finance, investment, technology, logistics, and export.',
+  },
+  {
+    n: '04',
+    h: 'In-person gatherings',
+    p: 'Physical meetups and social activities. Hikes, runs, camping trips, time away from a screen. Building can be mentally draining, and it helps to recoup once in a while.',
+  },
+  {
+    n: '05',
+    h: 'Accountability partners',
+    p: "People in the same weight class to answer to, so the plan from last month actually gets checked.",
+  },
+  {
+    n: '06',
+    h: 'For investors',
+    p: 'Investment blueprints, and introductions to consultants and operators who have actually run projects worth backing.',
+  },
+]
+
 // What we actually need to vet a signup — who they are, and what they're
 // looking for. The goal placeholder changes with the category so the
 // question feels specific instead of generic.
@@ -124,9 +157,8 @@ export default function GreenCircle() {
               founders. <em>One room</em>.
             </h2>
             <p className="lede">
-              I run a commercial plantation in Enugu State and an export trade
-              compliance platform, so most of what I know about African
-              agriculture I learned by doing it, not reading about it.
+              A community where investors, operators, and entrepreneurs in
+              African agriculture connect, build together, and thrive.
             </p>
             <div className="about-actions">
               <button type="button" className="btn btn-primary" onClick={scrollToJoin}>
@@ -147,31 +179,31 @@ export default function GreenCircle() {
           <div>
             <span className="lab">— 02 · What you get</span>
             <h2>
-              Real access,<br />
-              <em>real people</em>.
+              What you<br />
+              <em>actually get</em>.
             </h2>
           </div>
           <p className="lede">
-            The Green Circle is a community for investors, operators, and
-            entrepreneurs who want to tap into the potential of the African
-            agricultural industry and build with the right network around
-            them.
+            Here's what being in it actually looks like.
           </p>
         </div>
 
-        <div className="gc-summary">
-          <p>
-            Investors, operators and entrepreneurs get access to what's
-            actually working. Practical on-the-ground trips, agricultural
-            business deals, hiring opportunities, trade secrets, industry
-            updates, and where the money's moving right now. When something
-            useful comes up, a grant, a training, someone worth knowing, it
-            gets passed around instead of sitting in an inbox. For
-            entrepreneurs, building a business or an agri-tech startup can
-            be a lonely journey. The Green Circle also serves as your
-            accountability partners, which wasn't the original plan, but
-            it's turned into one of the better reasons to be in it.
-          </p>
+        <div className="expertise-grid gc-benefits">
+          {BENEFITS.map((it) => (
+            <div className="expertise" key={it.n}>
+              <span className="e-num">— {it.n}</span>
+              <div>
+                <h3>{it.h}</h3>
+                <p>{it.p}</p>
+              </div>
+              <span className="e-arrow" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 22 22" fill="none">
+                  <path d="M7 11h8M11 7l4 4-4 4" stroke="currentColor" strokeWidth="1.7"
+                        strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </span>
+            </div>
+          ))}
         </div>
 
         <div className="gc-gallery-head">
@@ -214,11 +246,6 @@ export default function GreenCircle() {
                 African agriculture is where you're putting your time or
                 your money, this is for you.
               </p>
-              <div className="when">
-                <span className="chip">Investors</span>
-                <span className="chip">Operators</span>
-                <span className="chip">Entrepreneurs</span>
-              </div>
             </div>
 
             <div className="num-card" style={{ marginTop: 'var(--s-4)' }}>
@@ -293,7 +320,7 @@ export default function GreenCircle() {
                     {status === 'loading' ? 'Joining…' : 'Join Community'} <span className="arrow" />
                   </button>
                   <p className="pkg-note" style={{ margin: '8px 0 0' }}>
-                    Free. Signups are reviewed, so it's not instant. You'll get the WhatsApp invite by email once yours goes through.
+                    Signups are reviewed, so it's not instant. You'll get the WhatsApp invite by email once yours goes through.
                   </p>
                 </div>
               </form>

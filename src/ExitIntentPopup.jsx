@@ -79,9 +79,8 @@ export function ExitIntentPopup() {
         <span className="caps gc-popup-lab">— Before you go</span>
         <h3>Investors, operators, founders. One room.</h3>
         <p>
-          The Green Circle is a free WhatsApp group for investors,
-          operators, and entrepreneurs working on real problems in African
-          agriculture. Free to join.
+          A community where investors, operators, and entrepreneurs in
+          African agriculture connect, build together, and thrive.
         </p>
         <a className="btn btn-primary" href={href} onClick={() => setVisible(false)}>
           Join The Green Circle <span className="arrow" />
