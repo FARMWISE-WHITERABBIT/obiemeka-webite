@@ -146,7 +146,7 @@ export default function GreenCircle() {
 
   return (
     <>
-      <Nav onPaperSection />
+      <Nav onNav={onNav} onPaperSection />
       <section className="section gc-landing page-top" id="greencircle-community" aria-label="Join The Green Circle">
         <div className="about gc-hero">
           <div className="about-body">

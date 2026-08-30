@@ -14,7 +14,7 @@ export default function BlogIndex() {
 
   return (
     <>
-      <Nav onPaperSection />
+      <Nav onNav={onNav} onPaperSection />
       <section className="section page-top" aria-label="Journal">
         <div className="section-head">
           <div>

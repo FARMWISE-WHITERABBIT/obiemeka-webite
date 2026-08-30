@@ -34,7 +34,7 @@ export default function BlogPost() {
 
   return (
     <>
-      <Nav onPaperSection />
+      <Nav onNav={onNav} onPaperSection />
       <article className="section blog-post page-top">
         <div className="blog-post-head">
           <Link to="/blog" className="caps blog-post-back">← Journal</Link>
