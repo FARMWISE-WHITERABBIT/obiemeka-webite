@@ -29,6 +29,35 @@ const REQUIRED_FIELDS = ['name', 'email', 'org', 'session', 'topic', 'challenge'
 // is confirmed — keep this in sync with SESSION_PRICING in api/_lib/booking.js.
 const PAYABLE_SESSIONS = ['discovery', 'compliance', 'strategy', 'investment']
 
+// Flutterwave's inline checkout SDK — loaded on demand (only once someone
+// actually pays) rather than on every page view, and only once even if the
+// form is submitted more than once.
+const FLW_SCRIPT_SRC = 'https://checkout.flutterwave.com/v3.js'
+const FLW_SCRIPT_TIMEOUT_MS = 8000
+
+function loadFlutterwaveScript() {
+  if (window.FlutterwaveCheckout) return Promise.resolve()
+
+  const existing = document.querySelector(`script[src="${FLW_SCRIPT_SRC}"]`)
+  if (existing) {
+    return new Promise((resolve, reject) => {
+      existing.addEventListener('load', () => resolve())
+      existing.addEventListener('error', () => reject(new Error('flutterwave_script_error')))
+      setTimeout(() => (window.FlutterwaveCheckout ? resolve() : reject(new Error('flutterwave_script_timeout'))), FLW_SCRIPT_TIMEOUT_MS)
+    })
+  }
+
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script')
+    script.src = FLW_SCRIPT_SRC
+    script.async = true
+    script.onload = () => resolve()
+    script.onerror = () => reject(new Error('flutterwave_script_error'))
+    document.head.appendChild(script)
+    setTimeout(() => (window.FlutterwaveCheckout ? resolve() : reject(new Error('flutterwave_script_timeout'))), FLW_SCRIPT_TIMEOUT_MS)
+  })
+}
+
 const INITIAL = {
   name: '', email: '', org: '', role: '',
   session: 'discovery', topic: TOPICS[0],
@@ -120,8 +149,33 @@ export function BookingForm({ pickedSession, onPickSession, pickedTopic }) {
         throw new Error(json.error || 'Something went wrong. Please try again.')
       }
 
-      if (json.paymentUrl) {
-        window.location.href = json.paymentUrl
+      if (json.payment) {
+        try {
+          await loadFlutterwaveScript()
+        } catch {
+          setStatus('error')
+          setApiError(
+            "Couldn't load the secure payment window — this is usually an ad blocker or privacy extension blocking it. " +
+            'Please disable it for this site and try again, or email oe@obiemeka.com and we\'ll arrange payment another way.'
+          )
+          return
+        }
+
+        const p = json.payment
+        window.FlutterwaveCheckout({
+          public_key: p.publicKey,
+          tx_ref: p.txRef,
+          amount: p.amount,
+          currency: p.currency,
+          redirect_url: p.redirectUrl,
+          customer: p.customer,
+          customizations: p.customizations,
+          onclose: () => {
+            // Only reset if the modal was closed before payment completed —
+            // a successful payment navigates away via redirect_url instead.
+            setStatus((s) => (s === 'loading' ? 'idle' : s))
+          },
+        })
         return
       }
 
@@ -286,7 +340,7 @@ export function BookingForm({ pickedSession, onPickSession, pickedTopic }) {
         </button>
         {PAYABLE_SESSIONS.includes(data.session) && (
           <p className="pkg-note" style={{ margin: '8px 0 0' }}>
-            You'll pay {sessionMeta.price.split('·')[0].trim()} via Flutterwave on the next screen — nothing is charged until then.
+            You'll pay {sessionMeta.price.split('·')[0].trim()} via Flutterwave in the secure window that opens — nothing is charged until then.
           </p>
         )}
       </div>

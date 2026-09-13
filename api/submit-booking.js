@@ -120,50 +120,43 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Could not save your request. Please try again.' })
   }
 
-  // Sessions with a fixed price go through Flutterwave before they're confirmed —
-  // hand the client a hosted checkout link instead of finishing the booking now.
+  // Sessions with a fixed price go through Flutterwave's inline checkout
+  // before they're confirmed. We used to call Flutterwave's /v3/payments API
+  // here to get a hosted checkout link and redirect the whole page to it —
+  // that hosted page (checkout-v2.dev-flutterwave.com in test, its live
+  // equivalent in production) is a bare shell that only renders once a
+  // background script call succeeds, and shows nothing at all if that call
+  // is blocked (ad blockers, privacy extensions, restrictive networks) —
+  // this was reported by a client as "stuck on the flutterwave blank page."
+  // Initiating from the browser with the inline SDK instead means payment
+  // happens in a modal on our own domain and never depends on that shell.
   if (amount) {
-    if (!process.env.FLUTTERWAVE_SECRET_KEY) {
-      console.error('Missing FLUTTERWAVE_SECRET_KEY env var')
+    if (!process.env.FLUTTERWAVE_PUBLIC_KEY) {
+      console.error('Missing FLUTTERWAVE_PUBLIC_KEY env var')
       await supabase.from('bookings').delete().eq('ref_num', ref)
       return res.status(500).json({ error: 'Payments are not configured yet. Please try again later.' })
     }
 
     const siteUrl = process.env.SITE_URL || 'https://obiemeka.com'
-    let flwJson
-    try {
-      const flwRes = await fetch('https://api.flutterwave.com/v3/payments', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${process.env.FLUTTERWAVE_SECRET_KEY}`,
-          'Content-Type': 'application/json',
+    return res.status(200).json({
+      ref,
+      payment: {
+        publicKey: process.env.FLUTTERWAVE_PUBLIC_KEY,
+        txRef: ref,
+        amount,
+        currency: 'NGN',
+        // Flutterwave redirects the top-level page here once payment finishes —
+        // this takes precedence over any JS callback, so /api/verify-payment
+        // (unchanged) remains the single source of truth for confirming payment.
+        redirectUrl: `${siteUrl}/api/verify-payment`,
+        customer: { email, name },
+        customizations: {
+          title: `Obi Emeka — ${session}`,
+          description: `Booking ${ref}`,
+          logo: `${siteUrl}/assets/monogram-inverse.png`,
         },
-        body: JSON.stringify({
-          tx_ref: ref,
-          amount,
-          currency: 'NGN',
-          redirect_url: `${siteUrl}/api/verify-payment`,
-          customer: { email, name },
-          customizations: {
-            title: `Obi Emeka — ${session}`,
-            description: `Booking ${ref}`,
-            logo: `${siteUrl}/assets/monogram-inverse.png`,
-          },
-          meta: { ref },
-        }),
-      })
-      flwJson = await flwRes.json()
-    } catch (err) {
-      console.error('Flutterwave request failed:', err)
-    }
-
-    if (!flwJson || flwJson.status !== 'success' || !flwJson.data?.link) {
-      console.error('Flutterwave payment init failed for', ref, flwJson)
-      await supabase.from('bookings').delete().eq('ref_num', ref)
-      return res.status(502).json({ error: 'Could not start payment. Please try again.' })
-    }
-
-    return res.status(200).json({ ref, paymentUrl: flwJson.data.link })
+      },
+    })
   }
 
   // No payment required (Retainer / Speaking) — confirm immediately, as before.
