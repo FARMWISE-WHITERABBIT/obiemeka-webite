@@ -92,10 +92,6 @@ export default function GreenCircle() {
   const [status, setStatus] = useState('idle') // idle | loading | success | error
   const [apiError, setApiError] = useState('')
 
-  useEffect(() => {
-    document.title = 'Join The Green Circle | Obi Emeka'
-  }, [])
-
   function scrollToJoin() {
     document.getElementById('gc-join')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
@@ -152,10 +148,10 @@ export default function GreenCircle() {
           <div className="about-body">
             <img className="gc-landing-logo" src="/assets/green-circle-logo.png" alt="The Green Circle" />
             <span className="lab">— 01 · The Green Circle</span>
-            <h2>
+            <h1>
               Investors, operators,<br />
               founders. <em>One room</em>.
-            </h2>
+            </h1>
             <p className="lede">
               A community where investors, operators, and entrepreneurs in
               African agriculture connect, build together, and thrive.

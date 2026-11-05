@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import { Nav, Footer } from '../sections'
 import { useSectionNav } from '../useSectionNav'
@@ -8,10 +8,6 @@ export default function BlogIndex() {
   const onNav = useSectionNav()
   const posts = getAllPosts()
 
-  useEffect(() => {
-    document.title = 'Journal | Obi Emeka'
-  }, [])
-
   return (
     <>
       <Nav onNav={onNav} onPaperSection />
@@ -19,10 +15,10 @@ export default function BlogIndex() {
         <div className="section-head">
           <div>
             <span className="lab">— Journal</span>
-            <h2>
+            <h1>
               Notes from<br />
               the <em>field</em>.
-            </h2>
+            </h1>
           </div>
           <p className="lede">
             Export compliance, agro real estate, and what's actually working
@@ -61,5 +57,5 @@ export default function BlogIndex() {
 function formatDate(iso) {
   const d = new Date(iso)
   if (Number.isNaN(d.getTime())) return iso
-  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })
 }

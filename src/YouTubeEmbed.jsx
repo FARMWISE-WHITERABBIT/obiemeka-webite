@@ -5,13 +5,14 @@ import React, { useState } from 'react'
 // with several videos doesn't pay for every player up front.
 export function YouTubeEmbed({ videoId, title = 'YouTube video' }) {
   const [loaded, setLoaded] = useState(false)
-  if (!videoId) return null
+  if (!/^[A-Za-z0-9_-]{11}$/.test(videoId || '')) return null
 
   return (
     <div className="yt-embed">
       {loaded ? (
         <iframe
-          src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
+          src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1`}
+          referrerPolicy="strict-origin-when-cross-origin"
           title={title}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen

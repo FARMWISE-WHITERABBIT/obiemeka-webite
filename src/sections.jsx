@@ -76,7 +76,7 @@ export function Nav({ onNav, onPaperSection }) {
                 {it.to ? (
                   <Link to={it.to} onClick={() => setMobileOpen(false)}>{it.label}</Link>
                 ) : (
-                  <a href={`#${it.id}`} onClick={(e) => { e.preventDefault(); navTo(it.id) }}>
+                  <a href={`/#${it.id}`} onClick={(e) => { e.preventDefault(); navTo(it.id) }}>
                     {it.label}
                   </a>
                 )}
@@ -86,7 +86,7 @@ export function Nav({ onNav, onPaperSection }) {
         </nav>
         <div className="right">
           <span className="nav-meta">EN ↗ Enugu, NG</span>
-          <a href="#book" className="nav-cta"
+          <a href="/#book" className="nav-cta"
              onClick={(e) => { e.preventDefault(); navTo('book') }}>
             Book a call →
           </a>
@@ -106,7 +106,7 @@ export function Nav({ onNav, onPaperSection }) {
                 {it.to ? (
                   <Link to={it.to} onClick={() => setMobileOpen(false)}>{it.label}</Link>
                 ) : (
-                  <a href={`#${it.id}`} onClick={(e) => { e.preventDefault(); navTo(it.id) }}>
+                  <a href={`/#${it.id}`} onClick={(e) => { e.preventDefault(); navTo(it.id) }}>
                     {it.label}
                   </a>
                 )}
@@ -114,7 +114,7 @@ export function Nav({ onNav, onPaperSection }) {
             ))}
           </ul>
         </nav>
-        <a href="#book" className="btn btn-primary mob-cta"
+        <a href="/#book" className="btn btn-primary mob-cta"
            onClick={(e) => { e.preventDefault(); navTo('book') }}>
           Book a consultation <span className="arrow" />
         </a>
@@ -319,7 +319,7 @@ export function About() {
               onClick={() => document.getElementById('ventures')?.scrollIntoView({ behavior: 'smooth' })}>
               See the ventures <span className="arrow" />
             </button>
-            <a className="btn btn-ghost" href="#book"
+            <a className="btn btn-ghost" href="/#book"
               onClick={(e) => { e.preventDefault(); document.getElementById('book')?.scrollIntoView({ behavior: 'smooth' }) }}>
               Work with Obi <span className="arrow" />
             </a>
@@ -446,7 +446,7 @@ export function Ventures() {
                              rel="noreferrer">
                             Visit {v.detail.urlLabel} <span className="arrow" />
                           </a>
-                          <a className="btn btn-ghost" href="#book"
+                          <a className="btn btn-ghost" href="/#book"
                              onClick={(e) => { e.preventDefault(); document.getElementById('book')?.scrollIntoView({ behavior: 'smooth' }) }}>
                             Discuss this <span className="arrow" />
                           </a>
@@ -1079,12 +1079,12 @@ export function Footer({ onNav }) {
           <div className="foot-col">
             <h4>Site</h4>
             <ul>
-              <li><a href="#about"     onClick={(e) => { e.preventDefault(); onNav('about') }}>About</a></li>
-              <li><a href="#ventures"  onClick={(e) => { e.preventDefault(); onNav('ventures') }}>Ventures</a></li>
-              <li><a href="#expertise" onClick={(e) => { e.preventDefault(); onNav('expertise') }}>Expertise</a></li>
-              <li><a href="#speaking"  onClick={(e) => { e.preventDefault(); onNav('speaking') }}>Speaking</a></li>
-              <li><a href="#packages"  onClick={(e) => { e.preventDefault(); onNav('packages') }}>Engagements</a></li>
-              <li><a href="#book"      onClick={(e) => { e.preventDefault(); onNav('book') }}>Book a call</a></li>
+              <li><a href="/#about"     onClick={(e) => { e.preventDefault(); onNav('about') }}>About</a></li>
+              <li><a href="/#ventures"  onClick={(e) => { e.preventDefault(); onNav('ventures') }}>Ventures</a></li>
+              <li><a href="/#expertise" onClick={(e) => { e.preventDefault(); onNav('expertise') }}>Expertise</a></li>
+              <li><a href="/#speaking"  onClick={(e) => { e.preventDefault(); onNav('speaking') }}>Speaking</a></li>
+              <li><a href="/#packages"  onClick={(e) => { e.preventDefault(); onNav('packages') }}>Engagements</a></li>
+              <li><a href="/#book"      onClick={(e) => { e.preventDefault(); onNav('book') }}>Book a call</a></li>
               <li><Link to="/blog">Journal</Link></li>
               <li><Link to="/greencircle-community">The Green Circle</Link></li>
             </ul>
