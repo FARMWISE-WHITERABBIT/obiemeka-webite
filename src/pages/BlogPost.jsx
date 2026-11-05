@@ -1,3 +1,4 @@
+import { applyBlogSeo } from '../lib/blogSeo'
 import React, { useEffect, useMemo } from 'react'
 import { useParams, Link, Navigate } from 'react-router-dom'
 import { Nav, Footer } from '../sections'
@@ -27,7 +28,8 @@ export default function BlogPost() {
   const halves = useMemo(() => (post ? splitHtmlAtMidpoint(post.html) : null), [post])
 
   useEffect(() => {
-    if (post) document.title = `${post.title} | Obi Emeka`
+    if (!post) return
+    return applyBlogSeo({ title: post.title, description: post.excerpt, path: `/blog/${post.slug}`, article: true })
   }, [post])
 
   if (!post) return <Navigate to="/blog" replace />

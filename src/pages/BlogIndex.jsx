@@ -1,3 +1,4 @@
+import { applyBlogSeo } from '../lib/blogSeo'
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Nav, Footer } from '../sections'
@@ -9,7 +10,7 @@ export default function BlogIndex() {
   const posts = getAllPosts()
 
   useEffect(() => {
-    document.title = 'Journal | Obi Emeka'
+    return applyBlogSeo({ title: 'Journal', description: 'Notes from Obi Emeka on export compliance, agro real estate, and African agri-tech.', path: '/blog' })
   }, [])
 
   return (
