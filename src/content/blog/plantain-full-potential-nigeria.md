@@ -4,7 +4,7 @@ date: 2026-11-05
 excerpt: Plantain can support food, fibre, packaging, and new materials businesses. Here is where Nigeria can capture more value, and what the research supports.
 ctaTopic: plantain value addition
 ---
-**Plantain's business potential in Nigeria extends well beyond selling the fruit.** There are opportunities in food processing at different stages of ripeness, leaves for food handling, and fibre recovered from the harvested plant. Some uses already have customers. Others need product development before they can become dependable sources of income.
+**Plantain's business potential in Nigeria extends well beyond selling the fruit.** There are opportunities in food processing at different stages of ripeness, leaves for food handling, and fibre recovered from the harvested plant for products including hair extensions and hygiene materials. Some uses already have customers. Others need product development before they can become dependable sources of income.
 
 When we talk about plantain, we usually picture a bunch heading to the market, dodo on a plate, boli by the roadside, or a packet of chips. Those are valuable businesses. But I think our commercial imagination around the crop is still too narrow.
 
@@ -47,6 +47,18 @@ What we commonly call the plantain trunk or stalk is a **pseudostem**: overlappi
 Research on the **Dominico Hartón plantain variety** has investigated fibres, yarns, starch, and sap recovered from that pseudostem. The [2024 study in *Polymers*](https://pmc.ncbi.nlm.nih.gov/articles/PMC11125146/) supports the idea of treating the harvested material as a source of manufacturing inputs.
 
 However, plantain and banana research needs careful reading. They belong to the same broader crop group, but a result from one variety cannot establish the performance of every Nigerian plantain variety. The opportunities below include both direct plantain evidence and related banana research; I distinguish them because a manufacturer will need to test the actual material being supplied.
+
+### A Nigerian example: plantain fibre for hair extensions
+
+We also have a Nigerian example to learn from. **Tare Robinson Korumene of ECO-FIP Nigeria** has developed hair extensions from plantain and banana pseudostem fibres. Her brand's [current website presents the product as DUNNALLY](https://dunnallyfiber.com/), made from plantain fibre sourced in Bayelsa State. The company says it is shipping to distributors in Nigeria and overseas; those are company-reported sales and distribution claims, rather than independently verified volumes.
+
+In [Chidera Nwafor's April 2025 interview](https://www.youtube.com/watch?v=pR0HbOSBano), she describes collecting harvested pseudostems, extracting fibre, combing it, and developing a softening and colouring process. She explains that the material has its own texture. That is an interesting product-development decision: work with the fibre's characteristics and establish what customers value about it.
+
+The interview is equally useful for what it reveals about building the business. At that stage, she described limited sample sales, support from friends and family, and a shortage of suitable machinery. Manual combing constrained output even after the team obtained an extractor. Her account shows why access to raw material is only one part of the opportunity. The slowest processing step can determine how many finished products a business can actually supply.
+
+She also shows experimental use of combing residues as pillow filling. That is another possible outlet to test, with comfort, durability, and customer acceptance still to establish. Products mentioned as future possibilities should be assessed separately from products already being made.
+
+For me, this is a practical Nigerian illustration of the larger argument: growers, equipment fabricators, fibre processors, product developers, and hair professionals can all have a role. The value comes from the work connecting the harvested plant to something a customer chooses to buy. Her interview does not establish today's production capacity or profitability, and the brand's current website should not be read as independent validation of its safety or environmental claims.
 
 ### Construction: a credible direction for fibre development
 
@@ -102,7 +114,7 @@ It is tempting to call plantain the most versatile crop in tropical Africa. I th
 
 | Crop | Established food and processing routes | Further value from the crop | What matters commercially |
 | --- | --- | --- | --- |
-| **Plantain** | Fresh cooking markets, chips, flour, prepared foods | Food-use leaves; banana/plantain fibre-pad businesses abroad; materials development | Grading and fast handling for fruit; consistent processing and buyer qualification for fibre |
+| **Plantain** | Fresh cooking markets, chips, flour, prepared foods | Food-use leaves; Nigerian fibre hair extensions; fibre-pad businesses abroad; materials development | Grading and fast handling for fruit; consistent processing and buyer qualification for fibre |
 | **Cassava** | Gari, flour, starch, and other staple foods | Industrial starch applications, feed, and alcohol production | Processing efficiency and a buyer's flour or starch specification |
 | **Maize** | Grain foods, meal, flour, and snacks | Animal feed, starch, oil, sweeteners, and ethanol | Grain quality, drying and storage, and access to processing markets |
 | **Oil palm** | Palm oil and palm kernel oil | Soap inputs, kernel meal, and fibre or shells used for energy | Fruit collection, extraction efficiency, and markets for multiple mill outputs |
@@ -111,7 +123,7 @@ These uses are documented by [IITA for cassava](https://iita.org/cassava/), [FAO
 
 Oil palm is already an example of multiple outputs from a single crop. Cassava and maize have extensive industrial uses too. Plantain does not have to displace them to justify more investment.
 
-Its appeal is the combination of food at several ripening stages, useful leaves, and a fibrous material available after bunch harvest. Its food businesses, fibre-based hygiene ventures elsewhere, and experimental construction materials sit at different stages of development. A Nigerian operator needs to choose the right entry point.
+Its appeal is the combination of food at several ripening stages, useful leaves, and a fibrous material available after bunch harvest. Its food businesses, Nigerian fibre hair extensions, hygiene ventures elsewhere, and experimental construction materials sit at different stages of development. A Nigerian operator needs to choose the right entry point.
 
 Counting possible products is only one comparison. Profit per hectare, processing cost, storage life, water demand, capital requirements, and local buyers can lead to a different investment decision. Comparing a tonne of wet stalk with a tonne of dry grain would tell us very little.
 

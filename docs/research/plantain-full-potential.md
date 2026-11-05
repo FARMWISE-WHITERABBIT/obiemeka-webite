@@ -41,6 +41,18 @@ The article distinguishes plantain from related banana research, and experimenta
 - “Up to 3,000 pads per stem” is not used as a production assumption. It depends on the feedstock, pad construction, fibre loading, recovery and rejected material, and is not a verified Nigerian plantain yield.
 - Coloured-water demonstrations and UV exposure in a video are not presented as a complete product qualification or guaranteed sterilization process.
 
+## Nigerian hair-extension case supplied in the second transcript
+
+- Original primary video identified: [Chidera Nwafor, 20 April 2025](https://www.youtube.com/watch?v=pR0HbOSBano). The user supplied its full transcript. Names in automatic captions are unreliable; use Tare Robinson Korumene and ECO-FIP Nigeria, corroborated by the brand's own website.
+- Current first-party source: [DUNNALLY](https://dunnallyfiber.com/), checked 5 November 2026. The site says it ships to distributors in Nigeria, the UK, USA and Canada. Attribute these as company claims; no shipment volumes, accounts, or current capacity were independently verified.
+- The earlier interview uses a brand name transcribed as Dunali/Dunaly. The article uses the spelling on the current first-party website rather than silently presenting the auto-transcription as authoritative.
+- Keep the interview's sample sales, machinery bottleneck, and family/friend support historical. Do not assert the company remains pre-commercial in November 2026.
+- The interview describes 22 participants, while acknowledging small allowances and limited revenue. Do not translate this into 22 verified full-salary jobs or proven profitability.
+- Pillow filling is experimental in the interview. Other applications discussed by the presenter/founder are not automatically established product lines.
+- Avoid claims that the product is universally itch-free, “chemical-free,” safer than all synthetic hair, cancer-preventing, or independently certified. The transcript and first-party marketing do not establish those conclusions.
+- Do not use the interview's projected mechanized output as achieved current capacity, or treat a promised/discussed funding amount in later media as cash received.
+- No video was embedded with the site's default “by Obi Emeka” caption: the original interview is linked with proper credit to Chidera Nwafor.
+
 ## Questions to resolve before filming a commercial demonstration
 
 - Identify the actual local cultivar and keep it consistent through trials.
