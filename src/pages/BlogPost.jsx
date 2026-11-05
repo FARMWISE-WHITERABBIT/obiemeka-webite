@@ -42,9 +42,10 @@ export default function BlogPost() {
         </div>
 
         {post.image && (
-          <div className="blog-post-image">
-            <img src={post.image} alt="" />
-          </div>
+          <figure className="blog-post-image">
+            <img src={post.image} alt={post.imageAlt} width={post.imageWidth || undefined} height={post.imageHeight || undefined} />
+            {(post.imageCaption || post.imageCredit) && <figcaption>{post.imageCaption}{post.imageCredit && <> Photo: <a href={post.imageSource}>{post.imageCredit}</a> · <a href={post.imageLicense}>CC BY-SA 4.0</a>. Resized and converted to WebP.</>}</figcaption>}
+          </figure>
         )}
 
         {post.youtube && (

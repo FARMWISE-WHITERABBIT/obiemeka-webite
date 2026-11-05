@@ -2,6 +2,14 @@
 title: Plantain in Nigeria: the value beyond the bunch
 date: 2026-11-05
 excerpt: From shade for young cocoa to food, useful leaves, and manufacturing fibre, plantain offers Nigeria several connected opportunities to create value.
+image: /assets/blog/plantain-plantation.webp
+imageAlt: Rows of plantain plants growing beside a house
+imageCaption: Plantain cultivation brings value beyond the harvested bunch.
+imageCredit: Ei'eke / Wikimedia Commons
+imageSource: https://commons.wikimedia.org/wiki/File:Plantain_tree_plantation.jpg
+imageLicense: https://creativecommons.org/licenses/by-sa/4.0/
+imageWidth: 1400
+imageHeight: 933
 ctaTopic: plantain value addition
 ---
 **Plantain's versatility begins while it is growing and continues after the bunch is harvested.** It can provide temporary shade for young cocoa, produce food for several markets, supply useful leaves, and yield fibre for manufactured products. Understanding how those roles connect gives us a better starting point for building businesses around the crop.
@@ -37,6 +45,11 @@ Different stages of ripeness suit different products and customers.
 Processing still needs wholesome fruit and a suitable recipe. Variety and ripeness affect how the ingredient behaves, so a successful flour or baked product needs its own formulation.
 
 The business opportunity is to organise these outlets. Grade incoming fruit, know which customers want each grade, and move it to the right destination on time. That gives a grower or processor more options as the fruit changes, rather than leaving the whole harvest dependent on one market.
+
+<figure class="blog-photo">
+<img src="/assets/blog/green-ripe-plantain.webp" alt="Green and yellow ripe plantain harvested in Liberia" width="1400" height="788" loading="lazy" decoding="async" />
+<figcaption>Green and ripe plantain in Liberia: different stages of ripeness open different food markets. Photo: <a href="https://commons.wikimedia.org/wiki/File:Ripe_Plantain_and_green_Plantain.jpg">Menyea / Wikimedia Commons</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. Resized and converted to WebP.</figcaption>
+</figure>
 
 ## The leaves connect plantain to other food businesses
 
@@ -95,6 +108,11 @@ A [2024 experimental study of banana fibre and gypsum](https://www.techscience.c
 There is [Nigerian research using plantain pseudostem fibre in epoxy composites](https://www.digitalnjte.org/index.php/files/article/view/64) for low-stress applications such as interior panels and lightweight covers. Epoxy and gypsum are different materials, but both illustrate the potential for agricultural fibres in manufacturing.
 
 For this outlet, the next step is collaboration with a board producer: agree a fibre specification, make samples, and test the finished material for its intended use. As with hair extensions and hygiene products, the opportunity develops through a particular customer's requirements.
+
+<figure class="blog-photo">
+<img src="/assets/blog/banana-fibre.webp" alt="Bundles of dried banana fibre documented in Sri Lanka" width="1400" height="933" loading="lazy" decoding="async" />
+<figcaption>Dried banana fibre documented in Sri Lanka illustrates the material opportunity discussed here. This is a banana-fibre example, not a photograph of Nigerian plantain processing. Photo: <a href="https://commons.wikimedia.org/wiki/File:காய்ந்த_வாழை_நார்.jpg">SL Trades and Crafts Documentation Project / Noolaham TamilWiki</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. Resized and converted to WebP.</figcaption>
+</figure>
 
 ## Full use should support the next crop too
 

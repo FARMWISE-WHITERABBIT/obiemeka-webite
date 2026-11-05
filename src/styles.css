@@ -1524,3 +1524,10 @@ footer .inner { max-width: 1440px; margin: 0 auto; }
 .blog-post-body table { display: block; width: 100%; overflow-x: auto; border-collapse: collapse; margin: var(--s-4) 0 var(--s-5); }
 .blog-post-body th, .blog-post-body td { min-width: 130px; padding: 12px; border: 1px solid var(--hairline-strong); text-align: left; vertical-align: top; }
 .blog-post-body th { font-weight: 700; background: var(--paper); }
+
+/* Documentary photographs retain their full frame and readable credits. */
+.blog-post-image { margin-left: 0; margin-right: 0; }
+.blog-photo { margin: var(--s-5) 0; }
+.blog-photo img, .blog-post-image img { display: block; width: 100%; height: auto; }
+.blog-photo img { border-radius: var(--r-3); }
+.blog-photo figcaption, .blog-post-image figcaption { font-size: 0.82rem; line-height: 1.6; margin-top: 10px; }

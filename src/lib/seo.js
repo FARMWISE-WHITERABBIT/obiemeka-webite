@@ -44,7 +44,7 @@ export function getPageSeo(pathname) {
       { '@type': 'ListItem', position: 3, name: post.title, item: url },
     ] })
   }
-  return { title, description, url, known, type: post ? 'article' : 'website', image: post?.image ? new URL(post.image, SITE).href : DEFAULT_IMAGE, imageAlt: post?.image ? post.title : 'Obi Emeka — Nigerian agri-tech founder', schema: { '@context': 'https://schema.org', '@graph': graph } }
+  return { title, description, url, known, type: post ? 'article' : 'website', image: post?.image ? new URL(post.image, SITE).href : DEFAULT_IMAGE, imageAlt: post?.image ? (post.imageAlt || post.title) : 'Obi Emeka — Nigerian agri-tech founder', schema: { '@context': 'https://schema.org', '@graph': graph } }
 }
 
 // The build and client navigation use exactly the same metadata.
