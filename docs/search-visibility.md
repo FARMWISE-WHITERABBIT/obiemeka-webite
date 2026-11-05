@@ -6,7 +6,7 @@ The same route metadata drives the initial HTML and client navigation. Each page
 
 ## Add a post
 
-Add a Markdown file in `src/content/blog/` with `title`, `date` (publication date), `excerpt`, and optional `ctaTopic` and `youtube` frontmatter. `youtube` is the 11-character video ID, not the full watch URL. The player thumbnail loads first; clicking loads the privacy-enhanced YouTube iframe. A watch link remains available in the article.
+Add a Markdown file in `src/content/blog/` with `title`, `date` (publication date), `excerpt`, and optional `updated` (date of a substantive revision), `ctaTopic`, and `youtube` frontmatter. `youtube` is the 11-character video ID, not the full watch URL. The player thumbnail loads first; clicking loads the privacy-enhanced YouTube iframe. A watch link remains available in the article.
 
 Use lowercase, hyphenated filenames. The build discovers posts automatically and generates the deployed sitemap from the same collection. It does not invent modification dates or change old publication dates. The historical sitemap in `public/` is replaced in the production build.
 
@@ -18,7 +18,7 @@ After deployment, inspect the new and existing article URLs in Search Console an
 
 The supplied video is cited and embedded. VideoObject rich-result markup is deliberately omitted until its actual upload date and other video metadata can be verified; the article publication date is not the video's upload date.
 
-For future articles, use direct answers, descriptive headings, original experience, relevant internal links, and primary sources for legal, regulatory, financial, or time-sensitive claims. The older EUDR checklist still needs a separate factual editorial review against current official regulations; this technical update does not validate its compliance guidance.
+For future articles, use direct answers, descriptive headings, original experience, relevant internal links, and primary sources for legal, regulatory, financial, or time-sensitive claims. The EUDR checklist was substantively reviewed against current European Commission implementation resources on 5 November 2026; its linked sources and visible update date establish the review cutoff. Future regulatory changes require another review.
 
 There is no guarantee of rankings, AI citations, or rich results. No special AI files, fabricated FAQs, credentials, ratings, or unsupported schema were added.
 

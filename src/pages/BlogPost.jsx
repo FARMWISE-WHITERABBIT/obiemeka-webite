@@ -36,6 +36,7 @@ export default function BlogPost() {
         <div className="blog-post-head">
           <Link to="/blog" className="caps blog-post-back">← Journal</Link>
           {post.date && <time className="caps blog-post-date" dateTime={post.date}>{formatDate(post.date)}</time>}
+          {post.updated && <span className="caps blog-post-date">Updated <time dateTime={post.updated}>{formatDate(post.updated)}</time></span>}
           <h1>{post.title}</h1>
           <p className="blog-post-author">By <Link to="/#about" rel="author">Obi Emeka</Link></p>
         </div>

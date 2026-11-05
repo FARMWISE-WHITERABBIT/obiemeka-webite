@@ -53,3 +53,16 @@ test('Unknown URLs have a real not-found document rather than homepage content',
   assert.equal(config.rewrites, undefined, 'No blanket homepage rewrite')
   assert.ok(config.redirects.some(r => r.source === '/green-circle' && r.permanent))
 })
+
+test('A substantive article update preserves publication history and updates discovery dates', async () => {
+  const html = await readFile('dist/blog/eudr-compliance-checklist.html', 'utf8')
+  const schema = JSON.parse(html.match(/<script id="page-schema" type="application\/ld\+json">(.*?)<\/script>/s)[1])
+  const article = schema['@graph'].find(n => n['@type'] === 'BlogPosting')
+  assert.equal(article.datePublished, '2026-06-15')
+  assert.equal(article.dateModified, '2026-11-05')
+  assert.ok(html.includes('dateTime="2026-11-05"'))
+  assert.match(sitemap, /<loc>https:\/\/obiemeka.com\/blog\/eudr-compliance-checklist<\/loc><lastmod>2026-11-05<\/lastmod>/)
+  const unchanged = await readFile('dist/blog/smallholder-digitization-what-works.html', 'utf8')
+  const unchangedSchema = JSON.parse(unchanged.match(/<script id="page-schema" type="application\/ld\+json">(.*?)<\/script>/s)[1])
+  assert.equal(unchangedSchema['@graph'].find(n => n['@type'] === 'BlogPosting').dateModified, undefined)
+})

@@ -41,6 +41,7 @@ const POSTS = Object.entries(rawModules)
       slug: meta.slug || slug,
       title: meta.title || slug,
       date: meta.date || '',
+      updated: meta.updated || '',
       excerpt: meta.excerpt || '',
       image: meta.image || '',
       youtube: meta.youtube || '',

@@ -37,7 +37,7 @@ export function getPageSeo(pathname) {
     graph.push({ '@type': 'ItemList', itemListElement: getAllPosts().map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: p.title, url: `${SITE}/blog/${p.slug}` })) })
   }
   if (post) {
-    graph.push({ '@type': 'BlogPosting', '@id': `${url}#article`, headline: post.title, description, url, mainEntityOfPage: { '@id': `${url}#webpage` }, author: person, inLanguage: 'en-NG', ...(post.date ? { datePublished: post.date } : {}), ...(post.image ? { image: new URL(post.image, SITE).href } : {}), ...(post.youtube ? { citation: `https://www.youtube.com/watch?v=${post.youtube}` } : {}) })
+    graph.push({ '@type': 'BlogPosting', '@id': `${url}#article`, headline: post.title, description, url, mainEntityOfPage: { '@id': `${url}#webpage` }, author: person, inLanguage: 'en-NG', ...(post.date ? { datePublished: post.date } : {}), ...(post.updated ? { dateModified: post.updated } : {}), ...(post.image ? { image: new URL(post.image, SITE).href } : {}), ...(post.youtube ? { citation: `https://www.youtube.com/watch?v=${post.youtube}` } : {}) })
     graph.push({ '@type': 'BreadcrumbList', itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
       { '@type': 'ListItem', position: 2, name: 'Journal', item: `${SITE}/blog` },

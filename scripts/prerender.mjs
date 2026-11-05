@@ -14,7 +14,7 @@ for (const path of [...pagePaths(), '/404']) {
 const posts = getAllPosts()
 const urls = pagePaths().map(path => {
   const post = posts.find(p => path === `/blog/${p.slug}`)
-  return `  <url><loc>${escapeHtml(SITE + path)}</loc>${post?.date ? `<lastmod>${escapeHtml(post.date)}</lastmod>` : ''}</url>`
+  return `  <url><loc>${escapeHtml(SITE + path)}</loc>${post?.date ? `<lastmod>${escapeHtml(post.updated || post.date)}</lastmod>` : ''}</url>`
 })
 await writeFile('dist/sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join('\n')}\n</urlset>\n`)
 await rm('.prerender', { recursive: true })
