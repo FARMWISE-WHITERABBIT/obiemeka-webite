@@ -1519,3 +1519,8 @@ footer .inner { max-width: 1440px; margin: 0 auto; }
 .blog-post-video { margin: 0 0 var(--s-6); }
 .blog-post-video figcaption { margin-top: var(--s-3); font-size: 0.9rem; color: var(--muted); line-height: 1.6; }
 .blog-post-video figcaption a { text-decoration: underline; }
+
+/* Keep wide crop comparisons inside the article on narrow screens. */
+.blog-post-body table { display: block; width: 100%; overflow-x: auto; border-collapse: collapse; margin: var(--s-4) 0 var(--s-5); }
+.blog-post-body th, .blog-post-body td { min-width: 130px; padding: 12px; border: 1px solid var(--hairline-strong); text-align: left; vertical-align: top; }
+.blog-post-body th { font-weight: 700; background: var(--paper); }
