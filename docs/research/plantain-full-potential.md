@@ -63,3 +63,14 @@ The article distinguishes plantain from related banana research, and experimenta
 - Obtain permission for any third-party footage, figures, or product claims; no source figures or screenshots were copied into the article.
 
 A video script and footage plan are not part of this draft. The post's argument and source register can support them later.
+
+## Cohesion revision and cocoa companion-crop evidence
+
+The editorial revision follows the crop's life: field role → fruit → leaves → postharvest fibre → maintaining the next crop → comparison → business execution. It merges the previously separate income/economics/starting-point sections and trims repeated qualifications. The cocoa plantation provides the opening and closing connection. No personal experience of planting companion crops on Obi's own farm is invented.
+
+- [IITA: Planting temporary and permanent shade in cocoa](https://biblio.iita.org/documents/U11ManAsarePlantingNothomNodev.pdf-66a7d381ce34c6f69507cc1a51506a2f.pdf): institutional extension manual, indexed passage reviewed. Supports plantain's temporary-shade role during cocoa establishment. Exact spacing, timing and shade percentages are not prescribed as universally applicable Nigerian instructions.
+- [Ghana Landscape Restoration Project/COCOBOD rehabilitation account](https://glrssmp.epa.gov.gh/index.php/2026/11/03/rehabilitation-of-moribund-cocoa-farms/): primary programme account, reviewed 5 November 2026. Describes intercropped plantain and cocoyam for shade and supplementary establishment-period income. It is a Ghana example, not a verified outcome on a Nigerian farm.
+- [CocoaSoils newsletter, November 2020](https://cocoasoils.org/wp-content/uploads/2021/03/Newsletter-Vol.9-November-2020.pdf): primary Nigerian field observations retrieved through indexed text. Supports managing plantain population and competition; no recommendation to retain unlimited plantain in mature cocoa.
+- [A New Intercropping System for Cocoa Cultivation Using Erect Cassava](https://www.jstage.jst.go.jp/article/jsta/67/2/67_54/_article): primary 2023 research, abstract reviewed as a cross-check. Its treatment-specific survival rates are not extrapolated to Nigeria or used as guaranteed benefits.
+
+The article now explicitly includes temporary shade and possible early food/income, then connects that field role to the existing cocoa-fermentation leaf use. It does not claim plantain fixes nitrogen, guarantees higher cocoa yield, replaces every permanent shade tree, or ensures unlimited year-round fibre supply from a cocoa stand.
