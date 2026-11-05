@@ -1,9 +1,12 @@
 ---
 title: Thriving in Nigeria means looking beyond the local market
 date: 2026-11-05
+youtube: 905mdy0lXD0
 excerpt: Three export paths worth considering — services, agricultural commodities, and minerals — and why the opportunity only works when you understand the operation behind it.
 ctaTopic: agricultural commodity exports
 ---
+**How can you build an export business from Nigeria?** Start with a service or product you can deliver reliably, find the overseas customer who needs it, and work out the costs and risks before committing money. The three paths discussed here are digital services, agricultural commodities, and minerals. None guarantees a profit.
+
 During a walk through the community where I run my plantation in Enugu, I recorded a video about a question many Nigerians are asking: how do you build a decent living when everyday costs keep rising and your income struggles to keep up?
 
 My argument was simple. Look beyond the local market. Think about what you can offer to customers outside Nigeria, whether that is a skill, an agricultural commodity, or a mineral product.
@@ -49,3 +52,7 @@ Setting up our plantation in Enugu has taught me how expensive starting from scr
 If you are deciding where to begin, choose one path and get specific. What will you sell? Who needs it? What will it cost you to deliver? What could go wrong before you get paid?
 
 You do not need to pursue all three routes. You need one that fits your skills, resources, and ability to execute. Looking beyond Nigeria's local market opens up possibilities; building the capability to serve that market is what makes the opportunity useful.
+
+## Keep exploring
+
+For the agricultural route, read [the EUDR compliance checklist](/blog/eudr-compliance-checklist). If you are considering plantation investment, start with [agro real estate as an asset class](/blog/agro-real-estate-as-an-asset-class).

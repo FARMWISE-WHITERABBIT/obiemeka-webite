@@ -5,8 +5,12 @@ import './tokens.css'
 import './styles.css'
 import App from './App'
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+const app = (
   <BrowserRouter>
     <App />
   </BrowserRouter>
 )
+
+const root = document.getElementById('root')
+if (root.querySelector('*')) ReactDOM.hydrateRoot(root, app)
+else ReactDOM.createRoot(root).render(app)

@@ -1,8 +1,8 @@
-import { applyBlogSeo } from '../lib/blogSeo'
-import React, { useEffect, useMemo } from 'react'
-import { useParams, Link, Navigate } from 'react-router-dom'
+import React, { useMemo } from 'react'
+import { useParams, Link } from 'react-router-dom'
 import { Nav, Footer } from '../sections'
 import { useSectionNav } from '../useSectionNav'
+import NotFound from './NotFound'
 import { getPostBySlug } from '../lib/blogPosts'
 import { GreenCircleCTA } from '../GreenCircleCTA'
 import { YouTubeEmbed } from '../YouTubeEmbed'
@@ -27,12 +27,7 @@ export default function BlogPost() {
   const post = getPostBySlug(slug)
   const halves = useMemo(() => (post ? splitHtmlAtMidpoint(post.html) : null), [post])
 
-  useEffect(() => {
-    if (!post) return
-    return applyBlogSeo({ title: post.title, description: post.excerpt, path: `/blog/${post.slug}`, article: true })
-  }, [post])
-
-  if (!post) return <Navigate to="/blog" replace />
+  if (!post) return <NotFound />
 
   return (
     <>
@@ -40,8 +35,9 @@ export default function BlogPost() {
       <article className="section blog-post page-top">
         <div className="blog-post-head">
           <Link to="/blog" className="caps blog-post-back">← Journal</Link>
-          {post.date && <span className="caps blog-post-date">{formatDate(post.date)}</span>}
+          {post.date && <time className="caps blog-post-date" dateTime={post.date}>{formatDate(post.date)}</time>}
           <h1>{post.title}</h1>
+          <p className="blog-post-author">By <Link to="/#about" rel="author">Obi Emeka</Link></p>
         </div>
 
         {post.image && (
@@ -51,7 +47,10 @@ export default function BlogPost() {
         )}
 
         {post.youtube && (
-          <YouTubeEmbed videoId={post.youtube} title={post.title} />
+          <figure className="blog-post-video">
+            <YouTubeEmbed key={post.youtube} videoId={post.youtube} title={post.title} />
+            <figcaption>Watch the original discussion by Obi Emeka on <a href={`https://www.youtube.com/watch?v=${post.youtube}`}>YouTube</a>. Read the adapted discussion below.</figcaption>
+          </figure>
         )}
 
         <div className="blog-post-body">
@@ -76,5 +75,5 @@ export default function BlogPost() {
 function formatDate(iso) {
   const d = new Date(iso)
   if (Number.isNaN(d.getTime())) return iso
-  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })
 }

@@ -1,0 +1,84 @@
+[
+  {
+    "@type": "Person",
+    "@id": "https://obiemeka.com/#obi-emeka",
+    "name": "Obi Emeka",
+    "givenName": "Obi",
+    "familyName": "Emeka",
+    "jobTitle": "Founder & CEO",
+    "description": "Nigerian agri-tech entrepreneur and agricultural export expert. Founder and CEO of WhiteRabbit Agro, building OriginTrace (supply-chain traceability for African commodity exports) and FarmWise (cooperative digitization platform). Speaks regularly on export compliance, EUDR, and the future of African agriculture.",
+    "url": "https://obiemeka.com",
+    "image": "https://obiemeka.com/assets/obi-emeka-portrait.jpeg",
+    "email": "oe@obiemeka.com",
+    "telephone": "+2348103446650",
+    "nationality": {
+      "@type": "Country",
+      "name": "Nigeria"
+    },
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Enugu",
+      "addressRegion": "Enugu State",
+      "addressCountry": "NG"
+    },
+    "sameAs": [
+      "https://www.linkedin.com/in/obiemeka/",
+      "https://www.instagram.com/theobiemeka/",
+      "https://www.facebook.com/obiemekaofficial",
+      "https://www.tiktok.com/@obi.emeka",
+      "https://www.youtube.com/@obiemeka"
+    ],
+    "knowsAbout": [
+      "Agricultural technology",
+      "Agri-tech",
+      "Export compliance",
+      "EUDR compliance",
+      "UK export regulations",
+      "US export regulations",
+      "Agro real estate",
+      "Supply chain traceability",
+      "African agriculture",
+      "Smallholder digitization",
+      "Agricultural investment",
+      "Cooperative digitization",
+      "Nigerian agriculture",
+      "African commodity exports"
+    ],
+    "worksFor": {
+      "@type": "Organization",
+      "name": "WhiteRabbit Agro",
+      "url": "https://whiterabbitagro.com"
+    },
+    "founder": [
+      {
+        "@type": "Organization",
+        "name": "WhiteRabbit Agro",
+        "url": "https://whiterabbitagro.com",
+        "description": "Agri-tech company building infrastructure for African agricultural exports"
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "OriginTrace",
+        "url": "https://origintrace.trade",
+        "applicationCategory": "Supply chain traceability platform for African commodity exports"
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "FarmWise",
+        "url": "https://farmwise.whiterabbitagro.com",
+        "applicationCategory": "Cooperative and smallholder farm management platform"
+      }
+    ]
+  },
+  {
+    "@type": "WebSite",
+    "@id": "https://obiemeka.com/#website",
+    "url": "https://obiemeka.com",
+    "name": "Obi Emeka",
+    "description": "Official website of Obi Emeka \u2014 Nigerian agri-tech founder, agricultural export expert, and CEO of WhiteRabbit Agro.",
+    "inLanguage": "en-NG",
+    "about": {
+      "@id": "https://obiemeka.com/#obi-emeka"
+    }
+  }
+]

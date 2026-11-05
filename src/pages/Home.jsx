@@ -19,10 +19,6 @@ export default function Home() {
   const handleNav = useSectionNav()
   const location = useLocation()
 
-  useEffect(() => {
-    document.title = 'Obi Emeka | Agri-Tech Founder & Agricultural Export Expert | Nigeria'
-  }, [])
-
   // Arriving from another route via a /#section link — scroll to it once mounted.
   useEffect(() => {
     if (!location.hash) return

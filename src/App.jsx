@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react'
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { Analytics } from '@vercel/analytics/react'
+import { Seo } from './Seo'
+import NotFound from './pages/NotFound'
 import Home from './pages/Home'
 import GreenCircle from './pages/GreenCircle'
 import BlogIndex from './pages/BlogIndex'
@@ -37,13 +39,14 @@ export default function App() {
 
   return (
     <>
+      <Seo />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/greencircle-community" element={<GreenCircle />} />
         <Route path="/green-circle" element={<RedirectPreservingSearch to="/greencircle-community" />} />
         <Route path="/blog" element={<BlogIndex />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
-        <Route path="*" element={<Home />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
 
       {location.pathname !== '/greencircle-community' && <ExitIntentPopup />}
