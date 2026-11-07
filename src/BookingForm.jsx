@@ -1,3 +1,4 @@
+import { trackLinks } from './lib/linksAnalytics'
 import React, { useState, useEffect, useMemo } from 'react'
 import { SCHEDULING_URLS } from './schedulingLinks'
 
@@ -131,6 +132,7 @@ export function BookingForm({ pickedSession, onPickSession, pickedTopic, returnT
       }
 
       if (json.paymentUrl) {
+        trackLinks('checkout_started', discoveryCredit ? 'discovery_credit' : 'book')
         window.location.href = json.paymentUrl
         return
       }

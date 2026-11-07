@@ -1,3 +1,4 @@
+import { trackLinks } from '../lib/linksAnalytics'
 import React, { useEffect, useRef, useState } from 'react'
 import { BookingForm } from '../BookingForm'
 import { openFlutterwaveCheckout } from '../lib/flutterwaveCheckout'
@@ -122,6 +123,7 @@ export function AgriQuizForm({ inline = false }) {
             new Promise(resolve => window.setTimeout(resolve, 3000)),
           ])
           setCheckout(prepared)
+          trackLinks('report_ready', 'quiz')
         } finally {
           setPreparing(false)
         }
@@ -131,6 +133,7 @@ export function AgriQuizForm({ inline = false }) {
 
   function pay() {
     return run(async () => {
+      trackLinks('checkout_started', 'quiz')
       const payment = await openFlutterwaveCheckout(checkout)
       if (payment) {
         const next = new URLSearchParams(params)
