@@ -70,6 +70,23 @@ const categories = {
 }
 const flags = ['buyerAccess', 'siteAccess', 'operatingCoverage']
 
+const horizons = {
+  short: 'within three months',
+  medium: 'within three to twelve months',
+  long: 'on a horizon beyond one year',
+}
+
+function preparationReport(overview, nextStep, revisit = []) {
+  return {
+    status: 'prepare', shortlist: [], revisit, overview, nextStep,
+    plan: [
+      { when: 'Days 1–30', action: nextStep },
+      { when: 'Days 31–60', action: 'Collect local quotes and speak to operators about costs, delays and where money tends to get tied up.' },
+      { when: 'Days 61–90', action: 'Reassess once you can explain how the business would be funded, operated and supervised. Keep capital uncommitted if key gaps remain.' },
+    ],
+  }
+}
+
 export function assessAgribusinessFit(answers) {
   for (const [key, options] of Object.entries(categories)) {
     if (!options.includes(answers?.[key])) throw new TypeError(`Invalid answer: ${key}`)
@@ -82,16 +99,16 @@ export function assessAgribusinessFit(answers) {
   }
 
   if (answers.capitalPosition === 'noRiskCapital' || (answers.funding === 'borrowed' && answers.lossTolerance === 'low')) {
-    return {
-      status: 'prepare', shortlist: [], revisit: [],
-      nextStep: 'Protect household reserves. Interview buyers or operators and build a pilot budget before committing money.',
-    }
+    return preparationReport(
+      'Your answers suggest that an operating loss could disrupt your other commitments. The next step is to gather evidence without taking on a financial obligation.',
+      'Protect household reserves. Interview buyers or operators and build a pilot budget before committing money.',
+    )
   }
   if (answers.role === 'passive') {
-    return {
-      status: 'prepare', shortlist: [], revisit: [],
-      nextStep: 'Define who will operate the business and how you would verify their track record, reporting and use of funds. Reassess after defining your oversight role.',
-    }
+    return preparationReport(
+      'You prefer a capital role with limited day-to-day involvement. Your fit depends heavily on who will run the business and how you can independently check their work.',
+      'Define who will operate the business and how you would verify their track record, reporting and use of funds. Reassess after defining your oversight role.',
+    )
   }
 
   const assessed = routes.map(route => {
@@ -140,10 +157,23 @@ export function assessAgribusinessFit(answers) {
   }).sort((a, b) => b.score - a.score)
 
   const shortlist = assessed.filter(item => !item.blockers.length && item.score > 0).slice(0, 3)
+  const revisit = assessed.filter(item => item.blockers.length).slice(0, 3)
+  const first = shortlist[0]
+  if (!first) {
+    return preparationReport(
+      'The routes assessed do not currently match enough of your goals, experience and operating constraints to shortlist.',
+      'Address the prerequisites on the closest route and rerun the assessment before committing money.',
+      revisit,
+    )
+  }
+  const time = answers.weeklyHours === 1 ? 'one hour' : `${answers.weeklyHours} hours`
   return {
-    status: shortlist.length ? 'shortlist' : 'prepare',
-    shortlist,
-    revisit: assessed.filter(item => item.blockers.length).slice(0, 3),
-    nextStep: shortlist[0]?.nextStep || 'Address the prerequisites on the closest route and rerun the assessment before committing money.',
+    status: 'shortlist', shortlist, revisit, nextStep: first.nextStep,
+    overview: `You can give the business ${time} a week and want it to generate cash ${horizons[answers.cashHorizon]}. Of the options assessed, ${first.name.toLowerCase()} is your strongest starting point given the goals, experience and operating resources you reported.`,
+    plan: [
+      { when: 'Days 1–30', action: first.nextStep },
+      { when: 'Days 31–60', action: first.budgetCheck },
+      { when: 'Days 61–90', action: 'Review the evidence against your time and cash limits. Proceed only if buyers, costs and operating coverage check out. For a long-cycle venture, use this stage for due diligence and pilot planning.' },
+    ],
   }
 }

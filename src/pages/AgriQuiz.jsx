@@ -49,6 +49,7 @@ export function AgriQuizForm({ inline = false }) {
   const transactionId = params.get('transaction_id')
   const [verified, setVerified] = useState(false)
   const [report, setReport] = useState(null)
+  const [emailed, setEmailed] = useState(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const enabled = import.meta.env.VITE_AGRI_QUIZ_ENABLED === 'true'
@@ -65,6 +66,7 @@ export function AgriQuizForm({ inline = false }) {
     return run(async () => {
       const result = await request({ action: 'verify', reference, transactionId })
       setReport(result.report)
+      setEmailed(result.emailed)
       setVerified(true)
     })
   }
@@ -100,7 +102,8 @@ export function AgriQuizForm({ inline = false }) {
       {!enabled && <p>Checkout is not open yet.</p>}
       {enabled && reference && !verified && (
         <div>
-          <button className="btn btn-primary" disabled={busy} onClick={verify}>{busy ? 'Checking payment…' : 'Check payment'}</button>
+          {busy ? <p className="quiz-progress" role="status"><span aria-hidden="true" /> Confirming your payment and preparing report delivery…</p>
+            : <button className="btn btn-primary" onClick={verify}>Check payment</button>}
           {error && <p><Link to="/links#quiz">Start a new assessment if you did not pay</Link></p>}
         </div>
       )}
@@ -120,7 +123,7 @@ export function AgriQuizForm({ inline = false }) {
           ))}
           {!verified && <>
             <label>Email address <input name="email" type="email" required maxLength="254" autoComplete="email" /></label>
-            <p>Complete the assessment first. After Flutterwave verifies your payment, your report opens here. Use the same browser to return to it.</p>
+            <p>Complete the assessment first. After Flutterwave verifies your payment, your report opens here and we send a copy to your email.</p>
           </>}
           <button className="btn btn-primary" disabled={busy}>
             {busy ? 'Please wait…' : verified ? 'Get my report' : 'Pay ₦15,000 to unlock my report'}
@@ -130,6 +133,12 @@ export function AgriQuizForm({ inline = false }) {
       {report && (
         <section aria-labelledby="quiz-report">
           <h2 id="quiz-report">Your agribusiness fit report</h2>
+          {emailed ? <p role="status">We sent a copy to the email you entered.</p> : (
+            <p>Your report is ready here. If the email hasn’t arrived, check spam or{' '}
+              <button type="button" disabled={busy} onClick={verify}>{busy ? 'Checking…' : 'check email delivery again'}</button>.
+            </p>
+          )}
+          {report.overview && <p>{report.overview}</p>}
           <p><strong>Start here.</strong> {report.nextStep}</p>
           {report.shortlist.map(route => (
             <article key={route.id}>
@@ -146,6 +155,10 @@ export function AgriQuizForm({ inline = false }) {
               <ul>{route.blockers.map(blocker => <li key={blocker}>{blocker}</li>)}</ul>
             </article>
           ))}
+          {!!report.plan?.length && <>
+            <h3>Your first 90 days</h3>
+            <ol>{report.plan.map(step => <li key={step.when}><strong>{step.when}.</strong> {step.action}</li>)}</ol>
+          </>}
           <p>Check local costs, demand and operating requirements before committing capital. This assessment screens for business fit and does not estimate returns.</p>
         </section>
       )}

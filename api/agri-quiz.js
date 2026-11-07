@@ -3,10 +3,10 @@ import { flutterwave } from './_lib/flutterwave.js'
 import { getSupabase } from './_lib/booking.js'
 import { assessAgribusinessFit } from '../src/lib/agri-fit/assess.mjs'
 
-const PRICE = 15000
+import { emailQuizReport, QUIZ_ORDER_COLUMNS, QUIZ_PREFIX, QUIZ_PRICE, QUIZ_REFERENCE_PATTERN, verifyQuizPayment } from './_lib/agri-quiz-payment.js'
+
 const COOKIE = 'oe_quiz'
 const SITE = process.env.SITE_URL || 'https://obiemeka.com'
-const referencePattern = /^[0-9a-f-]{36}$/
 const hash = token => createHash('sha256').update(token).digest('hex')
 
 
@@ -35,8 +35,8 @@ export default async function handler(req, res) {
       })
       if (error) throw error
       const result = await flutterwave('payments', {
-        tx_ref: `AGRI-QUIZ-${reference}`,
-        amount: PRICE,
+        tx_ref: QUIZ_PREFIX + reference,
+        amount: QUIZ_PRICE,
         currency: 'NGN',
         redirect_url: `${SITE}/links?quiz_order=${reference}`,
         customer: { email },
@@ -51,34 +51,24 @@ export default async function handler(req, res) {
     }
 
     const reference = body.reference
-    if (typeof reference !== 'string' || !referencePattern.test(reference)) {
+    if (typeof reference !== 'string' || !QUIZ_REFERENCE_PATTERN.test(reference)) {
       return res.status(400).json({ error: 'Invalid order reference.' })
     }
     const token = req.headers.cookie?.match(new RegExp(`(?:^|;\\s*)${COOKIE}_${reference}=([0-9a-f]{64})(?:;|$)`))?.[1]
     if (!token) return res.status(403).json({ error: 'Open the quiz in the browser where you paid.' })
     const { data: order, error: lookupError } = await db.from('agri_quiz_orders')
-      .select('transaction_id, report').eq('reference', reference).eq('access_hash', hash(token)).maybeSingle()
+      .select(QUIZ_ORDER_COLUMNS).eq('reference', reference).eq('access_hash', hash(token)).maybeSingle()
     if (lookupError) throw lookupError
     if (!order) return res.status(403).json({ error: 'Could not find your quiz order.' })
 
     if (body.action === 'verify') {
-      if (!order.transaction_id) {
-        const txRef = `AGRI-QUIZ-${reference}`
-        const transactionId = String(body.transactionId || '')
-        const result = await flutterwave(/^\d{1,20}$/.test(transactionId)
-          ? `transactions/${transactionId}/verify`
-          : `transactions/verify_by_reference?tx_ref=${txRef}`)
-        const tx = result.data
-        if (result.status !== 'success' || tx?.status !== 'successful' ||
-            tx.tx_ref !== txRef || tx.currency !== 'NGN' || Number(tx.amount) !== PRICE ||
-            !/^\d{1,20}$/.test(String(tx.id))) {
-          return res.status(409).json({ error: 'Payment has not been confirmed. If you paid, wait a moment and check again.' })
-        }
-        const { error } = await db.from('agri_quiz_orders')
-          .update({ transaction_id: String(tx.id) }).eq('reference', reference).is('transaction_id', null)
-        if (error) throw error
+      if (!await verifyQuizPayment(db, reference, order, body.transactionId)) {
+        return res.status(409).json({ error: 'Payment has not been confirmed. If you paid, wait a moment and check again.' })
       }
-      return res.status(200).json({ report: order.report })
+      let emailed = false
+      try { emailed = await emailQuizReport(db, reference, order) }
+      catch { console.error('Quiz report delivery failed for', reference) }
+      return res.status(200).json({ report: order.report, emailed })
     }
 
     if (body.action === 'report') {

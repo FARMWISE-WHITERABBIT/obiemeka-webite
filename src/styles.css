@@ -1566,3 +1566,18 @@ footer .inner { max-width: 1440px; margin: 0 auto; }
   font: inherit;
 }
 .agri-quiz .form-card .btn { justify-self: start; }
+
+.quiz-progress { display: flex; align-items: center; gap: 10px; }
+.quiz-progress span {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  border: 2px solid var(--hairline-strong);
+  border-top-color: var(--ink);
+  border-radius: 50%;
+  animation: quiz-progress-spin .8s linear infinite;
+}
+@keyframes quiz-progress-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .quiz-progress span { animation: none; }
+}
