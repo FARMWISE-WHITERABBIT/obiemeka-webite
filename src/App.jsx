@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { Analytics } from '@vercel/analytics/react'
+import { cleanLinksAnalyticsUrl } from './lib/linksAnalytics'
 import { Seo } from './Seo'
 import NotFound from './pages/NotFound'
 import Home from './pages/Home'
@@ -76,7 +77,7 @@ export default function App() {
         </TweaksPanel>
       )}
 
-      <Analytics />
+      <Analytics beforeSend={cleanLinksAnalyticsUrl} />
     </>
   )
 }

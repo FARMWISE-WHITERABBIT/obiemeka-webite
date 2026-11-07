@@ -1,3 +1,4 @@
+import { trackLinks } from '../lib/linksAnalytics'
 import React, { useState } from 'react'
 import { openFlutterwaveCheckout } from '../lib/flutterwaveCheckout'
 import { Link, useSearchParams } from 'react-router-dom'
@@ -22,6 +23,7 @@ export function InnerCircleForm({ inline = false }) {
       })
       const data = await response.json()
       if (!response.ok) throw new Error(data.error || 'Could not open checkout.')
+      trackLinks('checkout_started', 'inner')
       const payment = await openFlutterwaveCheckout(data)
       if (payment) setPaymentSubmitted(true)
     } catch (err) {

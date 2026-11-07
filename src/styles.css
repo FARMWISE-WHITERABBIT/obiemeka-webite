@@ -1586,5 +1586,41 @@ footer .inner { max-width: 1440px; margin: 0 auto; }
 .quiz-budget legend { font-weight: 700; }
 .quiz-budget p { margin: 0; }
 .quiz-budget label { display: grid; gap: var(--s-2); }
-.quiz-sample { margin-bottom: var(--s-3); }
-.quiz-sample summary { cursor: pointer; text-decoration: underline; }
+
+/* Profile hub cards retain the site's type, paper and green palette. */
+.links-hub { max-width: 620px; }
+.links-hub .links-header {
+  padding: clamp(24px, 6vw, 38px) 18px;
+  border: 1px solid #cbd9ce;
+  border-radius: var(--r-4);
+  background: radial-gradient(ellipse at 50% 0%, #d9eadd, transparent 78%), #f2f4eb;
+}
+.links-hub .links-header img { border: 3px solid var(--paper-pure); box-shadow: 0 0 0 1px #c5d4c6; }
+.links-hub .links-group { grid-template-columns: minmax(0, 1fr); }
+.links-hub .links-offer-row {
+  gap: 12px;
+  min-height: 62px;
+  padding: 9px 14px;
+  border: 1px solid #cfd9d1;
+  border-radius: var(--r-3);
+  background: var(--paper-pure);
+  color: var(--ink);
+}
+.links-hub .links-offer-row:hover, .links-offer[open] .links-offer-row { border-color: #64816d; background: #eff5ee; }
+.links-hub #quiz > .links-offer-row { background: #dcece0; border-color: #b3cbb9; }
+.links-hub #quiz > .links-offer-row:hover { border-color: #64816d; background: #d2e7d8; }
+.links-offer-label { flex: 1; min-width: 0; }
+.links-offer-label small { margin-top: 3px; color: #3e5245; font-size: 0.8rem; }
+.links-offer-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 34px;
+  height: 34px;
+  border-radius: var(--r-2);
+  background: #edf1e7;
+  color: #234e36;
+}
+#quiz .links-offer-icon { background: #234e36; color: #f8faf4; }
+.links-chevron { width: 8px; height: 8px; flex: 0 0 8px; margin: 0 5px; border: solid currentColor; border-width: 0 1.5px 1.5px 0; transform: rotate(45deg); }
+.links-offer[open] .links-chevron { transform: rotate(225deg); }
+.links-hub .links-group > .links-row { border-radius: var(--r-3); min-height: 46px; padding: 10px 14px; }

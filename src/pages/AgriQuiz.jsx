@@ -1,3 +1,4 @@
+import { trackLinks } from '../lib/linksAnalytics'
 import React, { useEffect, useRef, useState } from 'react'
 import { BookingForm } from '../BookingForm'
 import { openFlutterwaveCheckout } from '../lib/flutterwaveCheckout'
@@ -122,6 +123,7 @@ export function AgriQuizForm({ inline = false }) {
             new Promise(resolve => window.setTimeout(resolve, 3000)),
           ])
           setCheckout(prepared)
+          trackLinks('report_ready', 'quiz')
         } finally {
           setPreparing(false)
         }
@@ -131,6 +133,7 @@ export function AgriQuizForm({ inline = false }) {
 
   function pay() {
     return run(async () => {
+      trackLinks('checkout_started', 'quiz')
       const payment = await openFlutterwaveCheckout(checkout)
       if (payment) {
         const next = new URLSearchParams(params)
@@ -141,20 +144,30 @@ export function AgriQuizForm({ inline = false }) {
     })
   }
 
+  function downloadReport() {
+    return run(async () => {
+      const response = await fetch('/api/agri-quiz', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'pdf', reference }),
+      })
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}))
+        throw new Error(data.error || 'Could not download your report. Please try again.')
+      }
+      const url = URL.createObjectURL(await response.blob())
+      const link = document.createElement('a')
+      link.href = url
+      link.download = 'obi-emeka-agribusiness-fit-report.pdf'
+      link.click()
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000)
+    })
+  }
+
   return (
     <div className="agri-quiz links-panel-content">
-      <p>Explore agribusiness routes against your available capital, time, experience and goals. Get a personalised shortlist, the gaps to close and a practical validation step.</p>
+      <p>Trying to decide which agricultural business to get into? Tell us a bit about where you are now, what you’ve done before, and how much time and money you can put into it. We’ll use your answers to put together a detailed report on the options that fit you and the practical steps you can take to get started.</p>
       <p><strong>₦15,000 one-time payment</strong></p>
-      {!reference && !preparing && !checkout && (
-        <details className="quiz-sample">
-          <summary>See a sample report excerpt</summary>
-          <p><strong>Example: palm oil processing.</strong> This example uses fictional figures. The buyer has ₦3 million available and quotes of ₦2.5 million for setup and ₦1 million for working capital.</p>
-          <p><strong>Budget finding.</strong> The proposed setup is ₦500,000 over budget before any cost increases. If costs rise by 10%, the gap grows to ₦850,000.</p>
-          <p><strong>First 30 days.</strong> Verify seasonal fruit supply and obtain quotes from an existing mill. Ask a buyer to confirm grade and payment terms.</p>
-          <p><strong>Days 31–60.</strong> Use a trial milling run to measure saleable oil per tonne and calculate costs after transport and losses.</p>
-          <p><strong>Days 61–90.</strong> Compare the trial with the buyer’s price. Pause equipment purchases if fruit supply, extraction yield or waste handling remain unverified.</p>
-        </details>
-      )}
       {error && <p role="alert">{error}</p>}
       {reference && !verified && (
         <div>
@@ -171,7 +184,7 @@ export function AgriQuizForm({ inline = false }) {
       {checkout && !reference && (
         <section className="form-card" aria-labelledby="quiz-ready">
           <h2 id="quiz-ready" tabIndex={-1} ref={readyHeading}>Your report is ready</h2>
-          <p>Pay ₦15,000 once to see your personalised recommendations and action plan. We’ll also email you a copy after payment is confirmed.</p>
+          <p>Pay ₦15,000 once to see your personalised recommendations and action plan. You can download the PDF here after payment, and we’ll send it to your email too.</p>
           <button type="button" className="btn btn-primary" disabled={busy} onClick={pay}>
             {busy ? 'Opening Flutterwave…' : 'Pay ₦15,000 to receive my report'}
           </button>
@@ -183,7 +196,7 @@ export function AgriQuizForm({ inline = false }) {
       {(!reference || verified) && !report && (
         <div hidden={preparing || Boolean(checkout)}>
           <form className="form-card" onSubmit={submit}>
-            <h2>Your circumstances</h2>
+            <h2>Tell us more about yourself</h2>
             <label>How many hours a week can you personally give the business?
               <input type="number" name="weeklyHours" min="0" max="168" step="1" required />
             </label>
@@ -278,7 +291,7 @@ export function AgriQuizForm({ inline = false }) {
             </>}
             {!verified && <>
               <label>Email address <input name="email" type="email" required maxLength="254" autoComplete="email" /></label>
-              <p>We’ll use this email to send your report after payment.</p>
+              <p>We’ll send your PDF report to this email after payment.</p>
             </>}
             <button className="btn btn-primary" disabled={busy}>
               {busy ? 'Please wait…' : verified ? 'Get my report' : 'Submit My Answers'}
@@ -289,7 +302,8 @@ export function AgriQuizForm({ inline = false }) {
       {report && (
         <section aria-labelledby="quiz-report">
           <h2 id="quiz-report">Your agribusiness fit report</h2>
-          {emailed ? <p role="status">We sent a copy to the email you entered.</p> : (
+          <button type="button" className="btn btn-primary" onClick={downloadReport} disabled={busy}>Download PDF report</button>
+          {emailed ? <p role="status">We sent the PDF to the email you entered.</p> : (
             <p>Your report is ready here. If the email hasn’t arrived, check spam or{' '}
               <button type="button" disabled={busy} onClick={verify}>{busy ? 'Checking…' : 'check email delivery again'}</button>.
             </p>
@@ -339,7 +353,7 @@ export default function AgriQuiz() {
   return (
     <main className="section links-page">
       <Link to="/links">← Obi Emeka links</Link>
-      <h1>Know the Right Agricultural Business for You</h1>
+      <h1>Know the right agricultural business for you</h1>
       <AgriQuizForm />
     </main>
   )
