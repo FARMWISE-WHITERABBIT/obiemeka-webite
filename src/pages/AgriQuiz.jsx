@@ -53,6 +53,7 @@ export function AgriQuizForm({ inline = false }) {
   const [emailed, setEmailed] = useState(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
+  const [processingProduct, setProcessingProduct] = useState('')
   const [preparing, setPreparing] = useState(false)
   const [checkout, setCheckout] = useState(null)
   const readyHeading = useRef(null)
@@ -92,6 +93,7 @@ export function AgriQuizForm({ inline = false }) {
     const answers = Object.fromEntries(form)
     answers.weeklyHours = Number(answers.weeklyHours)
     for (const key of ['buyerAccess', 'siteAccess', 'operatingCoverage']) answers[key] = answers[key] === 'yes'
+    if (answers.processingProduct) answers.feedstockAccess = answers.feedstockAccess === 'yes'
     return run(async () => {
       if (verified) {
         const result = await request({ action: 'report', reference, answers })
@@ -167,6 +169,31 @@ export function AgriQuizForm({ inline = false }) {
                 </select>
               </label>
             ))}
+            <label>Are you considering making a processed product?
+              <select name="processingProduct" value={processingProduct} onChange={event => setProcessingProduct(event.target.value)}>
+                <option value="">No or still exploring</option>
+                <option value="plantainChips">Plantain chips</option>
+                <option value="coconutOil">Coconut oil</option>
+                <option value="other">Another processed product</option>
+              </select>
+            </label>
+            {processingProduct && <>
+              <label>How would you produce it?
+                <select name="processingSetup" required defaultValue="">
+                  <option value="" disabled>Choose an answer</option>
+                  <option value="inHouse">In my own facility</option>
+                  <option value="contract">I can access a contract processor</option>
+                  <option value="undecided">I haven’t decided yet</option>
+                </select>
+              </label>
+              <label>Can you source consistent raw materials at a price you can verify?
+                <select name="feedstockAccess" required defaultValue="">
+                  <option value="" disabled>Choose an answer</option>
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                </select>
+              </label>
+            </>}
             {!verified && <>
               <label>Email address <input name="email" type="email" required maxLength="254" autoComplete="email" /></label>
               <p>We’ll use this email to send your report after payment.</p>

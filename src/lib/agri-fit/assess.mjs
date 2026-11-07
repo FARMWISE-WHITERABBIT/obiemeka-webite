@@ -58,6 +58,20 @@ export const routes = [
   },
 ]
 
+const processingProducts = {
+  plantainChips: {
+    name: 'Plantain chips',
+    validate: 'Check whether suppliers can deliver firm green plantain consistently. Use a small trial batch to measure sellable packs, oil use and rejects. Confirm pack size and wholesale terms with retailers before buying equipment.',
+    budget: 'Calculate cost per sellable pack using plantain, frying oil, fuel, labour, packaging, rejects and delivery. Compare it with the price you actually receive from the retailer.',
+  },
+  coconutOil: {
+    name: 'Coconut oil',
+    validate: 'Choose the intended market and buyer specification first. Ask a processor to run a small extraction trial and document input weight, saleable oil yield, quality checks and storage requirements.',
+    budget: 'Calculate cost per saleable litre from the actual extraction yield, including coconuts, extraction, filtering, testing, containers and delivery. Compare it with a buyer’s quoted price.',
+  },
+  other: { name: 'Your chosen processed product' },
+}
+
 const categories = {
   goal: ['cashflow', 'buildBusiness', 'legacy'],
   role: ['operator', 'partner', 'passive'],
@@ -98,6 +112,14 @@ export function assessAgribusinessFit(answers) {
     throw new TypeError('Invalid answer: weeklyHours')
   }
 
+  const productKey = answers.processingProduct || ''
+  if (productKey && (!Object.hasOwn(processingProducts, productKey) ||
+      !['inHouse', 'contract', 'undecided'].includes(answers.processingSetup) ||
+      typeof answers.feedstockAccess !== 'boolean')) {
+    throw new TypeError('Invalid processing answers')
+  }
+  const product = productKey ? processingProducts[productKey] : null
+
   if (answers.capitalPosition === 'noRiskCapital' || (answers.funding === 'borrowed' && answers.lossTolerance === 'low')) {
     return preparationReport(
       'Your answers suggest that an operating loss could disrupt your other commitments. The next step is to gather evidence without taking on a financial obligation.',
@@ -134,14 +156,33 @@ export function assessAgribusinessFit(answers) {
       reasons.push('Builds on experience you already have.')
     }
 
-    const blockers = route.checks.filter(([key]) => !answers[key]).map(([, message]) => message)
+    const processing = route.id === 'processing' && product
+    const hasContractProcessor = processing && answers.processingSetup === 'contract'
+    if (processing) {
+      score += 4
+      reasons.push(`Evaluates your stated interest in ${product.name.toLowerCase()}.`)
+      if (hasContractProcessor) reasons.push('A contract processor can help you test the market before investing in equipment.')
+    }
+
+    const blockers = route.checks
+      .filter(([key]) => !answers[key] && !(key === 'operatingCoverage' && hasContractProcessor))
+      .map(([, message]) => message)
+    if (processing && !answers.feedstockAccess) {
+      blockers.push('Confirm reliable raw-material supply, quality specifications and delivered prices before planning a batch.')
+    }
+    if (processing && answers.processingSetup === 'inHouse' && !answers.siteAccess) {
+      blockers.push('Confirm a suitable processing site, utilities and hygiene controls before buying equipment.')
+    }
+    if (processing && answers.processingSetup === 'undecided') {
+      blockers.push('Compare an in-house pilot with a quote from a suitable contract processor.')
+    }
     if (!route.cashCycles.includes(answers.cashHorizon)) {
       blockers.push('Your cash deadline is too short to depend on this route.')
     }
     if (route.id === 'perennial' && answers.capitalPosition === 'pilotOnly') {
       blockers.push('Budget separately for establishment and operations before considering this route.')
     }
-    if (answers.oversight === 'remote' && !answers.operatingCoverage && route.id !== 'services') {
+    if (answers.oversight === 'remote' && !answers.operatingCoverage && !hasContractProcessor && route.id !== 'services') {
       blockers.push('Arrange local oversight and reporting before running this route remotely.')
     }
     if (answers.lossTolerance === 'low' && ['production', 'perennial', 'processing'].includes(route.id)) {
@@ -150,10 +191,18 @@ export function assessAgribusinessFit(answers) {
     if (answers.funding === 'borrowed' && route.id !== 'services') {
       blockers.push('Stress-test repayments against late sales and lower volumes before relying on borrowed funds.')
     }
-    if (answers.weeklyHours < 5 && !answers.operatingCoverage) {
+    if (answers.weeklyHours < 5 && !answers.operatingCoverage && !hasContractProcessor) {
       blockers.push('Set aside more time or put reliable operational support in place.')
     }
-    return { id: route.id, name: route.name, score, reasons, blockers, nextStep: route.validate, budgetCheck: route.budget }
+    return {
+      id: route.id,
+      name: processing ? `${route.name}: ${product.name}` : route.name,
+      score, reasons, blockers,
+      nextStep: processing
+        ? `${product.validate || route.validate} Confirm the applicable food safety, registration and labelling requirements before selling.`
+        : route.validate,
+      budgetCheck: (processing && product.budget) || route.budget,
+    }
   }).sort((a, b) => b.score - a.score)
 
   const shortlist = assessed.filter(item => !item.blockers.length && item.score > 0).slice(0, 3)

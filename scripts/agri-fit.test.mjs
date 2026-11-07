@@ -44,3 +44,25 @@ test('Out-of-range time and missing screening answers are rejected', () => {
   assert.throws(() => assess({ ...profile, weeklyHours: -1 }), TypeError)
   assert.throws(() => assess({ ...profile, operatingCoverage: undefined }), TypeError)
 })
+
+test('Processing plans distinguish plantain chips from coconut oil', () => {
+  const processor = { ...profile, cashHorizon: 'medium', processingSetup: 'contract', feedstockAccess: true }
+  const chips = assess({ ...processor, processingProduct: 'plantainChips' })
+  const oil = assess({ ...processor, processingProduct: 'coconutOil' })
+  assert.equal(chips.shortlist[0].id, 'processing')
+  assert.match(chips.plan[1].action, /sellable pack/)
+  assert.equal(oil.shortlist[0].id, 'processing')
+  assert.match(oil.plan[1].action, /saleable litre/)
+  assert.notEqual(chips.plan[0].action, oil.plan[0].action)
+})
+
+test('Processing interest does not override raw-material and facility gaps', () => {
+  const report = assess({
+    ...profile, cashHorizon: 'medium', processingProduct: 'plantainChips',
+    processingSetup: 'inHouse', feedstockAccess: false,
+  })
+  assert.ok(!report.shortlist.some(route => route.id === 'processing'))
+  const processing = report.revisit.find(route => route.id === 'processing')
+  assert.ok(processing.blockers.some(reason => reason.includes('raw-material supply')))
+  assert.ok(processing.blockers.some(reason => reason.includes('processing site')))
+})
