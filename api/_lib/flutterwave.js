@@ -12,3 +12,17 @@ export async function flutterwave(path, body) {
   return response.json()
 }
 
+
+export function inlineCheckoutOptions({ txRef, amount, email, title, plan }) {
+  const publicKey = process.env.FLUTTERWAVE_PUBLIC_KEY
+  if (!publicKey) return undefined
+  return {
+    public_key: publicKey,
+    tx_ref: txRef,
+    amount,
+    currency: 'NGN',
+    customer: { email },
+    customizations: { title },
+    ...(plan ? { payment_plan: Number(plan), payment_options: 'card' } : {}),
+  }
+}

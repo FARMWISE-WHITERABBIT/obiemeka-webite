@@ -1,7 +1,7 @@
 import { emailQuizReport, QUIZ_ORDER_COLUMNS, QUIZ_PREFIX, QUIZ_REFERENCE_PATTERN, verifyQuizPayment } from './_lib/agri-quiz-payment.js'
 import { INNER_CIRCLE_PREFIX } from './inner-circle.js'
 import { recordInnerCirclePayment } from './_lib/inner-circle-payment.js'
-import { SESSION_PRICING, getSupabase, sendBookingEmails } from './_lib/booking.js'
+import { expectedBookingAmount, getSupabase, sendBookingEmails } from './_lib/booking.js'
 
 // Server-to-server webhook Flutterwave calls on transaction completion. This is
 // the authoritative confirmation path — the browser redirect in verify-payment.js
@@ -81,7 +81,7 @@ export default async function handler(req, res) {
   }
 
   const tx = verifyJson?.data
-  const expectedAmount = SESSION_PRICING[booking.session]
+  const expectedAmount = expectedBookingAmount(booking)
   const ok = verifyJson?.status === 'success'
     && tx?.status === 'successful'
     && tx?.tx_ref === txRef

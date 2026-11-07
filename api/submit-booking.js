@@ -1,3 +1,4 @@
+import { DISCOVERY_CREDIT, validDiscoveryCredit } from './_lib/discovery-credit.js'
 import { VALID_SESSIONS, SESSION_PRICING, getSupabase, sendBookingEmails } from './_lib/booking.js'
 
 const MAX_LENGTHS = {
@@ -67,6 +68,40 @@ export default async function handler(req, res) {
 
   const supabase = getSupabase()
 
+  let quizReference = null
+  const credit = body.discoveryCredit
+  if (credit != null) {
+    if (session !== 'discovery' || !validDiscoveryCredit(credit.reference, credit.token)) {
+      return res.status(400).json({ error: 'This credit is available only for the Discovery Call linked to your paid quiz.' })
+    }
+    const { data: quiz, error } = await supabase.from('agri_quiz_orders')
+      .select('email, transaction_id, report').eq('reference', credit.reference).maybeSingle()
+    if (error) return res.status(503).json({ error: 'Could not check your quiz credit. Please try again.' })
+    if (!quiz?.transaction_id || !quiz.report || quiz.email !== email.toLowerCase()) {
+      return res.status(403).json({ error: 'Use the same email address you entered for your paid quiz.' })
+    }
+    quizReference = credit.reference
+  }
+
+  async function existingQuizCheckout() {
+    const { data, error } = await supabase.from('bookings')
+      .select('ref_num, payment_status, quiz_checkout_url').eq('quiz_order_reference', quizReference).maybeSingle()
+    if (error) return res.status(503).json({ error: 'Could not check your quiz credit. Please try again.' })
+    if (!data) return null
+    if (data.payment_status === 'paid') {
+      return res.status(409).json({ error: 'This quiz credit has already been used for a paid Discovery Call.' })
+    }
+    if (data.quiz_checkout_url) {
+      return res.status(200).json({ ref: data.ref_num, paymentUrl: data.quiz_checkout_url })
+    }
+    return res.status(409).json({ error: 'Your discounted checkout is being prepared. Please try again shortly.' })
+  }
+
+  if (quizReference) {
+    const existing = await existingQuizCheckout()
+    if (existing) return existing
+  }
+
   // Rate limits: cap repeat submissions to the same email (stops using the form
   // to spam an arbitrary victim) and total submissions site-wide (stops floods).
   const emailWindowStart = new Date(Date.now() - EMAIL_RATE_LIMIT.windowMs).toISOString()
@@ -88,7 +123,7 @@ export default async function handler(req, res) {
     return res.status(429).json({ error: 'Too many requests right now. Please try again in a few minutes.' })
   }
 
-  const amount = SESSION_PRICING[session] || null
+  const amount = quizReference ? SESSION_PRICING.discovery - DISCOVERY_CREDIT : SESSION_PRICING[session] || null
 
   // ref_num is unique in the DB; regenerate and retry on the rare collision
   // instead of hard-failing a valid submission.
@@ -109,10 +144,15 @@ export default async function handler(req, res) {
       payment_status: amount ? 'pending' : 'not_required',
       amount,
       currency:       amount ? 'NGN' : null,
+      ...(quizReference ? { quiz_order_reference: quizReference } : {}),
     }).select().single()
     dbError = error
     inserted = data
     if (!dbError || dbError.code !== '23505') break
+    if (quizReference) {
+      const existing = await existingQuizCheckout()
+      if (existing) return existing
+    }
   }
 
   if (dbError) {
@@ -163,6 +203,11 @@ export default async function handler(req, res) {
       return res.status(502).json({ error: 'Could not start payment. Please try again.' })
     }
 
+    if (quizReference) {
+      const { error } = await supabase.from('bookings')
+        .update({ quiz_checkout_url: flwJson.data.link }).eq('ref_num', ref)
+      if (error) console.error('Could not save discounted checkout link for', ref)
+    }
     return res.status(200).json({ ref, paymentUrl: flwJson.data.link })
   }
 

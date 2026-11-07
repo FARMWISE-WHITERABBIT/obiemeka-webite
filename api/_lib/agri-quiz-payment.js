@@ -29,16 +29,20 @@ export async function emailQuizReport(db, reference, order) {
   const report = order.report
   const lines = [
     'Your agribusiness fit report', '',
-    report.overview, '', 'Start here', report.nextStep,
+    report.overview,
+    ...(report.capital?.length ? ['', 'Capital and cash needs', ...report.capital] : []),
+    '', 'Start here', report.nextStep,
   ]
   for (const route of report.shortlist) {
     lines.push('', route.name, ...route.reasons.map(reason => '• ' + reason),
       'First test: ' + route.nextStep)
     if (route.budgetCheck) lines.push('Numbers to collect: ' + route.budgetCheck)
+    if (route.stop) lines.push('When to pause: ' + route.stop)
   }
   if (report.revisit.length) lines.push('', 'Routes to revisit')
   for (const route of report.revisit) {
     lines.push('', route.name, ...route.blockers.map(blocker => '• ' + blocker))
+    if (route.nextStep) lines.push('How to recheck it: ' + route.nextStep)
   }
   if (report.plan?.length) lines.push('', 'Your first 90 days')
   for (const step of report.plan || []) lines.push(step.when + ' — ' + step.action)

@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto'
 import { getSupabase } from './_lib/booking.js'
-import { flutterwave } from './_lib/flutterwave.js'
+import { flutterwave, inlineCheckoutOptions } from './_lib/flutterwave.js'
 
 export const INNER_CIRCLE_PRICE = 50000
 export const INNER_CIRCLE_PREFIX = 'INNER-CIRCLE-'
@@ -31,14 +31,22 @@ export default async function handler(req, res) {
       return res.status(409).json({ error: 'This email already has an active Inner Circle subscription.' })
     }
 
+    function checkoutResponse(reference, checkoutUrl) {
+      const inlineCheckout = inlineCheckoutOptions({
+        txRef: INNER_CIRCLE_PREFIX + reference, amount: INNER_CIRCLE_PRICE, email,
+        title: 'Green Circle Inner Circle — monthly membership', plan,
+      })
+      return res.status(200).json({ checkoutUrl, inlineCheckout })
+    }
+
     const reference = randomUUID()
     const { error: insertError } = await db.from('inner_circle_checkouts').insert({ email, reference })
     if (insertError?.code === '23505') {
       const { data: existing, error } = await db.from('inner_circle_checkouts')
-        .select('checkout_url, transaction_id').eq('email', email).single()
+        .select('reference, checkout_url, transaction_id').eq('email', email).single()
       if (error) throw error
       if (existing.checkout_url && !existing.transaction_id) {
-        return res.status(200).json({ checkoutUrl: existing.checkout_url })
+        return checkoutResponse(existing.reference, existing.checkout_url)
       }
       return res.status(409).json({ error: 'A checkout already exists for this email. Contact oe@obiemeka.com if you need help restarting it.' })
     }
@@ -60,7 +68,7 @@ export default async function handler(req, res) {
     const { error } = await db.from('inner_circle_checkouts')
       .update({ checkout_url: url.href }).eq('reference', reference)
     if (error) throw error
-    return res.status(200).json({ checkoutUrl: url.href })
+    return checkoutResponse(reference, url.href)
   } catch {
     return res.status(503).json({ error: 'Checkout is temporarily unavailable. Contact oe@obiemeka.com if the issue persists.' })
   }

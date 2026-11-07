@@ -10,3 +10,5 @@ Both offers default to checkout off. The product panels live on /links. With the
 6. Review sample reports with Nigerian operators before opening sales. Screening rules do not model local prices, yields or returns. Confirm the refund, support and data-retention processes before using live credentials and the live plan ID.
 
 Local checks use node --test scripts/agri-fit.test.mjs scripts/product-payments.test.mjs, the production build with both frontend flags enabled, and npm run test:seo. Simulated payment tests do not substitute for hosted test payments or renewals.
+
+For the quiz Discovery Call credit, apply the bookings migration before deploying. Verify that an unpaid quiz cannot produce a credit, that the same email gets the ₦135,000 hosted checkout, and that the booking callback and webhook both accept that recorded amount. An expired or unusable hosted link needs operator reconciliation before its booking can be replaced.

@@ -1581,3 +1581,10 @@ footer .inner { max-width: 1440px; margin: 0 auto; }
 @media (prefers-reduced-motion: reduce) {
   .quiz-progress span { animation: none; }
 }
+
+.quiz-budget { display: grid; gap: var(--s-2); min-width: 0; margin: 0; padding: var(--s-3); border: 1px solid var(--hairline-strong); }
+.quiz-budget legend { font-weight: 700; }
+.quiz-budget p { margin: 0; }
+.quiz-budget label { display: grid; gap: var(--s-2); }
+.quiz-sample { margin-bottom: var(--s-3); }
+.quiz-sample summary { cursor: pointer; text-decoration: underline; }
