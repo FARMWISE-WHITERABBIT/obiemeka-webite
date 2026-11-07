@@ -180,13 +180,32 @@ async function sendAdminNotification(signup) {
   const notifyTo = process.env.NOTIFY_EMAIL || 'oe@obiemeka.com'
   const { id, name, email, phone, member_type, goal, utm_source, utm_medium, utm_campaign, created_at } = signup
   const submittedAt = new Date(created_at || Date.now()).toUTCString()
+  const answers = [
+    ['Full name', name],
+    ['Email', email],
+    ['WhatsApp number', phone],
+    ['Which of these are you?', MEMBER_TYPE_LABELS[member_type] || member_type],
+    ['What are you hoping to get out of it?', goal],
+  ]
+  const signupDetails = [
+    ['Source', utm_source],
+    ['Medium', utm_medium],
+    ['Campaign', utm_campaign],
+    ['Submitted', submittedAt],
+  ]
 
   try {
     const { error } = await resend.emails.send({
       from:    `Obi Emeka Website <${fromAddr}>`,
       to:      notifyTo,
       subject: `New Green Circle signup: ${name}`,
-      html:    notificationHtml({ name, email, phone, member_type, goal, utm_source, utm_medium, utm_campaign, submittedAt }),
+      replyTo: email,
+      text: [
+        'Someone signed up for The Green Circle.', '',
+        ...answers.map(([label, value]) => label + ': ' + value),
+        '', 'Signup details', ...signupDetails.map(([label, value]) => label + ': ' + (value || '—')),
+      ].join('\n'),
+      html: notificationHtml(answers, signupDetails),
     }, { idempotencyKey: `green-circle-signup/${id}` })
     if (error) throw error
     return true
@@ -196,53 +215,29 @@ async function sendAdminNotification(signup) {
   }
 }
 
-function notificationHtml({ name, email, phone, member_type, goal, utm_source, utm_medium, utm_campaign, submittedAt }) {
-  const rows = [
-    ['Name', escapeHtml(name)],
-    ['Email', escapeHtml(email)],
-    ['Phone', escapeHtml(phone) || '—'],
-    ['Member type', escapeHtml(MEMBER_TYPE_LABELS[member_type] || member_type)],
-    ['Source', escapeHtml(utm_source) || '—'],
-    ['Medium', escapeHtml(utm_medium) || '—'],
-    ['Campaign', escapeHtml(utm_campaign) || '—'],
-    ['Submitted', submittedAt],
-  ]
+function notificationHtml(answers, signupDetails) {
+  const rows = fields => fields.map(([label, value]) => `
+    <tr><td style="padding:10px 0;border-top:1px solid #DCE6DD;">
+      <p style="margin:0 0 4px;color:#315640;font-weight:bold;font-size:13px;">${escapeHtml(label)}</p>
+      <p style="margin:0;color:#202B24;font-size:15px;line-height:1.5;overflow-wrap:anywhere;">${escapeHtml(value || '—').replace(/\n/g, '<br>')}</p>
+    </td></tr>`).join('')
   return `<!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"></head>
-<body style="margin:0;padding:0;background:#0A0A0A;font-family:system-ui,sans-serif;color:#F6F4EF;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="max-width:640px;margin:40px auto;">
-    <tr><td style="padding:0 24px;">
-      <p style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#6B6660;margin:0 0 32px;">
-        — obiemeka.com / Green Circle
-      </p>
-      <h1 style="font-size:36px;font-weight:800;letter-spacing:-0.03em;margin:0 0 8px;line-height:1;">
-        Someone signed up for The Green Circle.
-      </h1>
-      <p style="color:#6B6660;font-size:15px;margin:0 0 24px;">
-        The free signup sends a WhatsApp invite automatically. Their WhatsApp number is below if you need to follow up.
-      </p>
-
-      <div style="background:rgba(246,244,239,0.06);border:1px solid rgba(246,244,239,0.1);
-                  border-radius:12px;padding:20px 24px;margin-bottom:32px;">
-        <p style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#6B6660;margin:0 0 12px;">
-          — What they're hoping to get out of it
-        </p>
-        <p style="font-size:15px;line-height:1.6;color:#F6F4EF;margin:0;">${escapeHtml(goal).replace(/\n/g, '<br>')}</p>
-      </div>
-
-      <table width="100%" cellpadding="0" cellspacing="0"
-             style="border:1px solid rgba(246,244,239,0.1);border-radius:12px;overflow:hidden;margin-bottom:32px;">
-        ${rows.map(([k, v], i) => `
-        <tr style="background:${i % 2 === 0 ? 'rgba(246,244,239,0.04)' : 'transparent'};">
-          <td style="padding:12px 16px;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;
-                     color:#6B6660;white-space:nowrap;width:110px;">${k}</td>
-          <td style="padding:12px 16px;font-size:14px;color:#F6F4EF;">${v}</td>
-        </tr>`).join('')}
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head>
+<body style="margin:0;background:#F3F4ED;font-family:Arial,sans-serif;color:#202B24;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+    <tr><td align="center" style="padding:24px 12px;">
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:580px;background:#FFFFFF;border:1px solid #D0DED2;border-radius:16px;">
+        <tr><td style="padding:24px;">
+          <p style="margin:0 0 8px;color:#315640;font-size:11px;font-weight:bold;letter-spacing:2px;">THE GREEN CIRCLE</p>
+          <h1 style="margin:0 0 10px;font-family:Georgia,serif;font-size:28px;">New free community signup</h1>
+          <p style="margin:0 0 16px;font-size:15px;line-height:1.5;">Here’s everything they entered. Use their WhatsApp number if you need to follow up, or reply to this email to contact them.</p>
+          <h2 style="margin:0 0 8px;font-size:17px;">Form answers</h2>
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0">${rows(answers)}</table>
+          <h2 style="margin:14px 0 8px;font-size:17px;">Signup details</h2>
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0">${rows(signupDetails)}</table>
+        </td></tr>
       </table>
-
-      <p style="font-size:13px;color:#6B6660;border-top:1px solid rgba(246,244,239,0.1);padding-top:24px;margin:0;">
-        Reply directly to <a href="mailto:${escapeHtml(email)}" style="color:#E8FF3A;">${escapeHtml(email)}</a>
-      </p>
     </td></tr>
   </table>
 </body></html>`

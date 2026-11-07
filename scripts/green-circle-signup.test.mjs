@@ -35,7 +35,7 @@ test('Free signup emails both recipients and makes repeat submissions idempotent
   })
   const req = { method: 'POST', body: {
     name: 'Example Applicant', email: 'applicant@example.com', phone: '+2348012345678',
-    memberType: 'agribusiness-owner', goal: 'Meet other agribusiness operators.',
+    memberType: 'agribusiness-owner', goal: 'Meet other agribusiness operators.\nLearn more about buyers & export.',
   } }
   const call = () => submit(req, {
     status(code) { this.code = code; return this },
@@ -44,14 +44,25 @@ test('Free signup emails both recipients and makes repeat submissions idempotent
 
   assert.equal((await call()).status, 503)
   assert.equal(signup.status, 'pending')
-  assert.equal(acceptedEmails.get('green-circle-signup/signup-1').to, 'owner@example.com')
-  assert.match(acceptedEmails.get('green-circle-signup/signup-1').html, /2348012345678/)
+  const notification = acceptedEmails.get('green-circle-signup/signup-1')
+  assert.equal(notification.to, 'owner@example.com')
+  assert.equal(notification.reply_to, 'applicant@example.com')
+  for (const answer of ['Example Applicant', 'applicant@example.com', '+2348012345678',
+    'Agribusiness owner / operator', 'Meet other agribusiness operators.', 'Learn more about buyers & export.']) {
+    assert.ok(notification.text.includes(answer))
+  }
+  assert.match(notification.html, /operators\.<br>Learn more about buyers &amp; export\./)
+
 
   rejectInvite = false
   assert.equal((await call()).status, 200)
   assert.equal(signup.status, 'approved')
   const invite = acceptedEmails.get('green-circle-invite/signup-1')
   assert.equal(invite.to, 'applicant@example.com')
+  assert.equal(invite.subject, 'Welcome to The Green Circle')
+  assert.equal(invite.reply_to, 'owner@example.com')
+  assert.match(invite.text, /Hi Example,/)
+  assert.match(invite.text, /chat\.whatsapp\.com\/test-invite/)
   assert.match(invite.html, /chat\.whatsapp\.com\/test-invite/)
   assert.equal((await call()).status, 200)
   assert.equal(acceptedEmails.size, 2)

@@ -11,12 +11,23 @@ export async function sendInviteEmail(signup) {
   const resend = new Resend(process.env.RESEND_API_KEY)
   const fromAddr = process.env.EMAIL_FROM || 'onboarding@resend.dev'
 
+  const firstName = (signup.name || '').trim().split(/\s+/)[0]
+  const greeting = firstName ? `Hi ${firstName},` : 'Hello,'
+
   try {
     const { error } = await resend.emails.send({
       from:    `Obi Emeka <${fromAddr}>`,
       to:      signup.email,
-      subject: 'Your Green Circle WhatsApp invite',
-      html:    inviteHtml({ name: signup.name, whatsappLink }),
+      subject: 'Welcome to The Green Circle',
+      replyTo: process.env.NOTIFY_EMAIL || 'oe@obiemeka.com',
+      text: [
+        greeting, '', 'Thanks for signing up for The Green Circle.',
+        'It’s a free WhatsApp community for people working in or exploring African agriculture.',
+        '', 'Join The Green Circle on WhatsApp: ' + whatsappLink,
+        '', 'When you join, introduce yourself and tell us what you’re working on or hoping to learn.',
+        'If the link gives you any trouble, reply to this email and we’ll help.', '', 'See you there,', 'Obi Emeka',
+      ].join('\n'),
+      html: inviteHtml({ greeting, whatsappLink }),
     }, { idempotencyKey: `green-circle-invite/${signup.id}` })
     if (error) throw error
     return true
@@ -26,38 +37,37 @@ export async function sendInviteEmail(signup) {
   }
 }
 
-function inviteHtml({ name, whatsappLink }) {
-  const firstName = escapeHtml((name || '').split(' ')[0])
+function inviteHtml({ greeting, whatsappLink }) {
+  const safeLink = escapeHtml(whatsappLink)
   return `<!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"></head>
-<body style="margin:0;padding:0;background:#F6F4EF;font-family:system-ui,sans-serif;color:#0A0A0A;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="max-width:640px;margin:40px auto;">
-    <tr><td style="padding:0 24px;">
-      <p style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#6B6660;margin:0 0 32px;">
-        — Obi Emeka · The Green Circle
-      </p>
-      <h1 style="font-size:36px;font-weight:800;letter-spacing:-0.03em;margin:0 0 8px;line-height:1;">
-        You're in, ${firstName}.
-      </h1>
-      <p style="color:#6B6660;font-size:16px;line-height:1.6;margin:0 0 32px;">
-        Tap below to join the WhatsApp Community — this is where The Green
-        Circle actually lives, not your inbox.
-      </p>
-      <table cellpadding="0" cellspacing="0" style="margin:0 0 32px;">
-        <tr><td style="border-radius:999px;background:#0A0A0A;">
-          <a href="${escapeHtml(whatsappLink)}"
-             style="display:inline-block;padding:14px 28px;font-size:15px;font-weight:600;
-                    color:#E8FF3A;text-decoration:none;border-radius:999px;">
-            Join the WhatsApp Community &rarr;
-          </a>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head>
+<body style="margin:0;background:#F3F4ED;font-family:Arial,sans-serif;color:#202B24;">
+  <div style="display:none;max-height:0;overflow:hidden;">Your invite to the free Green Circle WhatsApp community.</div>
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#F3F4ED;">
+    <tr><td align="center" style="padding:28px 12px;">
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:580px;background:#FFFFFF;border:1px solid #D0DED2;border-radius:16px;">
+        <tr><td style="padding:26px 24px;background:#244B36;color:#FFFFFF;border-radius:15px 15px 0 0;">
+          <p style="margin:0 0 8px;font-size:11px;font-weight:bold;letter-spacing:2px;">OBI EMEKA</p>
+          <h1 style="margin:0;font-family:Georgia,serif;font-size:30px;line-height:1.2;">Welcome to The Green Circle</h1>
+        </td></tr>
+        <tr><td style="padding:24px;font-size:16px;line-height:1.6;">
+          <p style="margin:0 0 12px;">${escapeHtml(greeting)}</p>
+          <p style="margin:0 0 16px;">Thanks for signing up. The Green Circle is a free WhatsApp community for people working in or exploring African agriculture. You’ll meet others in the sector and hear about learning sessions, meetups and opportunities.</p>
+          <table role="presentation" cellspacing="0" cellpadding="0" style="margin:0 0 18px;">
+            <tr><td style="background:#244B36;border-radius:8px;">
+              <a href="${safeLink}" style="display:inline-block;padding:13px 18px;color:#FFFFFF;font-size:15px;font-weight:bold;text-decoration:none;">Join The Green Circle on WhatsApp</a>
+            </td></tr>
+          </table>
+          <p style="margin:0 0 12px;">When you join, introduce yourself and tell us what you’re working on or hoping to learn.</p>
+          <p style="margin:0 0 16px;">If the button doesn’t work, <a href="${safeLink}" style="color:#244B36;text-decoration:underline;">open the WhatsApp invite here</a> or reply to this email and we’ll help.</p>
+          <p style="margin:0;">See you there,<br><strong>Obi Emeka</strong></p>
+        </td></tr>
+        <tr><td style="padding:14px 24px;border-top:1px solid #D0DED2;color:#526558;font-size:12px;">
+          You’re receiving this because you signed up for The Green Circle on <a href="https://obiemeka.com" style="color:#244B36;">obiemeka.com</a>.
         </td></tr>
       </table>
-      <p style="font-size:12px;color:#6B6660;border-top:1px solid rgba(10,10,10,0.1);
-                padding-top:24px;margin:32px 0 0;">
-        <a href="https://obiemeka.com" style="color:#0A0A0A;">obiemeka.com</a>
-      </p>
     </td></tr>
   </table>
 </body></html>`
 }
-
