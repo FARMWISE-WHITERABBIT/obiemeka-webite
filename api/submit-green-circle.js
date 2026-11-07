@@ -1,3 +1,4 @@
+import { sendInviteEmail } from './_lib/green-circle-invite.js'
 import { isWhatsAppPhone } from '../src/lib/whatsAppPhone.js'
 import crypto from 'node:crypto'
 import { Resend } from 'resend'
@@ -100,11 +101,6 @@ export default async function handler(req, res) {
     return res.status(429).json({ error: 'Too many requests right now. Please try again in a few minutes.' })
   }
 
-  // Person is in the database the moment they submit, independent of whether
-  // they're approved. A repeat signup with the same email refreshes their
-  // attribution/contact fields but never touches status or approval_token —
-  // resubmitting can't reset an already-reviewed application back to pending,
-  // and won't invalidate an approve link already sent to Obi.
   const attributionFields = {
     name,
     phone,
@@ -118,11 +114,19 @@ export default async function handler(req, res) {
     referrer: referrer || null,
   }
 
-  const { data: existing } = await supabase
+  const { data: existing, error: lookupError } = await supabase
     .from('green_circle_signups')
-    .select('id')
+    .select('id, status')
     .eq('email', email)
     .maybeSingle()
+
+  if (lookupError) {
+    return res.status(503).json({ error: 'Could not check your signup. Please try again.' })
+  }
+  if (existing?.status === 'approved') return res.status(200).json({ ok: true })
+  if (existing?.status === 'declined') {
+    return res.status(409).json({ error: 'Please contact us about your previous Green Circle signup.' })
+  }
 
   let signup, dbError
   if (existing) {
@@ -130,6 +134,7 @@ export default async function handler(req, res) {
       .from('green_circle_signups')
       .update(attributionFields)
       .eq('email', email)
+      .eq('status', 'pending')
       .select()
       .single()
     signup = data; dbError = error
@@ -147,35 +152,51 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Could not save your request. Please try again.' })
   }
 
-  await sendAdminNotification(signup)
+  const notified = await sendAdminNotification(signup)
+  if (!notified) {
+    return res.status(503).json({ error: 'Your details were saved, but we couldn’t finish sending the signup emails. Please try again shortly.' })
+  }
+
+  if (!await sendInviteEmail(signup)) {
+    return res.status(503).json({ error: 'Your details were saved, but we couldn’t send your WhatsApp invite. Please try again shortly.' })
+  }
+
+  // "Approved" is the existing status for someone invited to the free group.
+  // Preserve it for Inner Circle eligibility without adding a review step.
+  const { error: statusError } = await supabase.from('green_circle_signups')
+    .update({ status: 'approved', approved_at: new Date().toISOString() })
+    .eq('id', signup.id).eq('status', 'pending')
+  if (statusError) {
+    return res.status(503).json({ error: 'Your invite was sent, but we couldn’t finish saving your signup. Please try again shortly.' })
+  }
   return res.status(200).json({ ok: true })
 }
 
 async function sendAdminNotification(signup) {
-  if (!process.env.RESEND_API_KEY) return
+  if (!process.env.RESEND_API_KEY) return false
 
   const resend = new Resend(process.env.RESEND_API_KEY)
   const fromAddr = process.env.EMAIL_FROM || 'onboarding@resend.dev'
   const notifyTo = process.env.NOTIFY_EMAIL || 'oe@obiemeka.com'
-  const siteUrl = process.env.SITE_URL || 'https://obiemeka.com'
-  const { id, name, email, phone, member_type, goal, utm_source, utm_medium, utm_campaign, approval_token, created_at } = signup
+  const { id, name, email, phone, member_type, goal, utm_source, utm_medium, utm_campaign, created_at } = signup
   const submittedAt = new Date(created_at || Date.now()).toUTCString()
-  const approveUrl = `${siteUrl}/api/approve-green-circle?id=${id}&token=${approval_token}&action=approve`
-  const declineUrl = `${siteUrl}/api/approve-green-circle?id=${id}&token=${approval_token}&action=decline`
 
   try {
-    await resend.emails.send({
+    const { error } = await resend.emails.send({
       from:    `Obi Emeka Website <${fromAddr}>`,
       to:      notifyTo,
-      subject: `Review: new Green Circle signup from ${name}`,
-      html:    notificationHtml({ name, email, phone, member_type, goal, utm_source, utm_medium, utm_campaign, submittedAt, approveUrl, declineUrl }),
-    })
+      subject: `New Green Circle signup: ${name}`,
+      html:    notificationHtml({ name, email, phone, member_type, goal, utm_source, utm_medium, utm_campaign, submittedAt }),
+    }, { idempotencyKey: `green-circle-signup/${id}` })
+    if (error) throw error
+    return true
   } catch (err) {
     console.error('Green Circle admin notification failed:', err)
+    return false
   }
 }
 
-function notificationHtml({ name, email, phone, member_type, goal, utm_source, utm_medium, utm_campaign, submittedAt, approveUrl, declineUrl }) {
+function notificationHtml({ name, email, phone, member_type, goal, utm_source, utm_medium, utm_campaign, submittedAt }) {
   const rows = [
     ['Name', escapeHtml(name)],
     ['Email', escapeHtml(email)],
@@ -195,10 +216,10 @@ function notificationHtml({ name, email, phone, member_type, goal, utm_source, u
         — obiemeka.com / Green Circle
       </p>
       <h1 style="font-size:36px;font-weight:800;letter-spacing:-0.03em;margin:0 0 8px;line-height:1;">
-        Review this signup.
+        Someone signed up for The Green Circle.
       </h1>
       <p style="color:#6B6660;font-size:15px;margin:0 0 24px;">
-        Approving emails them the WhatsApp invite immediately. Declining sends nothing — they're just left off the list.
+        The free signup sends a WhatsApp invite automatically. Their WhatsApp number is below if you need to follow up.
       </p>
 
       <div style="background:rgba(246,244,239,0.06);border:1px solid rgba(246,244,239,0.1);
@@ -208,25 +229,6 @@ function notificationHtml({ name, email, phone, member_type, goal, utm_source, u
         </p>
         <p style="font-size:15px;line-height:1.6;color:#F6F4EF;margin:0;">${escapeHtml(goal).replace(/\n/g, '<br>')}</p>
       </div>
-
-      <table cellpadding="0" cellspacing="0" style="margin:0 0 32px;">
-        <tr>
-          <td style="border-radius:999px;background:#E8FF3A;padding-right:12px;">
-            <a href="${approveUrl}"
-               style="display:inline-block;padding:14px 28px;font-size:15px;font-weight:700;
-                      color:#0A0A0A;text-decoration:none;border-radius:999px;">
-              Approve &rarr;
-            </a>
-          </td>
-          <td style="border-radius:999px;border:1px solid rgba(246,244,239,0.25);">
-            <a href="${declineUrl}"
-               style="display:inline-block;padding:13px 27px;font-size:15px;font-weight:600;
-                      color:#F6F4EF;text-decoration:none;border-radius:999px;">
-              Decline
-            </a>
-          </td>
-        </tr>
-      </table>
 
       <table width="100%" cellpadding="0" cellspacing="0"
              style="border:1px solid rgba(246,244,239,0.1);border-radius:12px;overflow:hidden;margin-bottom:32px;">
