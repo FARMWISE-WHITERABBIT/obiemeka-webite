@@ -1,6 +1,9 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import quiz from '../api/agri-quiz.js'
+import submitBooking from '../api/submit-booking.js'
+import { discoveryCreditToken } from '../api/_lib/discovery-credit.js'
+import { expectedBookingAmount } from '../api/_lib/booking.js'
 import webhook from '../api/flutterwave-webhook.js'
 import innerCircle from '../api/inner-circle.js'
 
@@ -78,6 +81,7 @@ test('Quiz verifies reference and amount before permitting a single saved report
   const pending = await call('verify', headers)
   assert.equal(pending.code, 409)
   assert.equal(pending.body.report, undefined)
+  assert.equal(pending.body.discoveryCredit, undefined)
   assert.equal(emails, 0)
   amount = 15000
   const event = {
@@ -90,6 +94,7 @@ test('Quiz verifies reference and amount before permitting a single saved report
   const unlocked = await call('verify', headers)
   assert.equal(unlocked.code, 200)
   assert.equal(unlocked.body.emailed, true)
+  assert.equal(unlocked.body.discoveryCredit.amount, 15000)
   assert.equal(emails, 1)
   assert.equal(unlocked.body.report.shortlist[0].id, 'trade')
   const completed = await call('report', headers, answers)
@@ -127,4 +132,55 @@ test('Inner Circle requires renewal consent and starts checkout on the configure
   assert.equal(checkout.inlineCheckout.payment_options, 'card')
   active = true
   assert.equal((await call(true)).code, 409)
+})
+
+
+test('Discovery Call credit is paid-order and email bound, and creates one discounted checkout', async t => {
+  const reference = '514deed9-bdaf-47c7-a737-1c627edc1003'
+  const token = discoveryCreditToken(reference)
+  let booking
+  let paid = true
+  let checkoutCount = 0
+  t.mock.method(globalThis, 'fetch', async (input, init) => {
+    const url = new URL(input)
+    if (url.hostname === 'api.flutterwave.com') {
+      const payment = JSON.parse(init.body)
+      assert.equal(payment.amount, 135000)
+      checkoutCount++
+      return json({ status: 'success', data: { link: checkoutUrl } })
+    }
+    if (url.pathname.endsWith('/agri_quiz_orders')) {
+      return json([{ email: 'buyer@example.com', transaction_id: paid ? '123' : null, report: {} }])
+    }
+    if (init.method === 'HEAD') return new Response(null, { headers: { 'content-range': '*/0' } })
+    if (init.method === 'POST') {
+      booking = JSON.parse(init.body)
+      return json(booking)
+    }
+    if (init.method === 'PATCH') {
+      Object.assign(booking, JSON.parse(init.body))
+      return json([])
+    }
+    return json(booking ? [booking] : [])
+  })
+  const fields = {
+    name: 'Trial Buyer', email: 'buyer@example.com', org: 'Independent', session: 'discovery',
+    topic: 'Quiz report', challenge: 'I would like help interpreting my agribusiness assessment.',
+    discoveryCredit: { reference, token },
+  }
+  const book = (changes = {}) => submitBooking({
+    method: 'POST', body: { ...fields, ...changes },
+  }, response())
+  assert.equal((await book({ email: 'other@example.com' })).code, 403)
+  assert.equal((await book({ session: 'strategy' })).code, 400)
+  paid = false
+  assert.equal((await book()).code, 403)
+  paid = true
+  assert.equal((await book()).body.paymentUrl, checkoutUrl)
+  assert.equal(expectedBookingAmount(booking), 135000)
+  assert.equal(expectedBookingAmount({ session: 'discovery', amount: 135000 }), 150000)
+  assert.equal((await book()).body.paymentUrl, checkoutUrl)
+  assert.equal(checkoutCount, 1)
+  booking.payment_status = 'paid'
+  assert.equal((await book()).code, 409)
 })

@@ -1,4 +1,4 @@
-import { SESSION_PRICING, getSupabase, sendBookingEmails } from './_lib/booking.js'
+import { expectedBookingAmount, getSupabase, sendBookingEmails } from './_lib/booking.js'
 
 // Flutterwave redirects the browser here after checkout. We never trust the
 // redirect query params for the actual payment result — they're just enough
@@ -65,7 +65,7 @@ export default async function handler(req, res) {
   }
 
   const tx = verifyJson?.data
-  const expectedAmount = SESSION_PRICING[booking.session]
+  const expectedAmount = expectedBookingAmount(booking)
   const ok = verifyJson?.status === 'success'
     && tx?.status === 'successful'
     && tx?.tx_ref === tx_ref

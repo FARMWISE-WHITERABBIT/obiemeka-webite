@@ -84,6 +84,7 @@ test('A chocolate pilot with dollar quotes gives product and location-specific n
   const report = assess({
     ...profile, cashHorizon: 'medium', skills: 'processing',
     processingProduct: 'chocolate', processingSetup: 'contract', feedstockAccess: true,
+    processingScope: 'pilot', processingQuotes: true,
     budget: { currency: 'USD', available: 2000, setup: 500, working: 800 },
     region: 'Ondo State',
   })
@@ -101,4 +102,15 @@ test('Aquaculture and land partnerships get different guidance', () => {
   const land = assess({ ...profile, role: 'landPartner' })
   assert.equal(land.status, 'prepare')
   assert.match(land.plan[0].action, /title/)
+})
+
+test('A low, unverified chocolate estimate does not establish feasibility', () => {
+  const report = assess({
+    ...profile, cashHorizon: 'medium', processingProduct: 'chocolate',
+    processingSetup: 'contract', processingScope: 'pilot', processingQuotes: false,
+    feedstockAccess: true, budget: { currency: 'NGN', available: 2_000_000, setup: 550_000, working: 900_000 },
+  })
+  assert.ok(!report.shortlist.some(route => route.id === 'processing'))
+  assert.match(report.revisit[0].blockers.join(' '), /minimum batch/)
+  assert.ok(!report.shortlist.some(route => route.id === 'trade'))
 })

@@ -23,6 +23,15 @@ export const SESSION_PRICING = {
   investment: 600000,
 }
 
+// A discounted amount is written only by the paid quiz booking path.
+export function expectedBookingAmount(booking) {
+  if (booking.quiz_order_reference && booking.session === 'discovery') {
+    const amount = Number(booking.amount)
+    return Number.isSafeInteger(amount) && amount > 0 && amount < SESSION_PRICING.discovery ? amount : null
+  }
+  return SESSION_PRICING[booking.session]
+}
+
 export function getSupabase() {
   return createClient(
     process.env.SUPABASE_URL,

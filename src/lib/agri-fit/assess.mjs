@@ -1,3 +1,4 @@
+import { checkProcessingCapital } from './processing-capital.mjs'
 import { additionalRoutes, extraProcessingProducts } from './nigeria.mjs'
 
 // Route screening for Nigerian agribusiness. Thresholds are questionnaire
@@ -115,11 +116,12 @@ function assessBudget(budget) {
   const gap = Math.max(0, total - available)
   const stressTotal = total + Math.ceil(total * 0.1)
   summary.push(`Your estimates: ${money(setup)} for setup and ${money(working)} for working capital, or ${money(total)} in total.`)
+  summary.push('This comparison uses the amounts you entered. Check whether they cover the whole operating model before treating the plan as affordable.')
   summary.push(gap
     ? `That is ${money(gap)} above the amount you can commit. Price a smaller or outsourced version before spending.`
     : `That leaves ${money(available - total)} of the reported capital before further costs.`)
   summary.push(`If the quoted costs rise by 10%, an illustrative stress test, the total becomes ${money(stressTotal)}${stressTotal > available ? ` and exceeds your available capital by ${money(stressTotal - available)}` : ''}.`)
-  return { summary, gap, available }
+  return { summary, gap, available, hasQuotes: true }
 }
 
 function preparationReport(overview, nextStep, revisit = [], capital = []) {
@@ -161,7 +163,10 @@ export function assessAgribusinessFit(answers) {
   const region = typeof answers.region === 'string' ? answers.region.trim() : ''
   if (region.length > 60 || /[\r\n]/.test(region)) throw new TypeError('Enter a valid operating location.')
   const budget = assessBudget(answers.budget)
-  const capital = budget?.summary || []
+  const capitalCheck = checkProcessingCapital(productKey, answers.processingSetup,
+    answers.processingScope, answers.processingQuotes, budget)
+  const capital = [...(budget?.summary || []), ...(capitalCheck ? [capitalCheck.checklist] : [])]
+  if (capitalCheck?.benchmark) capital.push(capitalCheck.benchmark)
   if (answers.capitalPosition === 'noRiskCapital' || budget?.available === 0 ||
       (answers.funding === 'borrowed' && answers.lossTolerance === 'low')) {
     return preparationReport(
@@ -220,6 +225,10 @@ export function assessAgribusinessFit(answers) {
     if (route.id === preferred && budget?.gap) {
       blockers.push('Your quoted setup and working costs exceed your available capital for this plan.')
     }
+    if (processing && capitalCheck) blockers.push(...capitalCheck.blockers)
+    if (preferred && preferred !== route.id && route.checks.some(([key]) => key === 'buyerAccess')) {
+      blockers.push('Verify a buyer for this alternative separately. Buyer access for your chosen venture does not carry over.')
+    }
     if (processing && !answers.feedstockAccess) {
       blockers.push('Confirm reliable raw-material supply, quality specifications and delivered prices before planning a batch.')
     }
@@ -253,7 +262,7 @@ export function assessAgribusinessFit(answers) {
       name: processing ? `${route.name}: ${product.name}` : route.name,
       score, reasons, blockers,
       nextStep: processing
-        ? `${product.validate || route.validate} Confirm the applicable food safety, registration and labelling requirements before selling.`
+        ? `${capitalCheck ? capitalCheck.checklist + ' ' : ''}${product.validate || route.validate} Confirm the applicable food safety, registration and labelling requirements before selling.`
         : route.validate,
       budgetCheck: (processing && product.budget) || route.budget,
       stop: (processing && product.stop) || route.stop ||

@@ -37,7 +37,7 @@ const INITIAL = {
   nickname: '', // honeypot — real users never see or fill this
 }
 
-export function BookingForm({ pickedSession, onPickSession, pickedTopic, returnToLinks = false }) {
+export function BookingForm({ pickedSession, onPickSession, pickedTopic, returnToLinks = false, discoveryCredit }) {
   const [data, setData] = useState({ ...INITIAL, session: pickedSession || 'discovery' })
   const [errors, setErrors] = useState({})
   const [status, setStatus] = useState('idle') // idle | loading | success | error
@@ -122,7 +122,7 @@ export function BookingForm({ pickedSession, onPickSession, pickedTopic, returnT
       const res = await fetch('/api/submit-booking', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...data, ...(returnToLinks ? { returnToLinks: true } : {}) }),
+        body: JSON.stringify({ ...data, ...(returnToLinks ? { returnToLinks: true } : {}), ...(discoveryCredit ? { discoveryCredit } : {}) }),
       })
       const json = await res.json().catch(() => ({}))
 
@@ -146,6 +146,9 @@ export function BookingForm({ pickedSession, onPickSession, pickedTopic, returnT
     }
   }
 
+  const discountedPrice = discoveryCredit
+    ? '₦' + (150000 - discoveryCredit.amount).toLocaleString('en-NG')
+    : ''
   const sessionMeta = SESSIONS.find((s) => s.id === data.session) || SESSIONS[0]
 
   const scheduleUrl = paidReturn ? SCHEDULING_URLS[paidSession] : ''
@@ -246,12 +249,12 @@ export function BookingForm({ pickedSession, onPickSession, pickedTopic, returnT
       <div className="field">
         <label>Session type</label>
         <div className="session-pick">
-          {SESSIONS.map((s) => (
+          {SESSIONS.filter(s => !discoveryCredit || s.id === 'discovery').map((s) => (
             <button type="button" key={s.id}
                     className={data.session === s.id ? 'active' : ''}
                     onClick={() => { setField('session', s.id); onPickSession?.(s.id) }}>
               <span className="name">{s.name}</span>
-              <span className="price">{s.price}</span>
+              <span className="price">{discoveryCredit ? discountedPrice + " · 45 min" : s.price}</span>
             </button>
           ))}
         </div>
@@ -307,7 +310,7 @@ export function BookingForm({ pickedSession, onPickSession, pickedTopic, returnT
         </button>
         {PAYABLE_SESSIONS.includes(data.session) && (
           <p className="pkg-note" style={{ margin: '8px 0 0' }}>
-            You'll pay {sessionMeta.price.split('·')[0].trim()} via Flutterwave on the next screen — nothing is charged until then.
+            You'll pay {discountedPrice || sessionMeta.price.split('·')[0].trim()} via Flutterwave on the next screen — nothing is charged until then.
           </p>
         )}
       </div>

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { BookingForm } from '../BookingForm'
 import { openFlutterwaveCheckout } from '../lib/flutterwaveCheckout'
 import { Link, useSearchParams } from 'react-router-dom'
 
@@ -50,6 +51,7 @@ export function AgriQuizForm({ inline = false }) {
   const reference = params.get(inline ? 'quiz_order' : 'order')
   const transactionId = params.get('transaction_id')
   const [verified, setVerified] = useState(false)
+  const [discoveryCredit, setDiscoveryCredit] = useState(null)
   const [report, setReport] = useState(null)
   const [emailed, setEmailed] = useState(false)
   const [busy, setBusy] = useState(false)
@@ -73,6 +75,7 @@ export function AgriQuizForm({ inline = false }) {
       const result = await request({ action: 'verify', reference, transactionId })
       setReport(result.report)
       setEmailed(result.emailed)
+      setDiscoveryCredit(result.discoveryCredit || null)
       setVerified(true)
     })
   }
@@ -103,7 +106,10 @@ export function AgriQuizForm({ inline = false }) {
     }
     answers.weeklyHours = Number(answers.weeklyHours)
     for (const key of ['buyerAccess', 'siteAccess', 'operatingCoverage']) answers[key] = answers[key] === 'yes'
-    if (answers.processingProduct) answers.feedstockAccess = answers.feedstockAccess === 'yes'
+    if (answers.processingProduct) {
+      answers.feedstockAccess = answers.feedstockAccess === 'yes'
+      answers.processingQuotes = answers.processingQuotes === 'yes'
+    }
     return run(async () => {
       if (verified) {
         const result = await request({ action: 'report', reference, answers })
@@ -246,6 +252,22 @@ export function AgriQuizForm({ inline = false }) {
                   <option value="undecided">I haven’t decided yet</option>
                 </select>
               </label>
+              {['chocolate', 'palmOil'].includes(processingProduct) && <>
+                <label>What scale are you costing?
+                  <select name="processingScope" required defaultValue="">
+                    <option value="" disabled>Choose an answer</option>
+                    <option value="pilot">One pilot batch to test demand</option>
+                    <option value="commercial">A business producing and selling regularly</option>
+                  </select>
+                </label>
+                <label>Are your setup and working-capital estimates based on itemised written quotes for that scale?
+                  <select name="processingQuotes" required defaultValue="">
+                    <option value="" disabled>Choose an answer</option>
+                    <option value="yes">Yes, I have quotes that cover the operating model</option>
+                    <option value="no">No, I’m still estimating or collecting quotes</option>
+                  </select>
+                </label>
+              </>}
               <label>Can you source consistent raw materials at a price you can verify?
                 <select name="feedstockAccess" required defaultValue="">
                   <option value="" disabled>Choose an answer</option>
@@ -300,6 +322,13 @@ export function AgriQuizForm({ inline = false }) {
             <ol>{report.plan.map(step => <li key={step.when}><strong>{step.when}.</strong> {step.action}</li>)}</ol>
           </>}
           <p>Check local costs, demand and operating requirements before committing capital. This assessment screens for business fit and does not estimate returns.</p>
+          {discoveryCredit && (
+            <details className="links-booking">
+              <summary className="btn btn-ink links-row">Book a Discovery Call with your quiz credit</summary>
+              <p>Want Obi Emeka to walk through your report with you? Your ₦15,000 quiz credit brings the 45-minute Discovery Call from ₦150,000 to ₦135,000. Use the email from your quiz to redeem it once.</p>
+              <BookingForm pickedSession="discovery" returnToLinks discoveryCredit={discoveryCredit} />
+            </details>
+          )}
         </section>
       )}
     </div>
