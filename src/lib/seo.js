@@ -5,7 +5,7 @@ export const SITE = 'https://obiemeka.com'
 export const INDEX_ROBOTS = 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1'
 const DEFAULT_IMAGE = `${SITE}/assets/obi-emeka-portrait.jpeg`
 const person = { '@id': `${SITE}/#obi-emeka`, '@type': 'Person', name: 'Obi Emeka', url: `${SITE}/#about` }
-export const pagePaths = () => ['/', '/blog', '/greencircle-community', ...getAllPosts().map(p => `/blog/${p.slug}`)]
+export const pagePaths = () => ['/', '/links', '/blog', '/greencircle-community', ...getAllPosts().map(p => `/blog/${p.slug}`)]
 export const jsonLd = value => JSON.stringify(value).replace(/</g, '\\u003c')
 export const escapeHtml = value => String(value).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c])
 
@@ -16,7 +16,10 @@ export function getPageSeo(pathname) {
   const url = `${SITE}${path}`
   let title = 'Obi Emeka | Agri-Tech Founder & Agricultural Export Expert | Nigeria'
   let description = 'Obi Emeka is a Nigerian agri-tech entrepreneur and agricultural export expert. Founder of WhiteRabbit Agro, OriginTrace and FarmWise, based in Enugu, Nigeria.'
-  if (path === '/blog') {
+  if (path === '/links') {
+    title = 'Links, Community & Consultations | Obi Emeka'
+    description = 'Join The Green Circle, book a consultation with Obi Emeka, or find his ventures, journal, and social channels.'
+  } else if (path === '/blog') {
     title = 'Journal: African Agriculture & Exports | Obi Emeka'
     description = 'Practical notes by Obi Emeka on agricultural exports, EUDR compliance, agro real estate, and smallholder digitization in Nigeria and Africa.'
   } else if (path === '/greencircle-community') {

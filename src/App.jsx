@@ -4,6 +4,7 @@ import { Analytics } from '@vercel/analytics/react'
 import { Seo } from './Seo'
 import NotFound from './pages/NotFound'
 import Home from './pages/Home'
+import Links from './pages/Links'
 import GreenCircle from './pages/GreenCircle'
 import BlogIndex from './pages/BlogIndex'
 import BlogPost from './pages/BlogPost'
@@ -25,6 +26,7 @@ function RedirectPreservingSearch({ to }) {
 export default function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS)
   const location = useLocation()
+  const path = location.pathname.replace(/\/+$/, '')
 
   useEffect(() => {
     document.body.classList.remove('accent-citrus', 'accent-rust', 'accent-aqua', 'accent-green')
@@ -42,6 +44,7 @@ export default function App() {
       <Seo />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/links" element={<Links />} />
         <Route path="/greencircle-community" element={<GreenCircle />} />
         <Route path="/green-circle" element={<RedirectPreservingSearch to="/greencircle-community" />} />
         <Route path="/blog" element={<BlogIndex />} />
@@ -49,7 +52,7 @@ export default function App() {
         <Route path="*" element={<NotFound />} />
       </Routes>
 
-      {location.pathname !== '/greencircle-community' && <ExitIntentPopup />}
+      {path !== '/greencircle-community' && path !== '/links' && <ExitIntentPopup />}
 
       {import.meta.env.DEV && (
         <TweaksPanel title="Tweaks">
