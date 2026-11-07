@@ -353,7 +353,7 @@ export default function AgriQuiz() {
   return (
     <main className="section links-page">
       <Link to="/links">← Obi Emeka links</Link>
-      <h1>Not the right agricultural business for you?</h1>
+      <h1>Know the right agricultural business for you</h1>
       <AgriQuizForm />
     </main>
   )

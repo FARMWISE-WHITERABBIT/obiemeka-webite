@@ -82,7 +82,7 @@ export default function Links() {
 
       <section className="links-group" aria-labelledby="links-work">
         <h2 id="links-work" className="caps">Join, get advice &amp; book</h2>
-        <Offer id="quiz" title="Not the right agricultural business for you?" description="Take the quiz" open={active === 'quiz' || Boolean(quizOrder)}>
+        <Offer id="quiz" title="Know the right agricultural business for you" description="Take the quiz" open={active === 'quiz' || Boolean(quizOrder)}>
           <AgriQuizForm key={quizOrder || 'new'} inline />
         </Offer>
         <Offer id="join" title="Join The Green Circle" description="Free agriculture community" open={active === 'join'}>
