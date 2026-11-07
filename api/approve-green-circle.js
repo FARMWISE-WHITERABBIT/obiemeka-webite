@@ -63,6 +63,9 @@ export default async function handler(req, res) {
   }
 
   const newStatus = action === 'approve' ? 'approved' : 'declined'
+  if (newStatus === 'approved' && (!process.env.RESEND_API_KEY || !process.env.GREEN_CIRCLE_WHATSAPP_LINK)) {
+    return res.status(503).send(htmlPage('Invite email is unavailable', 'The invite link or email service is not configured. This signup is still pending.'))
+  }
 
   // The .eq('status', 'pending') guard makes this safe against a double
   // submit or two people opening the same email: only the request that
@@ -84,7 +87,11 @@ export default async function handler(req, res) {
   }
 
   if (newStatus === 'approved') {
-    await sendInviteEmail(updated)
+    const sent = await sendInviteEmail(updated)
+    if (!sent) {
+      return res.status(502).send(htmlPage('Approved, email not sent',
+        'The signup was approved, but the email provider did not accept the invite. Send the WhatsApp invite manually.'))
+    }
   }
 
   return res.status(200).send(htmlPage(
@@ -99,21 +106,24 @@ async function sendInviteEmail(signup) {
   const whatsappLink = process.env.GREEN_CIRCLE_WHATSAPP_LINK || ''
   if (!process.env.RESEND_API_KEY || !whatsappLink) {
     if (!whatsappLink) console.error('GREEN_CIRCLE_WHATSAPP_LINK not set — approved signup was not emailed an invite')
-    return
+    return false
   }
 
   const resend = new Resend(process.env.RESEND_API_KEY)
   const fromAddr = process.env.EMAIL_FROM || 'onboarding@resend.dev'
 
   try {
-    await resend.emails.send({
+    const { error } = await resend.emails.send({
       from:    `Obi Emeka <${fromAddr}>`,
       to:      signup.email,
       subject: 'Your Green Circle WhatsApp invite',
       html:    inviteHtml({ name: signup.name, whatsappLink }),
     })
+    if (error) throw error
+    return true
   } catch (err) {
     console.error('Green Circle invite email failed:', err)
+    return false
   }
 }
 

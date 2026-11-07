@@ -1,3 +1,4 @@
+import { isWhatsAppPhone } from '../src/lib/whatsAppPhone.js'
 import crypto from 'node:crypto'
 import { Resend } from 'resend'
 import { getSupabase, escapeHtml } from './_lib/booking.js'
@@ -41,7 +42,7 @@ export default async function handler(req, res) {
 
   const name        = (body?.name        || '').trim()
   const email       = (body?.email       || '').trim().toLowerCase()
-  const phone       = (body?.phone       || '').trim()
+  const phone       = (typeof body?.phone === 'string' ? body.phone : '').trim()
   const memberType  = (body?.memberType  || '').trim()
   const goal        = (body?.goal        || '').trim()
   const utm_source  = (body?.utm_source  || '').trim()
@@ -53,6 +54,9 @@ export default async function handler(req, res) {
 
   if (!name || !email) {
     return res.status(400).json({ error: 'Name and email are required' })
+  }
+  if (!isWhatsAppPhone(phone)) {
+    return res.status(400).json({ error: 'A valid WhatsApp number is required.' })
   }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return res.status(400).json({ error: 'Invalid email address' })
@@ -103,7 +107,7 @@ export default async function handler(req, res) {
   // and won't invalidate an approve link already sent to Obi.
   const attributionFields = {
     name,
-    phone: phone || null,
+    phone,
     member_type: memberType,
     goal,
     utm_source: utm_source || null,

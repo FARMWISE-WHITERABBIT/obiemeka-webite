@@ -1,3 +1,4 @@
+import { isWhatsAppPhone } from './lib/whatsAppPhone'
 import { trackLinks } from './lib/linksAnalytics'
 import React, { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -46,6 +47,8 @@ export function GreenCircleJoinForm({ source }) {
     if (!data.name.trim()) e.name = 'Required'
     if (!data.email.trim()) e.email = 'Required'
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) e.email = 'Looks invalid'
+    if (!data.phone.trim()) e.phone = 'Required'
+    else if (!isWhatsAppPhone(data.phone)) e.phone = 'Enter a valid WhatsApp number, including your country code if outside Nigeria.'
     if (!data.memberType) e.memberType = 'Required'
     if (!data.goal.trim() || data.goal.trim().length < 15) e.goal = 'A sentence or two, please'
     setErrors(e)
@@ -102,10 +105,13 @@ export function GreenCircleJoinForm({ source }) {
                onChange={(e) => setField('email', e.target.value)} />
         {errors.email && <span className="err">{errors.email}</span>}
       </div>
-      <div className="field">
-        <label>WhatsApp number (optional)</label>
-        <input value={data.phone} placeholder="+234…" maxLength={40}
+      <div className={`field ${errors.phone ? 'error' : ''}`}>
+        <label htmlFor="green-circle-whatsapp">WhatsApp number</label>
+        <input id="green-circle-whatsapp" type="tel" autoComplete="tel" required
+               aria-invalid={Boolean(errors.phone)} aria-describedby={errors.phone ? 'green-circle-phone-error' : undefined}
+               value={data.phone} placeholder="+234…" maxLength={40}
                onChange={(e) => setField('phone', e.target.value)} />
+        {errors.phone && <span id="green-circle-phone-error" className="err">{errors.phone}</span>}
       </div>
 
       <div className={`field ${errors.memberType ? 'error' : ''}`}>

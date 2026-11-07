@@ -86,12 +86,14 @@ export default function Links() {
           <AgriQuizForm key={quizOrder || 'new'} inline />
         </Offer>
         <Offer id="join" title="Join The Green Circle" description="Free agriculture community" open={active === 'join'}>
+          <p className="links-offer-intro">The Green Circle is a free WhatsApp community for investors, operators and entrepreneurs in African agriculture. It’s a place to meet people working in the sector, hear about funding and industry opportunities, and join learning sessions and meetups.</p>
           <GreenCircleJoinForm source="links" />
         </Offer>
         <Offer id="inner" title="Join the Inner Circle" description="Monthly sessions and introductions" open={active === 'inner' || params.has('inner_circle')}>
           <InnerCircleForm inline />
         </Offer>
         <Offer id="book" title="Book a Consultation" description="Professional advice with Obi Emeka" open={active === 'book' || params.has('booking')}>
+          <p className="links-offer-intro">Tell me what you’re working on and where you’re stuck. Pick a session and send me a short brief so I can understand what you need. Fixed-price sessions go through Flutterwave. For retainers and speaking enquiries, I’ll follow up with you directly.</p>
           <BookingForm returnToLinks />
         </Offer>
       </section>

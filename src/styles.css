@@ -1624,3 +1624,5 @@ footer .inner { max-width: 1440px; margin: 0 auto; }
 .links-chevron { width: 8px; height: 8px; flex: 0 0 8px; margin: 0 5px; border: solid currentColor; border-width: 0 1.5px 1.5px 0; transform: rotate(45deg); }
 .links-offer[open] .links-chevron { transform: rotate(225deg); }
 .links-hub .links-group > .links-row { border-radius: var(--r-3); min-height: 46px; padding: 10px 14px; }
+
+.links-offer-intro { margin: var(--s-3) var(--s-2); line-height: 1.55; }
