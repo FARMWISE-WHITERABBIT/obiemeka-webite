@@ -1531,3 +1531,53 @@ footer .inner { max-width: 1440px; margin: 0 auto; }
 .blog-photo img, .blog-post-image img { display: block; width: 100%; height: auto; }
 .blog-photo img { border-radius: var(--r-3); }
 .blog-photo figcaption, .blog-post-image figcaption { font-size: 0.82rem; line-height: 1.6; margin-top: 10px; }
+
+/* ===== LINKS HUB ===== */
+.links-page { max-width: 720px; padding: clamp(36px, 8vw, 80px) clamp(18px, 5vw, 42px); }
+.links-header { text-align: center; margin-bottom: var(--s-6); }
+.links-header img { margin: 0 auto var(--s-3); border-radius: 50%; object-fit: cover; object-position: 50% 12%; }
+.links-header h1 { margin: 0; font: var(--display-m); letter-spacing: -0.02em; }
+.links-header p { margin: var(--s-2) 0 0; }
+.links-group { display: grid; gap: var(--s-2); margin-bottom: var(--s-5); }
+.links-group h2 { margin: 0 0 var(--s-1); }
+.links-row { width: 100%; min-height: 56px; justify-content: space-between; padding: 14px 18px; white-space: normal; }
+.links-row strong { display: block; font-weight: 700; }
+.links-row small { display: block; margin-top: 5px; font-size: 0.88rem; line-height: 1.4; }
+.links-row .arrow { flex: 0 0 auto; }
+.links-booking { scroll-margin-top: var(--s-3); }
+.links-panel-content { padding: 0 var(--s-2) var(--s-3); }
+.links-booking summary { list-style: none; }
+.links-booking summary::-webkit-details-marker { display: none; }
+.links-booking[open] summary .arrow { transform: rotate(90deg); }
+.links-booking .form-card, .links-booking .form-success { margin-top: var(--s-2); }
+.links-social { display: flex; flex-wrap: wrap; gap: 0 var(--s-3); margin: 0; padding: 0; list-style: none; }
+.links-social a, .links-footer a { display: inline-flex; align-items: center; min-height: 44px; }
+.links-page :is(a, summary):focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.links-footer { border-top: 1px solid var(--hairline-strong); }
+#gc-join { scroll-margin-top: 108px; }
+
+.agri-quiz .form-card > label { display: grid; gap: var(--s-2); }
+.agri-quiz .form-card :is(input:not([type="checkbox"]), select) {
+  width: 100%;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--r-2);
+  font: inherit;
+}
+.agri-quiz .form-card .btn { justify-self: start; }
+
+.quiz-progress { display: flex; align-items: center; gap: 10px; }
+.quiz-progress span {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  border: 2px solid var(--hairline-strong);
+  border-top-color: var(--ink);
+  border-radius: 50%;
+  animation: quiz-progress-spin .8s linear infinite;
+}
+@keyframes quiz-progress-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .quiz-progress span { animation: none; }
+}

@@ -37,7 +37,7 @@ const INITIAL = {
   nickname: '', // honeypot — real users never see or fill this
 }
 
-export function BookingForm({ pickedSession, onPickSession, pickedTopic }) {
+export function BookingForm({ pickedSession, onPickSession, pickedTopic, returnToLinks = false }) {
   const [data, setData] = useState({ ...INITIAL, session: pickedSession || 'discovery' })
   const [errors, setErrors] = useState({})
   const [status, setStatus] = useState('idle') // idle | loading | success | error
@@ -122,7 +122,7 @@ export function BookingForm({ pickedSession, onPickSession, pickedTopic }) {
       const res = await fetch('/api/submit-booking', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, ...(returnToLinks ? { returnToLinks: true } : {}) }),
       })
       const json = await res.json().catch(() => ({}))
 

@@ -3,7 +3,7 @@ import { dirname } from 'node:path'
 import { render, renderHead, getPageSeo, pagePaths, getAllPosts, SITE, escapeHtml } from '../.prerender/entry-server.js'
 
 const template = await readFile('dist/index.html', 'utf8')
-for (const path of [...pagePaths(), '/404']) {
+for (const path of [...new Set([...pagePaths(), '/agribusiness-quiz', '/inner-circle', '/404'])]) {
   if (path !== '/' && !/^\/[a-z0-9/-]+$/.test(path)) throw new Error(`Unsafe page path: ${path}`)
   const file = path === '/' ? 'dist/index.html' : `dist${path}.html`
   await mkdir(dirname(file), { recursive: true })

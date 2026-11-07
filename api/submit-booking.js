@@ -142,7 +142,7 @@ export default async function handler(req, res) {
           tx_ref: ref,
           amount,
           currency: 'NGN',
-          redirect_url: `${siteUrl}/api/verify-payment`,
+          redirect_url: `${siteUrl}/api/verify-payment${body.returnToLinks === true ? '?return_to=links' : ''}`,
           customer: { email, name },
           customizations: {
             title: `Obi Emeka — ${session}`,
