@@ -9,6 +9,7 @@ process.env.SUPABASE_SERVICE_ROLE_KEY = 'test-only'
 process.env.AGRI_QUIZ_ENABLED = 'true'
 process.env.RESEND_API_KEY = 'test-only'
 process.env.FLUTTERWAVE_SECRET_KEY = 'test-only'
+process.env.FLUTTERWAVE_PUBLIC_KEY = 'test-public-key'
 process.env.FLUTTERWAVE_WEBHOOK_SECRET_HASH = 'test-webhook-secret'
 process.env.INNER_CIRCLE_ENABLED = 'true'
 process.env.FLUTTERWAVE_INNER_CIRCLE_PLAN_ID = '1234'
@@ -62,6 +63,11 @@ test('Quiz verifies reference and amount before permitting a single saved report
     lossTolerance: 'moderate', oversight: 'local' }
   const start = await quiz({ method: 'POST', headers: {}, body: { action: 'checkout', email: 'buyer@example.com', answers } }, response())
   assert.equal(start.body.checkoutUrl, checkoutUrl)
+  assert.equal(start.body.reference, order.reference)
+  assert.equal(start.body.inlineCheckout.public_key, 'test-public-key')
+  assert.equal(start.body.inlineCheckout.amount, 15000)
+  assert.equal(start.body.inlineCheckout.tx_ref, 'AGRI-QUIZ-' + order.reference)
+  assert.equal(start.body.inlineCheckout.redirect_url, undefined)
   assert.match(start.headers['Set-Cookie'], /HttpOnly; Secure/)
   const call = (action, headers = {}, answers) => quiz({
     method: 'POST', headers, body: { action, reference: order.reference, transactionId: 321, answers },
@@ -114,7 +120,11 @@ test('Inner Circle requires renewal consent and starts checkout on the configure
     method: 'POST', body: { email: 'member@example.com', consent },
   }, response())
   assert.equal((await call(false)).code, 400)
-  assert.equal((await call(true)).body.checkoutUrl, checkoutUrl)
+  const checkout = (await call(true)).body
+  assert.equal(checkout.checkoutUrl, checkoutUrl)
+  assert.equal(checkout.inlineCheckout.payment_plan, 1234)
+  assert.equal(checkout.inlineCheckout.amount, 50000)
+  assert.equal(checkout.inlineCheckout.payment_options, 'card')
   active = true
   assert.equal((await call(true)).code, 409)
 })

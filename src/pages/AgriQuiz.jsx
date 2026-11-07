@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { openFlutterwaveCheckout } from '../lib/flutterwaveCheckout'
 import { Link, useSearchParams } from 'react-router-dom'
 
 const fields = [
@@ -44,7 +45,7 @@ async function request(body) {
 }
 
 export function AgriQuizForm({ inline = false }) {
-  const [params] = useSearchParams()
+  const [params, setParams] = useSearchParams()
   const reference = params.get(inline ? 'quiz_order' : 'order')
   const transactionId = params.get('transaction_id')
   const [verified, setVerified] = useState(false)
@@ -52,7 +53,6 @@ export function AgriQuizForm({ inline = false }) {
   const [emailed, setEmailed] = useState(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
-  const enabled = import.meta.env.VITE_AGRI_QUIZ_ENABLED === 'true'
 
   async function run(action) {
     setError('')
@@ -72,8 +72,8 @@ export function AgriQuizForm({ inline = false }) {
   }
 
   useEffect(() => {
-    if (enabled && reference) void verify()
-  }, [enabled, reference, transactionId])
+    if (reference) void verify()
+  }, [reference, transactionId])
 
   function submit(event) {
     event.preventDefault()
@@ -89,7 +89,13 @@ export function AgriQuizForm({ inline = false }) {
         setReport(result.report)
       } else {
         const result = await request({ action: 'checkout', email, answers })
-        window.location.assign(result.checkoutUrl)
+        const payment = await openFlutterwaveCheckout(result)
+        if (payment) {
+          const next = new URLSearchParams(params)
+          next.set(inline ? 'quiz_order' : 'order', result.reference)
+          next.set('transaction_id', String(payment.transaction_id))
+          setParams(next, { replace: true })
+        }
       }
     })
   }
@@ -99,14 +105,14 @@ export function AgriQuizForm({ inline = false }) {
       <p>Explore agribusiness routes against your available capital, time, experience and goals. Get a personalised shortlist, the gaps to close and a practical validation step.</p>
       <p><strong>₦15,000 one-time payment</strong></p>
       {error && <p role="alert">{error}</p>}
-      {enabled && reference && !verified && (
+      {reference && !verified && (
         <div>
           {busy ? <p className="quiz-progress" role="status"><span aria-hidden="true" /> Confirming your payment and preparing report delivery…</p>
             : <button className="btn btn-primary" onClick={verify}>Check payment</button>}
           {error && <p><Link to="/links#quiz">Start a new assessment if you did not pay</Link></p>}
         </div>
       )}
-      {enabled && (!reference || verified) && !report && (
+      {(!reference || verified) && !report && (
         <form className="form-card" onSubmit={submit}>
           <h2>Your circumstances</h2>
           <label>How many hours a week can you personally give the business?

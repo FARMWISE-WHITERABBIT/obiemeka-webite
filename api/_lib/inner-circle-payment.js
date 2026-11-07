@@ -17,6 +17,15 @@ export async function recordInnerCirclePayment(db, txRef, transactionId) {
       String(tx.id) !== String(transactionId) || tx.customer?.email?.toLowerCase() !== order.email) return
 
   if (!order.transaction_id) {
+    const plan = process.env.FLUTTERWAVE_INNER_CIRCLE_PLAN_ID
+    if (!/^\d+$/.test(plan || '')) throw new Error('Membership plan not configured')
+    const query = new URLSearchParams({
+      email: order.email, plan, transaction_id: String(transactionId), status: 'active',
+    })
+    const subscriptions = await flutterwave(`subscriptions?${query}`)
+    if (subscriptions.status !== 'success' || !Array.isArray(subscriptions.data) || !subscriptions.data.length) {
+      throw new Error('Active membership subscription has not been confirmed')
+    }
     const { error: updateError } = await db.from('inner_circle_checkouts')
       .update({ transaction_id: String(transactionId) }).eq('reference', reference).is('transaction_id', null)
     if (updateError) throw updateError

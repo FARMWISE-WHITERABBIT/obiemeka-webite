@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
+import { openFlutterwaveCheckout } from '../lib/flutterwaveCheckout'
 import { Link, useSearchParams } from 'react-router-dom'
 
 export function InnerCircleForm({ inline = false }) {
   const [params] = useSearchParams()
-  const returned = params.has(inline ? 'inner_circle' : 'returned')
+  const [paymentSubmitted, setPaymentSubmitted] = useState(false)
+  const returned = paymentSubmitted || params.has(inline ? 'inner_circle' : 'returned')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
-  const enabled = import.meta.env.VITE_INNER_CIRCLE_ENABLED === 'true'
 
   async function checkout(event) {
     event.preventDefault()
@@ -21,9 +22,11 @@ export function InnerCircleForm({ inline = false }) {
       })
       const data = await response.json()
       if (!response.ok) throw new Error(data.error || 'Could not open checkout.')
-      window.location.assign(data.checkoutUrl)
+      const payment = await openFlutterwaveCheckout(data)
+      if (payment) setPaymentSubmitted(true)
     } catch (err) {
       setError(err.message)
+    } finally {
       setBusy(false)
     }
   }
@@ -40,11 +43,11 @@ export function InnerCircleForm({ inline = false }) {
       </ul>
       <p>After payment is verified, the team will contact you to arrange access to the WhatsApp group.</p>
       {error && <p role="alert">{error}</p>}
-      {enabled && returned && <div>
+      {returned && <div>
         <p role="status">If your payment went through, we’ll verify it and contact you using the email you entered. For help, email <a href="mailto:oe@obiemeka.com">oe@obiemeka.com</a>.</p>
-        <p><Link to="/links#inner">Return to checkout if you did not pay</Link></p>
+        <p>{!paymentSubmitted && <Link to="/links#inner">Return to checkout if you did not pay</Link>}</p>
       </div>}
-      {enabled && !returned && (
+      {!returned && (
         <form className="form-card" onSubmit={checkout}>
           <label>Your Green Circle email <input name="email" type="email" required maxLength="254" autoComplete="email" /></label>
           <div><input id="inner-circle-consent" name="consent" type="checkbox" required />{' '}

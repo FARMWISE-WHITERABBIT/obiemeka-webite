@@ -1,5 +1,5 @@
 import { createHash, randomBytes, randomUUID } from 'node:crypto'
-import { flutterwave } from './_lib/flutterwave.js'
+import { flutterwave, inlineCheckoutOptions } from './_lib/flutterwave.js'
 import { getSupabase } from './_lib/booking.js'
 import { assessAgribusinessFit } from '../src/lib/agri-fit/assess.mjs'
 
@@ -47,7 +47,11 @@ export default async function handler(req, res) {
         throw new Error('Unexpected checkout link')
       }
       res.setHeader('Set-Cookie', `${COOKIE}_${reference}=${token}; Path=/api/agri-quiz; HttpOnly; Secure; SameSite=Lax; Max-Age=2592000`)
-      return res.status(200).json({ checkoutUrl: url.href })
+      const inlineCheckout = inlineCheckoutOptions({
+        txRef: QUIZ_PREFIX + reference, amount: QUIZ_PRICE, email,
+        title: 'Know the Right Agricultural Business for You',
+      })
+      return res.status(200).json({ checkoutUrl: url.href, reference, inlineCheckout })
     }
 
     const reference = body.reference
