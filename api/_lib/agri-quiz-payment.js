@@ -1,4 +1,5 @@
 import { Resend } from 'resend'
+import { createQuizPdf, QUIZ_REPORT_FILENAME } from './agri-quiz-pdf.js'
 import { flutterwave } from './flutterwave.js'
 
 export const QUIZ_PRICE = 15000
@@ -53,7 +54,9 @@ export async function emailQuizReport(db, reference, order) {
     from: `Obi Emeka <${process.env.EMAIL_FROM || 'onboarding@resend.dev'}>`,
     to: order.email,
     subject: 'Your agribusiness fit report',
-    text: lines.filter(line => line != null).join('\n'),
+    text: 'Your PDF report is attached. Keep a copy as you check your options and work through your 90-day plan.\n\n' +
+      lines.filter(line => line != null).join('\n'),
+    attachments: [{ filename: QUIZ_REPORT_FILENAME, content: (await createQuizPdf(report)).toString('base64') }],
   }, { idempotencyKey: `agri-quiz-report/${reference}` })
   if (error) throw new Error('Report email was not accepted')
   const { error: updateError } = await db.from('agri_quiz_orders')

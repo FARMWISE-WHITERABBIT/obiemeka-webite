@@ -23,6 +23,7 @@ function response() {
     setHeader(key, value) { this.headers[key] = value },
     status(code) { this.code = code; return this },
     json(body) { this.body = body; return this },
+    send(body) { this.body = body; return this },
   }
 }
 const json = data => Response.json(data)
@@ -39,6 +40,8 @@ test('Quiz verifies reference and amount before permitting a single saved report
       assert.equal(email.to, 'buyer@example.com')
       assert.match(email.text, /Buyer-led aggregation/)
       assert.match(email.text, /Days 61–90/)
+      assert.equal(email.attachments[0].filename, 'obi-emeka-agribusiness-fit-report.pdf')
+      assert.match(Buffer.from(email.attachments[0].content, 'base64').subarray(0, 8).toString(), /^%PDF-/)
       assert.equal(init.headers.get('Idempotency-Key'), 'agri-quiz-report/' + order.reference)
       emails++
       return json({ id: 'test-email' })
@@ -78,6 +81,7 @@ test('Quiz verifies reference and amount before permitting a single saved report
   const headers = { cookie: start.headers['Set-Cookie'].split(';')[0] }
   assert.equal((await call('verify')).code, 403)
   assert.equal((await call('report', headers)).code, 403)
+  assert.equal((await call('pdf', headers)).code, 403)
   const pending = await call('verify', headers)
   assert.equal(pending.code, 409)
   assert.equal(pending.body.report, undefined)
@@ -95,6 +99,9 @@ test('Quiz verifies reference and amount before permitting a single saved report
   assert.equal(unlocked.code, 200)
   assert.equal(unlocked.body.emailed, true)
   assert.equal(unlocked.body.discoveryCredit.amount, 15000)
+  const pdf = await call('pdf', headers)
+  assert.equal(pdf.headers['Content-Type'], 'application/pdf')
+  assert.match(pdf.body.subarray(0, 8).toString(), /^%PDF-/)
   assert.equal(emails, 1)
   assert.equal(unlocked.body.report.shortlist[0].id, 'trade')
   const completed = await call('report', headers, answers)

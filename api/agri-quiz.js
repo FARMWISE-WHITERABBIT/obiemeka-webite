@@ -1,3 +1,4 @@
+import { createQuizPdf, QUIZ_REPORT_FILENAME } from './_lib/agri-quiz-pdf.js'
 import { discoveryCreditToken, DISCOVERY_CREDIT } from './_lib/discovery-credit.js'
 import { createHash, randomBytes, randomUUID } from 'node:crypto'
 import { flutterwave, inlineCheckoutOptions } from './_lib/flutterwave.js'
@@ -65,6 +66,16 @@ export default async function handler(req, res) {
       .select(QUIZ_ORDER_COLUMNS).eq('reference', reference).eq('access_hash', hash(token)).maybeSingle()
     if (lookupError) throw lookupError
     if (!order) return res.status(403).json({ error: 'Could not find your quiz order.' })
+
+    if (body.action === 'pdf') {
+      if (!order.transaction_id || !order.report) {
+        return res.status(403).json({ error: 'Confirm payment before downloading your report.' })
+      }
+      const pdf = await createQuizPdf(order.report)
+      res.setHeader('Content-Type', 'application/pdf')
+      res.setHeader('Content-Disposition', `attachment; filename="${QUIZ_REPORT_FILENAME}"`)
+      return res.status(200).send(pdf)
+    }
 
     if (body.action === 'verify') {
       if (!await verifyQuizPayment(db, reference, order, body.transactionId)) {

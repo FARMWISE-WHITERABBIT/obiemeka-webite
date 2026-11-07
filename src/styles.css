@@ -1586,8 +1586,6 @@ footer .inner { max-width: 1440px; margin: 0 auto; }
 .quiz-budget legend { font-weight: 700; }
 .quiz-budget p { margin: 0; }
 .quiz-budget label { display: grid; gap: var(--s-2); }
-.quiz-sample { margin-bottom: var(--s-3); }
-.quiz-sample summary { cursor: pointer; text-decoration: underline; }
 
 /* Profile hub cards retain the site's type, paper and green palette. */
 .links-hub { max-width: 620px; }
