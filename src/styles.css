@@ -1535,7 +1535,7 @@ footer .inner { max-width: 1440px; margin: 0 auto; }
 /* ===== LINKS HUB ===== */
 .links-page { max-width: 720px; padding: clamp(36px, 8vw, 80px) clamp(18px, 5vw, 42px); }
 .links-header { text-align: center; margin-bottom: var(--s-6); }
-.links-header img { margin: 0 auto var(--s-3); border-radius: 50%; object-fit: cover; }
+.links-header img { margin: 0 auto var(--s-3); border-radius: 50%; object-fit: cover; object-position: 50% 12%; }
 .links-header h1 { margin: 0; font: var(--display-m); letter-spacing: -0.02em; }
 .links-header p { margin: var(--s-2) 0 0; }
 .links-group { display: grid; gap: var(--s-2); margin-bottom: var(--s-5); }

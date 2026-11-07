@@ -30,7 +30,7 @@ export default function Links() {
   return (
     <main className="section links-page">
       <header className="links-header">
-        <img src={profile.image.replace(profile.url, '')} width="88" height="88" alt="" />
+        <img src="/assets/obi-emeka-links-portrait.webp" width="88" height="88" alt="" />
         <h1>Obi Emeka</h1>
         <p>Agri-tech founder and agricultural export advisor</p>
       </header>
