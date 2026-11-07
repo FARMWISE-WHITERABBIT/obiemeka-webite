@@ -7,6 +7,7 @@ export const routes = [
     goal: ['cashflow', 'buildBusiness'], skills: ['services', 'operations'],
     cashCycles: ['short', 'medium', 'long'],
     checks: [],
+    budget: 'Compare the fee per job with travel, labour, materials and the time you spend finding clients.',
     validate: 'Interview three potential clients and agree the scope and fee for one small paid pilot.',
   },
   {
@@ -15,6 +16,7 @@ export const routes = [
     goal: ['cashflow', 'buildBusiness'], skills: ['sales', 'operations'],
     cashCycles: ['short', 'medium', 'long'],
     checks: [['buyerAccess', 'Confirm a buyer, quality specifications, rejection rules and payment terms.']],
+    budget: 'Calculate contribution per delivered unit and how much cash you need between paying suppliers and collecting from the buyer.',
     validate: 'Cost one small order including transport, losses and the cash tied up until the buyer pays.',
   },
   {
@@ -27,6 +29,7 @@ export const routes = [
       ['operatingCoverage', 'Arrange reliable day-to-day coverage.'],
       ['buyerAccess', 'Confirm where and on what terms you can sell the harvest.'],
     ],
+    budget: 'Compare the cost of a complete cycle with revenue at a conservative sellable yield and buyer price.',
     validate: 'Get local input quotes and test a small production cycle with conservative yield and loss assumptions.',
   },
   {
@@ -38,6 +41,7 @@ export const routes = [
       ['buyerAccess', 'Identify a sales channel and test what customers will pay.'],
       ['operatingCoverage', 'Arrange production and quality control coverage.'],
     ],
+    budget: 'Track how many sellable packs a batch produces and whether the selling price covers raw materials, processing, packaging and distribution.',
     validate: 'Quote a compliant pilot batch and calculate cost per sellable unit, including packaging, rejects and distribution.',
   },
   {
@@ -49,6 +53,7 @@ export const routes = [
       ['siteAccess', 'Verify land rights, site suitability and water access.'],
       ['operatingCoverage', 'Identify an accountable local operator and establish oversight.'],
     ],
+    budget: 'Separate initial development costs from operating costs and map how long you can fund both before the asset generates cash.',
     validate: 'Have an independent adviser review land tenure and build a cash budget through establishment and early production.',
   },
 ]
@@ -94,7 +99,18 @@ export function assessAgribusinessFit(answers) {
     let score = 0
     if (route.goal.includes(answers.goal)) {
       score += 3
-      reasons.push('Matches your stated business goal.')
+      const goals = {
+        cashflow: 'Supports your goal of generating operating cash flow.',
+        buildBusiness: 'Supports your goal of building a business you can scale.',
+        legacy: 'Fits your goal of building a long-term family asset.',
+      }
+      reasons.push(goals[answers.goal])
+    }
+    if (route.id === 'trade' && answers.buyerAccess) {
+      reasons.push('You can already reach a potential buyer and confirm their terms.')
+    }
+    if (route.id === 'perennial' && answers.siteAccess && answers.operatingCoverage) {
+      reasons.push('You reported access to a suitable site and day-to-day operating coverage.')
     }
     if (route.skills.includes(answers.skills)) {
       score += 2
@@ -120,7 +136,7 @@ export function assessAgribusinessFit(answers) {
     if (answers.weeklyHours < 5 && !answers.operatingCoverage) {
       blockers.push('Set aside more time or put reliable operational support in place.')
     }
-    return { id: route.id, name: route.name, score, reasons, blockers, nextStep: route.validate }
+    return { id: route.id, name: route.name, score, reasons, blockers, nextStep: route.validate, budgetCheck: route.budget }
   }).sort((a, b) => b.score - a.score)
 
   const shortlist = assessed.filter(item => !item.blockers.length && item.score > 0).slice(0, 3)

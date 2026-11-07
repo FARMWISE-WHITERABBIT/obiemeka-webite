@@ -136,7 +136,8 @@ export default function AgriQuiz() {
             <article key={route.id}>
               <h3>{route.name}</h3>
               <ul>{route.reasons.map(reason => <li key={reason}>{reason}</li>)}</ul>
-              <p>{route.nextStep}</p>
+              <p><strong>First test.</strong> {route.nextStep}</p>
+              {route.budgetCheck && <p><strong>Numbers to collect.</strong> {route.budgetCheck}</p>}
             </article>
           ))}
           {!!report.revisit.length && <h3>Routes to revisit after closing these gaps</h3>}
