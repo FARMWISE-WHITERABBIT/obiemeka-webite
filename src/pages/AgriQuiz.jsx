@@ -43,9 +43,9 @@ async function request(body) {
   return data
 }
 
-export default function AgriQuiz() {
+export function AgriQuizForm({ inline = false }) {
   const [params] = useSearchParams()
-  const reference = params.get('order')
+  const reference = params.get(inline ? 'quiz_order' : 'order')
   const transactionId = params.get('transaction_id')
   const [verified, setVerified] = useState(false)
   const [report, setReport] = useState(null)
@@ -73,45 +73,38 @@ export default function AgriQuiz() {
     if (enabled && reference) void verify()
   }, [enabled, reference, transactionId])
 
-  function checkout(event) {
-    event.preventDefault()
-    const email = new FormData(event.currentTarget).get('email')
-    return run(async () => {
-      const result = await request({ action: 'checkout', email })
-      window.location.assign(result.checkoutUrl)
-    })
-  }
-
   function submit(event) {
     event.preventDefault()
-    const answers = Object.fromEntries(new FormData(event.currentTarget))
+    const form = new FormData(event.currentTarget)
+    const email = form.get('email')
+    form.delete('email')
+    const answers = Object.fromEntries(form)
     answers.weeklyHours = Number(answers.weeklyHours)
     for (const key of ['buyerAccess', 'siteAccess', 'operatingCoverage']) answers[key] = answers[key] === 'yes'
     return run(async () => {
-      const result = await request({ action: 'report', reference, answers })
-      setReport(result.report)
+      if (verified) {
+        const result = await request({ action: 'report', reference, answers })
+        setReport(result.report)
+      } else {
+        const result = await request({ action: 'checkout', email, answers })
+        window.location.assign(result.checkoutUrl)
+      }
     })
   }
 
   return (
-    <main className="section links-page agri-quiz">
-      <Link to="/links">← Obi Emeka links</Link>
-      <h1>Know the Right Agricultural Business for You</h1>
+    <div className="agri-quiz links-panel-content">
       <p>Explore agribusiness routes against your available capital, time, experience and goals. Get a personalised shortlist, the gaps to close and a practical validation step.</p>
       <p><strong>₦15,000 one-time payment</strong></p>
       {error && <p role="alert">{error}</p>}
       {!enabled && <p>Checkout is not open yet.</p>}
-      {enabled && !reference && (
-        <form className="form-card" onSubmit={checkout}>
-          <label>Email address <input name="email" type="email" required maxLength="254" autoComplete="email" /></label>
-          <button className="btn btn-primary" disabled={busy}>{busy ? 'Opening checkout…' : 'Continue to Flutterwave'}</button>
-          <p>Use this browser after payment to complete the assessment and reopen your report.</p>
-        </form>
-      )}
       {enabled && reference && !verified && (
-        <button className="btn btn-primary" disabled={busy} onClick={verify}>{busy ? 'Checking payment…' : 'Check payment'}</button>
+        <div>
+          <button className="btn btn-primary" disabled={busy} onClick={verify}>{busy ? 'Checking payment…' : 'Check payment'}</button>
+          {error && <p><Link to="/links#quiz">Start a new assessment if you did not pay</Link></p>}
+        </div>
       )}
-      {verified && !report && (
+      {enabled && (!reference || verified) && !report && (
         <form className="form-card" onSubmit={submit}>
           <h2>Your circumstances</h2>
           <label>How many hours a week can you personally give the business?
@@ -125,7 +118,13 @@ export default function AgriQuiz() {
               </select>
             </label>
           ))}
-          <button className="btn btn-primary" disabled={busy}>{busy ? 'Preparing your report…' : 'Get my report'}</button>
+          {!verified && <>
+            <label>Email address <input name="email" type="email" required maxLength="254" autoComplete="email" /></label>
+            <p>Complete the assessment first. After Flutterwave verifies your payment, your report opens here. Use the same browser to return to it.</p>
+          </>}
+          <button className="btn btn-primary" disabled={busy}>
+            {busy ? 'Please wait…' : verified ? 'Get my report' : 'Pay ₦15,000 to unlock my report'}
+          </button>
         </form>
       )}
       {report && (
@@ -150,6 +149,16 @@ export default function AgriQuiz() {
           <p>Check local costs, demand and operating requirements before committing capital. This assessment screens for business fit and does not estimate returns.</p>
         </section>
       )}
+    </div>
+  )
+}
+
+export default function AgriQuiz() {
+  return (
+    <main className="section links-page">
+      <Link to="/links">← Obi Emeka links</Link>
+      <h1>Know the Right Agricultural Business for You</h1>
+      <AgriQuizForm />
     </main>
   )
 }

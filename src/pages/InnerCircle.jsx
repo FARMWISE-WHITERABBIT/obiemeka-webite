@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 
-export default function InnerCircle() {
+export function InnerCircleForm({ inline = false }) {
   const [params] = useSearchParams()
+  const returned = params.has(inline ? 'inner_circle' : 'returned')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const enabled = import.meta.env.VITE_INNER_CIRCLE_ENABLED === 'true'
@@ -28,9 +29,7 @@ export default function InnerCircle() {
   }
 
   return (
-    <main className="section links-page agri-quiz">
-      <Link to="/links">← Obi Emeka links</Link>
-      <h1>Green Circle Inner Circle</h1>
+    <div className="agri-quiz links-panel-content">
       <p>A paid upgrade for members of the free Green Circle community who want closer access to people and opportunities in African agriculture.</p>
       <p><strong>₦50,000 per month</strong></p>
       <ul>
@@ -42,8 +41,11 @@ export default function InnerCircle() {
       <p>After payment is verified, the team will contact you to arrange access to the WhatsApp group.</p>
       {error && <p role="alert">{error}</p>}
       {!enabled && <p>Membership checkout is not open yet.</p>}
-      {enabled && params.has('returned') && <p role="status">If your payment went through, we’ll verify it and contact you using the email you entered. For help, email <a href="mailto:oe@obiemeka.com">oe@obiemeka.com</a>.</p>}
-      {enabled && !params.has('returned') && (
+      {enabled && returned && <div>
+        <p role="status">If your payment went through, we’ll verify it and contact you using the email you entered. For help, email <a href="mailto:oe@obiemeka.com">oe@obiemeka.com</a>.</p>
+        <p><Link to="/links#inner">Return to checkout if you did not pay</Link></p>
+      </div>}
+      {enabled && !returned && (
         <form className="form-card" onSubmit={checkout}>
           <label>Your Green Circle email <input name="email" type="email" required maxLength="254" autoComplete="email" /></label>
           <div><input id="inner-circle-consent" name="consent" type="checkbox" required />{' '}
@@ -52,7 +54,17 @@ export default function InnerCircle() {
           <button className="btn btn-primary" disabled={busy}>{busy ? 'Opening checkout…' : 'Continue to Flutterwave'}</button>
         </form>
       )}
-      <p>New to Green Circle? <a href="/greencircle-community#gc-join">Join the free community</a>.</p>
+      <p>New to Green Circle? <Link to="/links#join">Join the free community</Link>.</p>
+    </div>
+  )
+}
+
+export default function InnerCircle() {
+  return (
+    <main className="section links-page">
+      <Link to="/links">← Obi Emeka links</Link>
+      <h1>Green Circle Inner Circle</h1>
+      <InnerCircleForm />
     </main>
   )
 }

@@ -1544,6 +1544,8 @@ footer .inner { max-width: 1440px; margin: 0 auto; }
 .links-row strong { display: block; font-weight: 700; }
 .links-row small { display: block; margin-top: 5px; font-size: 0.88rem; line-height: 1.4; }
 .links-row .arrow { flex: 0 0 auto; }
+.links-booking { scroll-margin-top: var(--s-3); }
+.links-panel-content { padding: 0 var(--s-2) var(--s-3); }
 .links-booking summary { list-style: none; }
 .links-booking summary::-webkit-details-marker { display: none; }
 .links-booking[open] summary .arrow { transform: rotate(90deg); }

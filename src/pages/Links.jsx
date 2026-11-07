@@ -1,8 +1,10 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import { BookingForm } from '../BookingForm'
 import identity from '../lib/siteIdentity.json'
-import { buildGreenCircleLink } from '../lib/utm'
+import { GreenCircleJoinForm } from '../GreenCircleJoinForm'
+import { AgriQuizForm } from './AgriQuiz'
+import { InnerCircleForm } from './InnerCircle'
 
 const profile = identity.find(item => item['@type'] === 'Person')
 const socialNames = {
@@ -12,7 +14,6 @@ const socialNames = {
   'www.tiktok.com': 'TikTok',
   'www.youtube.com': 'YouTube',
 }
-const joinUrl = buildGreenCircleLink({ source: 'links', medium: 'link-hub', campaign: 'green-circle' }) + '#gc-join'
 
 function LinkLabel({ title, description }) {
   return (
@@ -26,7 +27,32 @@ function LinkLabel({ title, description }) {
   )
 }
 
+function Offer({ id, title, description, variant = 'ink', open, children }) {
+  return (
+    <details id={id} className="links-booking" open={open || undefined}>
+      <summary className={`btn btn-${variant} links-row`}>
+        <LinkLabel title={title} description={description} />
+      </summary>
+      {children}
+    </details>
+  )
+}
+
 export default function Links() {
+  const { search, hash } = useLocation()
+  const params = new URLSearchParams(search)
+  const quizOrder = params.get('quiz_order')
+  const active = hash.slice(1) || (quizOrder ? 'quiz' : params.has('inner_circle') ? 'inner' : params.has('booking') ? 'book' : '')
+
+  useEffect(() => {
+    if (!active) return
+    const offer = document.getElementById(active)
+    if (offer?.tagName === 'DETAILS') {
+      offer.open = true
+      offer.scrollIntoView({ block: 'start' })
+    }
+  }, [active, search])
+
   return (
     <main className="section links-page">
       <header className="links-header">
@@ -36,26 +62,19 @@ export default function Links() {
       </header>
 
       <section className="links-group" aria-labelledby="links-work">
-        <h2 id="links-work" className="caps">Connect &amp; book</h2>
-        <a className="btn btn-primary links-row" href={joinUrl}>
-          <LinkLabel title="Join The Green Circle" description="Apply to join the African agriculture community" />
-        </a>
-        {import.meta.env.VITE_INNER_CIRCLE_ENABLED === 'true' && (
-          <Link className="btn btn-ghost links-row" to="/inner-circle">
-            <LinkLabel title="Green Circle Inner Circle" description="Monthly sessions, introductions and partner access · ₦50,000/month" />
-          </Link>
-        )}
-        {import.meta.env.VITE_AGRI_QUIZ_ENABLED === 'true' && (
-          <Link className="btn btn-ghost links-row" to="/agribusiness-quiz">
-            <LinkLabel title="Know the Right Agricultural Business for You" description="Personalised assessment · ₦15,000" />
-          </Link>
-        )}
-        <details id="book" className="links-booking">
-          <summary className="btn btn-ink links-row">
-            <LinkLabel title="Book a consultation" description="Choose a session and pay online for fixed-price bookings" />
-          </summary>
-          <BookingForm />
-        </details>
+        <h2 id="links-work" className="caps">Join, get advice &amp; book</h2>
+        <Offer id="join" title="Join The Green Circle" description="Free community for African agriculture" variant="primary" open={active === 'join'}>
+          <GreenCircleJoinForm source="links" />
+        </Offer>
+        <Offer id="inner" title="Join the Inner Circle" description="Monthly sessions and introductions · ₦50,000/month" open={active === 'inner' || params.has('inner_circle')}>
+          <InnerCircleForm inline />
+        </Offer>
+        <Offer id="quiz" title="Know the Right Agricultural Business for You" description="Take the quiz here · ₦15,000 to unlock your report" open={active === 'quiz' || Boolean(quizOrder)}>
+          <AgriQuizForm key={quizOrder || 'new'} inline />
+        </Offer>
+        <Offer id="book" title="Book a consultation" description="Choose a session and pay online for fixed-price bookings" open={active === 'book' || params.has('booking')}>
+          <BookingForm returnToLinks />
+        </Offer>
       </section>
 
       <section className="links-group" aria-labelledby="links-ventures">

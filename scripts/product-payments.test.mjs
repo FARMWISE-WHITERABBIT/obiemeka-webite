@@ -30,17 +30,22 @@ test('Quiz verifies reference and amount before permitting a single saved report
         const payment = JSON.parse(init.body)
         assert.equal(payment.amount, 15000)
         assert.equal(payment.payment_plan, undefined)
+        assert.match(payment.redirect_url, /\/links\?quiz_order=/)
         return json({ status: 'success', data: { link: checkoutUrl } })
       }
       return json({ status: 'success', data: { id: 321, status: 'successful',
         currency: 'NGN', amount, tx_ref: 'AGRI-QUIZ-' + order.reference } })
     }
-    if (init.method === 'POST') { order = { ...JSON.parse(init.body), transaction_id: null, report: null }; return json([]) }
+    if (init.method === 'POST') { order = { ...JSON.parse(init.body), transaction_id: null }; return json([]) }
     if (init.method === 'PATCH') { Object.assign(order, JSON.parse(init.body)); return json([order]) }
     return json(url.searchParams.get('access_hash')?.endsWith(order.access_hash) ? [order] : [])
   })
 
-  const start = await quiz({ method: 'POST', headers: {}, body: { action: 'checkout', email: 'buyer@example.com' } }, response())
+  const answers = { goal: 'cashflow', role: 'operator', cashHorizon: 'short',
+    capitalPosition: 'pilotOnly', skills: 'sales', weeklyHours: 12, buyerAccess: true,
+    siteAccess: false, operatingCoverage: false, funding: 'ownFunds',
+    lossTolerance: 'moderate', oversight: 'local' }
+  const start = await quiz({ method: 'POST', headers: {}, body: { action: 'checkout', email: 'buyer@example.com', answers } }, response())
   assert.equal(start.body.checkoutUrl, checkoutUrl)
   assert.match(start.headers['Set-Cookie'], /HttpOnly; Secure/)
   const call = (action, headers = {}, answers) => quiz({
@@ -49,13 +54,13 @@ test('Quiz verifies reference and amount before permitting a single saved report
   const headers = { cookie: start.headers['Set-Cookie'].split(';')[0] }
   assert.equal((await call('verify')).code, 403)
   assert.equal((await call('report', headers)).code, 403)
-  assert.equal((await call('verify', headers)).code, 409)
+  const pending = await call('verify', headers)
+  assert.equal(pending.code, 409)
+  assert.equal(pending.body.report, undefined)
   amount = 15000
-  assert.equal((await call('verify', headers)).code, 200)
-  const answers = { goal: 'cashflow', role: 'operator', cashHorizon: 'short',
-    capitalPosition: 'pilotOnly', skills: 'sales', weeklyHours: 12, buyerAccess: true,
-    siteAccess: false, operatingCoverage: false, funding: 'ownFunds',
-    lossTolerance: 'moderate', oversight: 'local' }
+  const unlocked = await call('verify', headers)
+  assert.equal(unlocked.code, 200)
+  assert.equal(unlocked.body.report.shortlist[0].id, 'trade')
   const completed = await call('report', headers, answers)
   assert.equal(completed.body.report.shortlist[0].id, 'trade')
   assert.deepEqual((await call('report', headers, {})).body, completed.body)
@@ -73,6 +78,7 @@ test('Inner Circle requires renewal consent and starts checkout on the configure
       const payment = JSON.parse(init.body)
       assert.equal(payment.payment_plan, 1234)
       assert.equal(payment.amount, 50000)
+      assert.match(payment.redirect_url, /\/links\?inner_circle=returned/)
       assert.match(payment.tx_ref, /^INNER-CIRCLE-/)
       return json({ status: 'success', data: { link: checkoutUrl } })
     }

@@ -24,17 +24,21 @@ export default async function handler(req, res) {
       if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         return res.status(400).json({ error: 'Enter a valid email address.' })
       }
+      let report
+      try { report = assessAgribusinessFit(body.answers) }
+      catch (error) { return res.status(400).json({ error: error.message }) }
+
       const reference = randomUUID()
       const token = randomBytes(32).toString('hex')
       const { error } = await db.from('agri_quiz_orders').insert({
-        reference, email, access_hash: hash(token),
+        reference, email, access_hash: hash(token), report,
       })
       if (error) throw error
       const result = await flutterwave('payments', {
         tx_ref: `AGRI-QUIZ-${reference}`,
         amount: PRICE,
         currency: 'NGN',
-        redirect_url: `${SITE}/agribusiness-quiz?order=${reference}`,
+        redirect_url: `${SITE}/links?quiz_order=${reference}`,
         customer: { email },
         customizations: { title: 'Know the Right Agricultural Business for You' },
       })

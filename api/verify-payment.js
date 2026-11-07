@@ -13,14 +13,15 @@ import { SESSION_PRICING, getSupabase, sendBookingEmails } from './_lib/booking.
 // the webhook to confirm rather than being stamped 'failed'.
 export default async function handler(req, res) {
   const siteUrl = process.env.SITE_URL || 'https://obiemeka.com'
-  const { status, tx_ref, transaction_id } = req.query
+  const { status, tx_ref, transaction_id, return_to } = req.query
 
-  const fail = () => res.redirect(302, `${siteUrl}/?booking=failed#book`)
-  const processing = (ref) => res.redirect(302, `${siteUrl}/?booking=processing&ref=${encodeURIComponent(ref)}#book`)
+  const returnUrl = `${siteUrl}${return_to === 'links' ? '/links' : '/'}`
+  const fail = () => res.redirect(302, `${returnUrl}?booking=failed#book`)
+  const processing = (ref) => res.redirect(302, `${returnUrl}?booking=processing&ref=${encodeURIComponent(ref)}#book`)
   // session rides along so the success screen can offer the right
   // Google Calendar scheduling link for what was just paid for.
   const succeed = (ref, session) => res.redirect(302,
-    `${siteUrl}/?booking=success&ref=${encodeURIComponent(ref)}${session ? `&session=${encodeURIComponent(session)}` : ''}#book`)
+    `${returnUrl}?booking=success&ref=${encodeURIComponent(ref)}${session ? `&session=${encodeURIComponent(session)}` : ''}#book`)
 
   if (!tx_ref) return fail()
   if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY || !process.env.FLUTTERWAVE_SECRET_KEY) {

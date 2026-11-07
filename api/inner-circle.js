@@ -49,7 +49,7 @@ export default async function handler(req, res) {
       amount: INNER_CIRCLE_PRICE,
       currency: 'NGN',
       payment_plan: Number(plan),
-      redirect_url: `${process.env.SITE_URL || 'https://obiemeka.com'}/inner-circle?returned=1`,
+      redirect_url: `${process.env.SITE_URL || 'https://obiemeka.com'}/links?inner_circle=returned`,
       customer: { email },
       customizations: { title: 'Green Circle Inner Circle — monthly membership' },
     })
