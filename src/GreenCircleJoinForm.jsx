@@ -1,4 +1,4 @@
-import { isWhatsAppPhone } from './lib/whatsAppPhone'
+import { isPhoneNumber } from './lib/phoneNumber'
 import { trackLinks } from './lib/linksAnalytics'
 import React, { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -48,7 +48,7 @@ export function GreenCircleJoinForm({ source }) {
     if (!data.email.trim()) e.email = 'Required'
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) e.email = 'Looks invalid'
     if (!data.phone.trim()) e.phone = 'Required'
-    else if (!isWhatsAppPhone(data.phone)) e.phone = 'Enter a valid WhatsApp number, including your country code if outside Nigeria.'
+    else if (!isPhoneNumber(data.phone)) e.phone = 'Enter a valid WhatsApp number, including your country code if outside Nigeria.'
     if (!data.memberType) e.memberType = 'Required'
     if (!data.goal.trim() || data.goal.trim().length < 15) e.goal = 'A sentence or two, please'
     setErrors(e)

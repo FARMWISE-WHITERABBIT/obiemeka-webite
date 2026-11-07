@@ -1,5 +1,5 @@
 import { sendInviteEmail } from './_lib/green-circle-invite.js'
-import { isWhatsAppPhone } from '../src/lib/whatsAppPhone.js'
+import { isPhoneNumber } from '../src/lib/phoneNumber.js'
 import crypto from 'node:crypto'
 import { Resend } from 'resend'
 import { getSupabase, escapeHtml } from './_lib/booking.js'
@@ -56,7 +56,7 @@ export default async function handler(req, res) {
   if (!name || !email) {
     return res.status(400).json({ error: 'Name and email are required' })
   }
-  if (!isWhatsAppPhone(phone)) {
+  if (!isPhoneNumber(phone)) {
     return res.status(400).json({ error: 'A valid WhatsApp number is required.' })
   }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {

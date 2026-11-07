@@ -10,6 +10,7 @@ create table if not exists public.bookings (
   ref_num            text        not null unique,
   name               text        not null,
   email              text        not null,
+  phone          text,
   org                text,
   role               text,
   session            text        not null,  -- discovery | compliance | strategy | investment | retainer | speaking

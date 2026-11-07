@@ -34,7 +34,7 @@ const offerIcons = {
   join: 'M20 4c-8 0-13 4-13 9a4 4 0 0 0 4 4c5 0 9-5 9-13Z M4 20l9-9',
   inner: 'M12 3 4 8v8l8 5 8-5V8z M12 8v8 M8 12h8',
   book: 'M4 6h16v14H4z M8 3v6 M16 3v6 M4 11h16 M8 15h3',
-  venture: 'M4 20V9l8-5 8 5v11H4z M9 20v-6h6v6',
+  venture: 'M3 7h18v13H3z M8 7V4h8v3 M3 12c5 3 13 3 18 0 M10 13h4v3h-4z',
   journal: 'M4 5h7a2 2 0 0 1 2 2v13a3 3 0 0 0-3-2H4z M13 7a2 2 0 0 1 2-2h5v13h-4a3 3 0 0 0-3 2',
 }
 
@@ -87,7 +87,7 @@ export default function Links() {
           <InnerCircleForm inline />
         </Offer>
         <Offer id="book" title="Book a Consultation" description="Professional advice with Obi Emeka" open={active === 'book' || params.has('booking')}>
-          <p className="links-offer-intro">Tell me what you’re working on and where you’re stuck. Pick a session and send me a short brief so I can understand what you need. Fixed-price sessions go through Flutterwave. For retainers and speaking enquiries, I’ll follow up with you directly.</p>
+          <p className="links-offer-intro">Tell me what you’re working on and where you’re stuck. Book a session and send me a short brief so I can understand what you need.</p>
           <BookingForm returnToLinks />
         </Offer>
       </section>

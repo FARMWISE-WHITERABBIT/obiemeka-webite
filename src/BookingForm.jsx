@@ -1,5 +1,6 @@
+import { isPhoneNumber } from './lib/phoneNumber'
 import { trackLinks } from './lib/linksAnalytics'
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useId, useMemo } from 'react'
 import { SCHEDULING_URLS } from './schedulingLinks'
 
 export const SESSIONS = [
@@ -25,20 +26,21 @@ export const TOPICS = [
   "Other — I'll explain below",
 ]
 
-const REQUIRED_FIELDS = ['name', 'email', 'org', 'session', 'topic', 'challenge']
+const REQUIRED_FIELDS = ['name', 'email', 'phone', 'org', 'session', 'topic', 'challenge']
 
 // Sessions with a fixed price are paid for via Flutterwave before the booking
 // is confirmed — keep this in sync with SESSION_PRICING in api/_lib/booking.js.
 const PAYABLE_SESSIONS = ['discovery', 'compliance', 'strategy', 'investment']
 
 const INITIAL = {
-  name: '', email: '', org: '', role: '',
+  name: '', email: '', phone: '', org: '', role: '',
   session: 'discovery', topic: TOPICS[0],
   challenge: '', timing: 'Within 2 weeks',
   nickname: '', // honeypot — real users never see or fill this
 }
 
 export function BookingForm({ pickedSession, onPickSession, pickedTopic, returnToLinks = false, discoveryCredit }) {
+  const contactId = useId()
   const [data, setData] = useState({ ...INITIAL, session: pickedSession || 'discovery' })
   const [errors, setErrors] = useState({})
   const [status, setStatus] = useState('idle') // idle | loading | success | error
@@ -104,6 +106,8 @@ export function BookingForm({ pickedSession, onPickSession, pickedTopic, returnT
     if (!data.name.trim()) e.name = 'Required'
     if (!data.email.trim()) e.email = 'Required'
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) e.email = 'Looks invalid'
+    if (!data.phone.trim()) e.phone = 'Required'
+    else if (!isPhoneNumber(data.phone)) e.phone = 'Enter a valid phone number'
     if (!data.org.trim()) e.org = 'Required'
     if (!data.challenge.trim() || data.challenge.trim().length < 30)
       e.challenge = 'A few sentences, please'
@@ -221,17 +225,26 @@ export function BookingForm({ pickedSession, onPickSession, pickedTopic, returnT
 
       <div className="field-row">
         <div className={`field ${errors.name ? 'error' : ''}`}>
-          <label>Name</label>
-          <input value={data.name} placeholder="Your full name" maxLength={200}
+          <label htmlFor={contactId + '-name'}>Name</label>
+          <input id={contactId + '-name'} required autoComplete="name" value={data.name} placeholder="Your full name" maxLength={200}
                  onChange={(e) => setField('name', e.target.value)} />
           {errors.name && <span className="err">{errors.name}</span>}
         </div>
         <div className={`field ${errors.email ? 'error' : ''}`}>
-          <label>Email</label>
-          <input type="email" value={data.email} placeholder="you@org.com" maxLength={200}
+          <label htmlFor={contactId + '-email'}>Email</label>
+          <input id={contactId + '-email'} type="email" required autoComplete="email" value={data.email} placeholder="you@org.com" maxLength={200}
                  onChange={(e) => setField('email', e.target.value)} />
           {errors.email && <span className="err">{errors.email}</span>}
         </div>
+      </div>
+
+      <div className={`field ${errors.phone ? 'error' : ''}`}>
+        <label htmlFor={contactId + '-phone'}>Phone number</label>
+        <input id={contactId + '-phone'} type="tel" required autoComplete="tel"
+               value={data.phone} placeholder="+234…" maxLength={40}
+               aria-invalid={Boolean(errors.phone)} aria-describedby={errors.phone ? contactId + '-phone-error' : undefined}
+               onChange={e => setField('phone', e.target.value)} />
+        {errors.phone && <span id={contactId + '-phone-error'} className="err">{errors.phone}</span>}
       </div>
 
       <div className="field-row">
@@ -312,7 +325,7 @@ export function BookingForm({ pickedSession, onPickSession, pickedTopic, returnT
         </button>
         {PAYABLE_SESSIONS.includes(data.session) && (
           <p className="pkg-note" style={{ margin: '8px 0 0' }}>
-            You'll pay {discountedPrice || sessionMeta.price.split('·')[0].trim()} via Flutterwave on the next screen — nothing is charged until then.
+            You'll pay {discountedPrice || sessionMeta.price.split('·')[0].trim()} on the next screen.
           </p>
         )}
       </div>

@@ -55,7 +55,7 @@ export async function sendBookingEmails(booking) {
   const resend = new Resend(process.env.RESEND_API_KEY)
   const fromAddr = process.env.EMAIL_FROM || 'onboarding@resend.dev'
   const notifyTo = process.env.NOTIFY_EMAIL || 'oe@obiemeka.com'
-  const { ref_num: ref, name, email, org, role, session, topic, challenge, timing, payment_status } = booking
+  const { ref_num: ref, name, email, phone, org, role, session, topic, challenge, timing, payment_status } = booking
   const submittedAt = new Date(booking.created_at || Date.now()).toUTCString()
   const paid = payment_status === 'paid'
 
@@ -64,7 +64,7 @@ export async function sendBookingEmails(booking) {
       from:    `Obi Emeka Website <${fromAddr}>`,
       to:      notifyTo,
       subject: `[${ref}]${paid ? ' PAID' : ''} New ${SESSION_LABELS[session] ?? session} from ${name}`,
-      html:    notificationHtml({ ref, name, email, org, role, session, topic, challenge, timing, submittedAt, paid }),
+      html:    notificationHtml({ ref, name, email, phone, org, role, session, topic, challenge, timing, submittedAt, paid }),
     }),
     resend.emails.send({
       from:    `Obi Emeka <${fromAddr}>`,
@@ -84,11 +84,12 @@ export async function sendBookingEmails(booking) {
 // ── Email templates ───────────────────────────────────────────────────────────
 // Minimal, brand-consistent plain HTML — renders well in all email clients.
 
-function notificationHtml({ ref, name, email, org, role, session, topic, challenge, timing, submittedAt, paid }) {
+function notificationHtml({ ref, name, email, phone, org, role, session, topic, challenge, timing, submittedAt, paid }) {
   const rows = [
     ['Ref',       ref],
     ['Name',      escapeHtml(name)],
     ['Email',     escapeHtml(email)],
+    ['Phone',     escapeHtml(phone) || '—'],
     ['Org',       escapeHtml(org) || '—'],
     ['Role',      escapeHtml(role) || '—'],
     ['Session',   escapeHtml(SESSION_LABELS[session] ?? session)],

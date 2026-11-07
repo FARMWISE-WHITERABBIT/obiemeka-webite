@@ -1,8 +1,9 @@
+import { isPhoneNumber } from '../src/lib/phoneNumber.js'
 import { DISCOVERY_CREDIT, validDiscoveryCredit } from './_lib/discovery-credit.js'
 import { VALID_SESSIONS, SESSION_PRICING, getSupabase, sendBookingEmails } from './_lib/booking.js'
 
 const MAX_LENGTHS = {
-  name: 200, email: 200, org: 200, role: 200,
+  name: 200, email: 200, phone: 40, org: 200, role: 200,
   topic: 200, timing: 200, challenge: 5000,
 }
 
@@ -31,6 +32,7 @@ export default async function handler(req, res) {
   // Trim all string inputs
   const name      = (body?.name      || '').trim()
   const email     = (body?.email     || '').trim()
+  const phone     = (typeof body?.phone === 'string' ? body.phone : '').trim()
   const org       = (body?.org       || '').trim()
   const role      = (body?.role      || '').trim()
   const session   = (body?.session   || '').trim()
@@ -48,6 +50,9 @@ export default async function handler(req, res) {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return res.status(400).json({ error: 'Invalid email address' })
   }
+  if (!isPhoneNumber(phone)) {
+    return res.status(400).json({ error: 'A valid phone number is required.' })
+  }
   if (!VALID_SESSIONS.includes(session)) {
     return res.status(400).json({ error: 'Invalid session type' })
   }
@@ -55,7 +60,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Please describe your challenge in a few sentences' })
   }
   const tooLong = Object.entries(MAX_LENGTHS).find(
-    ([k, max]) => ({ name, email, org, role, topic, timing, challenge })[k]?.length > max
+    ([k, max]) => ({ name, email, phone, org, role, topic, timing, challenge })[k]?.length > max
   )
   if (tooLong) {
     return res.status(400).json({ error: `${tooLong[0]} is too long` })
@@ -134,6 +139,7 @@ export default async function handler(req, res) {
       ref_num:        ref,
       name,
       email,
+      phone,
       org,
       role:           role || null,
       session,

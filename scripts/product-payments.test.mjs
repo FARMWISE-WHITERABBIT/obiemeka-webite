@@ -171,19 +171,22 @@ test('Discovery Call credit is paid-order and email bound, and creates one disco
     return json(booking ? [booking] : [])
   })
   const fields = {
-    name: 'Trial Buyer', email: 'buyer@example.com', org: 'Independent', session: 'discovery',
+    name: 'Trial Buyer', email: 'buyer@example.com', phone: '+2348012345678', org: 'Independent', session: 'discovery',
     topic: 'Quiz report', challenge: 'I would like help interpreting my agribusiness assessment.',
     discoveryCredit: { reference, token },
   }
   const book = (changes = {}) => submitBooking({
     method: 'POST', body: { ...fields, ...changes },
   }, response())
+  assert.equal((await book({ phone: '' })).code, 400)
+  assert.equal((await book({ phone: 'abc' })).code, 400)
   assert.equal((await book({ email: 'other@example.com' })).code, 403)
   assert.equal((await book({ session: 'strategy' })).code, 400)
   paid = false
   assert.equal((await book()).code, 403)
   paid = true
   assert.equal((await book()).body.paymentUrl, checkoutUrl)
+  assert.equal(booking.phone, '+2348012345678')
   assert.equal(expectedBookingAmount(booking), 135000)
   assert.equal(expectedBookingAmount({ session: 'discovery', amount: 135000 }), 150000)
   assert.equal((await book()).body.paymentUrl, checkoutUrl)
