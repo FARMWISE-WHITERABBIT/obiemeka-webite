@@ -32,7 +32,7 @@ export default function Links() {
       <header className="links-header">
         <img src="/assets/obi-emeka-links-portrait.webp" width="88" height="88" alt="" />
         <h1>Obi Emeka</h1>
-        <p>Agri-tech founder and agricultural export advisor</p>
+        <p>Agri-tech founder and agricultural business advisor</p>
       </header>
 
       <section className="links-group" aria-labelledby="links-work">
