@@ -6,20 +6,21 @@ import { GreenCircleJoinForm } from '../GreenCircleJoinForm'
 import { AgriQuizForm } from './AgriQuiz'
 import { trackLinks } from '../lib/linksAnalytics'
 import { InnerCircleForm } from './InnerCircle'
+import { SOCIAL_ITEMS } from '../sections'
 
 const profile = identity.find(item => item['@type'] === 'Person')
-const socialNames = {
-  'www.linkedin.com': 'LinkedIn',
-  'www.instagram.com': 'Instagram',
-  'www.facebook.com': 'Facebook',
-  'www.tiktok.com': 'TikTok',
-  'www.youtube.com': 'YouTube',
-}
+const socialLinks = ['LinkedIn', 'Instagram', 'Facebook', 'TikTok', 'YouTube']
+  .map(name => SOCIAL_ITEMS.find(item => item.name === name))
 
-function LinkLabel({ title, description }) {
+function LinkLabel({ title, description, icon }) {
   return (
     <>
-      <span>
+      <span className="links-offer-icon" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+          <path d={icon} />
+        </svg>
+      </span>
+      <span className="links-offer-label">
         <strong>{title}</strong>
         {description && <small>{description}</small>}
       </span>
@@ -33,6 +34,8 @@ const offerIcons = {
   join: 'M20 4c-8 0-13 4-13 9a4 4 0 0 0 4 4c5 0 9-5 9-13Z M4 20l9-9',
   inner: 'M12 3 4 8v8l8 5 8-5V8z M12 8v8 M8 12h8',
   book: 'M4 6h16v14H4z M8 3v6 M16 3v6 M4 11h16 M8 15h3',
+  venture: 'M4 20V9l8-5 8 5v11H4z M9 20v-6h6v6',
+  journal: 'M4 5h7a2 2 0 0 1 2 2v13a3 3 0 0 0-3-2H4z M13 7a2 2 0 0 1 2-2h5v13h-4a3 3 0 0 0-3 2',
 }
 
 function Offer({ id, title, description, open, children }) {
@@ -41,16 +44,7 @@ function Offer({ id, title, description, open, children }) {
       <summary className="btn links-row links-offer-row" onClick={event => {
         if (!event.currentTarget.parentElement.open) trackLinks('open', id)
       }}>
-        <span className="links-offer-icon" aria-hidden="true">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-            <path d={offerIcons[id]} />
-          </svg>
-        </span>
-        <span className="links-offer-label">
-          <strong>{title}</strong>
-          {description && <small>{description}</small>}
-        </span>
-        <span className="links-chevron" aria-hidden="true" />
+        <LinkLabel title={title} description={description} icon={offerIcons[id]} />
       </summary>
       {children}
     </details>
@@ -101,20 +95,22 @@ export default function Links() {
       <section className="links-group" aria-labelledby="links-ventures">
         <h2 id="links-ventures" className="caps">Ventures</h2>
         {profile.founder.map(({ name, url }) => (
-          <a className="btn btn-ghost links-row" href={url} key={url} onClick={() => trackLinks('click', name)}>
-            <LinkLabel title={name} />
+          <a className="btn links-row links-offer-row" href={url} key={url} onClick={() => trackLinks('click', name)}>
+            <LinkLabel title={name} icon={offerIcons.venture} />
           </a>
         ))}
       </section>
 
       <section className="links-group" aria-labelledby="links-follow">
         <h2 id="links-follow" className="caps">Read &amp; follow</h2>
-        <Link className="btn btn-ghost links-row" to="/blog" onClick={() => trackLinks('click', 'journal')}>
-          <LinkLabel title="The Journal" description="Notes on agriculture, trade and technology" />
+        <Link className="btn links-row links-offer-row" to="/blog" onClick={() => trackLinks('click', 'journal')}>
+          <LinkLabel title="The Journal" description="Notes on agriculture, trade and technology" icon={offerIcons.journal} />
         </Link>
         <ul className="links-social">
-          {profile.sameAs.map(url => (
-            <li key={url}><a href={url} onClick={() => trackLinks('click', socialNames[new URL(url).hostname])}>{socialNames[new URL(url).hostname]}</a></li>
+          {socialLinks.map(({ name, url, icon }) => (
+            <li key={name}>
+              <a href={url} aria-label={name} title={name} onClick={() => trackLinks('click', name)}>{icon}</a>
+            </li>
           ))}
         </ul>
       </section>

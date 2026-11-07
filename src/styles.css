@@ -1588,7 +1588,15 @@ footer .inner { max-width: 1440px; margin: 0 auto; }
 .quiz-budget label { display: grid; gap: var(--s-2); }
 
 /* Profile hub cards retain the site's type, paper and green palette. */
-.links-hub { max-width: 620px; }
+.links-hub {
+  max-width: 620px;
+  width: calc(100% - 24px);
+  margin: clamp(12px, 4vw, 40px) auto;
+  padding: clamp(13px, 4vw, 30px);
+  border: 1px solid #d3ddd4;
+  border-radius: var(--r-4);
+  background: #f8f9f3;
+}
 .links-hub .links-header {
   padding: clamp(24px, 6vw, 38px) 18px;
   border: 1px solid #cbd9ce;
@@ -1621,8 +1629,28 @@ footer .inner { max-width: 1440px; margin: 0 auto; }
   color: #234e36;
 }
 #quiz .links-offer-icon { background: #234e36; color: #f8faf4; }
-.links-chevron { width: 8px; height: 8px; flex: 0 0 8px; margin: 0 5px; border: solid currentColor; border-width: 0 1.5px 1.5px 0; transform: rotate(45deg); }
-.links-offer[open] .links-chevron { transform: rotate(225deg); }
-.links-hub .links-group > .links-row { border-radius: var(--r-3); min-height: 46px; padding: 10px 14px; }
+.links-hub .links-offer-row .arrow { background: #e3ece3; }
+.links-hub .links-offer-row:hover .arrow,
+.links-hub .links-offer-row:focus-visible .arrow { transform: rotate(-45deg); }
+.links-hub .links-offer[open] .links-offer-row .arrow { transform: rotate(90deg); }
+.links-hub .links-offer[open] .links-offer-row:hover .arrow,
+.links-hub .links-offer[open] .links-offer-row:focus-visible .arrow { transform: rotate(45deg); }
+.links-hub .links-social { justify-content: center; gap: 8px; margin-top: var(--s-2); }
+.links-hub .links-social a {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid #cfd9d1;
+  border-radius: 50%;
+  background: var(--paper-pure);
+  color: #234e36;
+}
+.links-hub .links-social a:hover { background: #dcece0; border-color: #64816d; }
+.links-hub .links-social svg { width: 18px; height: 18px; }
+.links-hub .links-footer { text-align: center; }
+@media (prefers-reduced-motion: reduce) {
+  .links-hub .links-offer-row .arrow { transition: none; }
+}
 
 .links-offer-intro { margin: var(--s-3) var(--s-2); line-height: 1.55; }

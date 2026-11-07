@@ -943,7 +943,7 @@ export function Packages({ onPick }) {
 /* =============================================================
    SOCIAL
    ============================================================= */
-const SOCIAL_ITEMS = [
+export const SOCIAL_ITEMS = [
   {
     name: 'Instagram',
     handle: '@theobiemeka',
