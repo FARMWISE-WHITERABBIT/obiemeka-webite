@@ -63,14 +63,14 @@ export default function Links() {
 
       <section className="links-group" aria-labelledby="links-work">
         <h2 id="links-work" className="caps">Join, get advice &amp; book</h2>
+        <Offer id="quiz" title="Know the Right Agricultural Business for You" description="Take the quiz here · ₦15,000 to unlock your report" open={active === 'quiz' || Boolean(quizOrder)}>
+          <AgriQuizForm key={quizOrder || 'new'} inline />
+        </Offer>
         <Offer id="join" title="Join The Green Circle" description="Free community for African agriculture" variant="primary" open={active === 'join'}>
           <GreenCircleJoinForm source="links" />
         </Offer>
         <Offer id="inner" title="Join the Inner Circle" description="Monthly sessions and introductions · ₦50,000/month" open={active === 'inner' || params.has('inner_circle')}>
           <InnerCircleForm inline />
-        </Offer>
-        <Offer id="quiz" title="Know the Right Agricultural Business for You" description="Take the quiz here · ₦15,000 to unlock your report" open={active === 'quiz' || Boolean(quizOrder)}>
-          <AgriQuizForm key={quizOrder || 'new'} inline />
         </Offer>
         <Offer id="book" title="Book a consultation" description="Choose a session and pay online for fixed-price bookings" open={active === 'book' || params.has('booking')}>
           <BookingForm returnToLinks />

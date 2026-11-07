@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { openFlutterwaveCheckout } from '../lib/flutterwaveCheckout'
 import { Link, useSearchParams } from 'react-router-dom'
 
@@ -53,6 +53,10 @@ export function AgriQuizForm({ inline = false }) {
   const [emailed, setEmailed] = useState(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
+  const [preparing, setPreparing] = useState(false)
+  const [checkout, setCheckout] = useState(null)
+  const readyHeading = useRef(null)
+  const progressMessage = useRef(null)
 
   async function run(action) {
     setError('')
@@ -75,6 +79,11 @@ export function AgriQuizForm({ inline = false }) {
     if (reference) void verify()
   }, [reference, transactionId])
 
+  useEffect(() => {
+    if (preparing) progressMessage.current?.focus()
+    else if (checkout) readyHeading.current?.focus()
+  }, [checkout, preparing])
+
   function submit(event) {
     event.preventDefault()
     const form = new FormData(event.currentTarget)
@@ -88,14 +97,28 @@ export function AgriQuizForm({ inline = false }) {
         const result = await request({ action: 'report', reference, answers })
         setReport(result.report)
       } else {
-        const result = await request({ action: 'checkout', email, answers })
-        const payment = await openFlutterwaveCheckout(result)
-        if (payment) {
-          const next = new URLSearchParams(params)
-          next.set(inline ? 'quiz_order' : 'order', result.reference)
-          next.set('transaction_id', String(payment.transaction_id))
-          setParams(next, { replace: true })
+        setPreparing(true)
+        try {
+          const [prepared] = await Promise.all([
+            request({ action: 'checkout', email, answers }),
+            new Promise(resolve => window.setTimeout(resolve, 3000)),
+          ])
+          setCheckout(prepared)
+        } finally {
+          setPreparing(false)
         }
+      }
+    })
+  }
+
+  function pay() {
+    return run(async () => {
+      const payment = await openFlutterwaveCheckout(checkout)
+      if (payment) {
+        const next = new URLSearchParams(params)
+        next.set(inline ? 'quiz_order' : 'order', checkout.reference)
+        next.set('transaction_id', String(payment.transaction_id))
+        setParams(next, { replace: true })
       }
     })
   }
@@ -112,28 +135,47 @@ export function AgriQuizForm({ inline = false }) {
           {error && <p><Link to="/links#quiz">Start a new assessment if you did not pay</Link></p>}
         </div>
       )}
-      {(!reference || verified) && !report && (
-        <form className="form-card" onSubmit={submit}>
-          <h2>Your circumstances</h2>
-          <label>How many hours a week can you personally give the business?
-            <input type="number" name="weeklyHours" min="0" max="168" step="1" required />
-          </label>
-          {fields.map(([id, prompt, options]) => (
-            <label key={id}>{prompt}
-              <select name={id} required defaultValue="">
-                <option value="" disabled>Choose an answer</option>
-                {Object.entries(options).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
-              </select>
-            </label>
-          ))}
-          {!verified && <>
-            <label>Email address <input name="email" type="email" required maxLength="254" autoComplete="email" /></label>
-            <p>Complete the assessment first. After Flutterwave verifies your payment, your report opens here and we send a copy to your email.</p>
-          </>}
-          <button className="btn btn-primary" disabled={busy}>
-            {busy ? 'Please wait…' : verified ? 'Get my report' : 'Pay ₦15,000 to unlock my report'}
+      {preparing && (
+        <p className="quiz-progress" role="status" tabIndex={-1} ref={progressMessage}>
+          <span aria-hidden="true" /> Reviewing your answers and preparing your report…
+        </p>
+      )}
+      {checkout && !reference && (
+        <section className="form-card" aria-labelledby="quiz-ready">
+          <h2 id="quiz-ready" tabIndex={-1} ref={readyHeading}>Your report is ready</h2>
+          <p>Pay ₦15,000 once to see your personalised recommendations and action plan. We’ll also email you a copy after payment is confirmed.</p>
+          <button type="button" className="btn btn-primary" disabled={busy} onClick={pay}>
+            {busy ? 'Opening Flutterwave…' : 'Pay ₦15,000 to receive my report'}
           </button>
-        </form>
+          <button type="button" className="btn btn-ghost" disabled={busy} onClick={() => { setCheckout(null); setError('') }}>
+            Edit my answers
+          </button>
+        </section>
+      )}
+      {(!reference || verified) && !report && (
+        <div hidden={preparing || Boolean(checkout)}>
+          <form className="form-card" onSubmit={submit}>
+            <h2>Your circumstances</h2>
+            <label>How many hours a week can you personally give the business?
+              <input type="number" name="weeklyHours" min="0" max="168" step="1" required />
+            </label>
+            {fields.map(([id, prompt, options]) => (
+              <label key={id}>{prompt}
+                <select name={id} required defaultValue="">
+                  <option value="" disabled>Choose an answer</option>
+                  {Object.entries(options).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+                </select>
+              </label>
+            ))}
+            {!verified && <>
+              <label>Email address <input name="email" type="email" required maxLength="254" autoComplete="email" /></label>
+              <p>We’ll use this email to send your report after payment.</p>
+            </>}
+            <button className="btn btn-primary" disabled={busy}>
+              {busy ? 'Please wait…' : verified ? 'Get my report' : 'Submit My Answers'}
+            </button>
+          </form>
+        </div>
       )}
       {report && (
         <section aria-labelledby="quiz-report">
