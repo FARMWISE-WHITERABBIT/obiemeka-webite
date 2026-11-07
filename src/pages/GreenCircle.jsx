@@ -324,6 +324,13 @@ export default function GreenCircle() {
           </div>
         </div>
       </section>
+      {import.meta.env.VITE_INNER_CIRCLE_ENABLED === 'true' && (
+        <section className="section tight">
+          <h2>Already part of The Green Circle?</h2>
+          <p>Join the Inner Circle for monthly group sessions, introductions and eligible partner events.</p>
+          <Link className="btn btn-ink" to="/inner-circle">Explore the Inner Circle <span className="arrow" /></Link>
+        </section>
+      )}
       <Footer onNav={onNav} />
     </>
   )

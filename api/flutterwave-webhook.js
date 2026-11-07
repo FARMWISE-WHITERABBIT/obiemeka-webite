@@ -1,3 +1,5 @@
+import { INNER_CIRCLE_PREFIX } from './inner-circle.js'
+import { recordInnerCirclePayment } from './_lib/inner-circle-payment.js'
 import { SESSION_PRICING, getSupabase, sendBookingEmails } from './_lib/booking.js'
 
 // Server-to-server webhook Flutterwave calls on transaction completion. This is
@@ -32,6 +34,15 @@ export default async function handler(req, res) {
   }
 
   const supabase = getSupabase()
+  if (typeof txRef === 'string' && txRef.startsWith(INNER_CIRCLE_PREFIX)) {
+    try {
+      await recordInnerCirclePayment(supabase, txRef, transactionId)
+      return res.status(200).json({ received: true })
+    } catch {
+      return res.status(503).json({ error: 'Could not process the membership payment.' })
+    }
+  }
+
   const { data: booking } = await supabase.from('bookings').select('*').eq('ref_num', txRef).single()
   if (!booking || booking.payment_status === 'paid') {
     return res.status(200).json({ received: true })

@@ -5,6 +5,8 @@ import { Seo } from './Seo'
 import NotFound from './pages/NotFound'
 import Home from './pages/Home'
 import Links from './pages/Links'
+import AgriQuiz from './pages/AgriQuiz'
+import InnerCircle from './pages/InnerCircle'
 import GreenCircle from './pages/GreenCircle'
 import BlogIndex from './pages/BlogIndex'
 import BlogPost from './pages/BlogPost'
@@ -45,6 +47,8 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/links" element={<Links />} />
+        <Route path="/agribusiness-quiz" element={<AgriQuiz />} />
+        <Route path="/inner-circle" element={<InnerCircle />} />
         <Route path="/greencircle-community" element={<GreenCircle />} />
         <Route path="/green-circle" element={<RedirectPreservingSearch to="/greencircle-community" />} />
         <Route path="/blog" element={<BlogIndex />} />
@@ -52,7 +56,7 @@ export default function App() {
         <Route path="*" element={<NotFound />} />
       </Routes>
 
-      {path !== '/greencircle-community' && path !== '/links' && <ExitIntentPopup />}
+      {path !== '/greencircle-community' && path !== '/links' && path !== '/agribusiness-quiz' && path !== '/inner-circle' && <ExitIntentPopup />}
 
       {import.meta.env.DEV && (
         <TweaksPanel title="Tweaks">

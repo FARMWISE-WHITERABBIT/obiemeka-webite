@@ -40,6 +40,16 @@ export default function Links() {
         <a className="btn btn-primary links-row" href={joinUrl}>
           <LinkLabel title="Join The Green Circle" description="Apply to join the African agriculture community" />
         </a>
+        {import.meta.env.VITE_INNER_CIRCLE_ENABLED === 'true' && (
+          <Link className="btn btn-ghost links-row" to="/inner-circle">
+            <LinkLabel title="Green Circle Inner Circle" description="Monthly sessions, introductions and partner access · ₦50,000/month" />
+          </Link>
+        )}
+        {import.meta.env.VITE_AGRI_QUIZ_ENABLED === 'true' && (
+          <Link className="btn btn-ghost links-row" to="/agribusiness-quiz">
+            <LinkLabel title="Know the Right Agricultural Business for You" description="Personalised assessment · ₦15,000" />
+          </Link>
+        )}
         <details id="book" className="links-booking">
           <summary className="btn btn-ink links-row">
             <LinkLabel title="Book a consultation" description="Choose a session and pay online for fixed-price bookings" />

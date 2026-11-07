@@ -1553,3 +1553,14 @@ footer .inner { max-width: 1440px; margin: 0 auto; }
 .links-page :is(a, summary):focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 .links-footer { border-top: 1px solid var(--hairline-strong); }
 #gc-join { scroll-margin-top: 108px; }
+
+.agri-quiz .form-card > label { display: grid; gap: var(--s-2); }
+.agri-quiz .form-card :is(input:not([type="checkbox"]), select) {
+  width: 100%;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--r-2);
+  font: inherit;
+}
+.agri-quiz .form-card .btn { justify-self: start; }
