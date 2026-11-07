@@ -99,7 +99,6 @@ export function AgriQuizForm({ inline = false }) {
       <p>Explore agribusiness routes against your available capital, time, experience and goals. Get a personalised shortlist, the gaps to close and a practical validation step.</p>
       <p><strong>₦15,000 one-time payment</strong></p>
       {error && <p role="alert">{error}</p>}
-      {!enabled && <p>Checkout is not open yet.</p>}
       {enabled && reference && !verified && (
         <div>
           {busy ? <p className="quiz-progress" role="status"><span aria-hidden="true" /> Confirming your payment and preparing report delivery…</p>

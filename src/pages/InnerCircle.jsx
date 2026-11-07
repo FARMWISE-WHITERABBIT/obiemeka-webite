@@ -40,7 +40,6 @@ export function InnerCircleForm({ inline = false }) {
       </ul>
       <p>After payment is verified, the team will contact you to arrange access to the WhatsApp group.</p>
       {error && <p role="alert">{error}</p>}
-      {!enabled && <p>Membership checkout is not open yet.</p>}
       {enabled && returned && <div>
         <p role="status">If your payment went through, we’ll verify it and contact you using the email you entered. For help, email <a href="mailto:oe@obiemeka.com">oe@obiemeka.com</a>.</p>
         <p><Link to="/links#inner">Return to checkout if you did not pay</Link></p>
