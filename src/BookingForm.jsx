@@ -1,5 +1,5 @@
 import { isPhoneNumber } from './lib/phoneNumber'
-import { trackLinks } from './lib/linksAnalytics'
+import { trackLead, trackLinks } from './lib/linksAnalytics'
 import React, { useState, useEffect, useId, useMemo } from 'react'
 import { SCHEDULING_URLS } from './schedulingLinks'
 
@@ -141,6 +141,7 @@ export function BookingForm({ pickedSession, onPickSession, pickedTopic, returnT
         return
       }
 
+      if (json.leadCreated) trackLead('consultation_' + data.session)
       setRefNum(json.ref)
       setStatus('success')
       setTimeout(() => {

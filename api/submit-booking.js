@@ -1,3 +1,4 @@
+import { analyticsClientId } from './_lib/analytics.js'
 import { isPhoneNumber } from '../src/lib/phoneNumber.js'
 import { DISCOVERY_CREDIT, validDiscoveryCredit } from './_lib/discovery-credit.js'
 import { VALID_SESSIONS, SESSION_PRICING, getSupabase, sendBookingEmails } from './_lib/booking.js'
@@ -195,7 +196,7 @@ export default async function handler(req, res) {
             description: `Booking ${ref}`,
             logo: `${siteUrl}/assets/monogram-inverse.png`,
           },
-          meta: { ref },
+          meta: { ref, analytics_client_id: analyticsClientId(req) },
         }),
       })
       flwJson = await flwRes.json()
@@ -219,5 +220,5 @@ export default async function handler(req, res) {
 
   // No payment required (Retainer / Speaking) — confirm immediately, as before.
   await sendBookingEmails(inserted)
-  return res.status(200).json({ ref })
+  return res.status(200).json({ ref, leadCreated: true })
 }

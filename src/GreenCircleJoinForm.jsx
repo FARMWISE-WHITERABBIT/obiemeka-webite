@@ -1,5 +1,5 @@
 import { isPhoneNumber } from './lib/phoneNumber'
-import { trackLinks } from './lib/linksAnalytics'
+import { trackLead, trackLinks } from './lib/linksAnalytics'
 import React, { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { captureUtmFromLocation } from './lib/utm'
@@ -77,6 +77,7 @@ export function GreenCircleJoinForm({ source }) {
       const json = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(json.error || 'Something went wrong. Please try again.')
       setStatus('success')
+      if (json.leadCreated) trackLead('green_circle')
       trackLinks('submitted', 'join')
     } catch (err) {
       setStatus('error')

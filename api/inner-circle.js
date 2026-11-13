@@ -1,3 +1,4 @@
+import { analyticsClientId } from './_lib/analytics.js'
 import { randomUUID } from 'node:crypto'
 import { getSupabase } from './_lib/booking.js'
 import { flutterwave, inlineCheckoutOptions } from './_lib/flutterwave.js'
@@ -56,6 +57,7 @@ export default async function handler(req, res) {
       tx_ref: INNER_CIRCLE_PREFIX + reference,
       amount: INNER_CIRCLE_PRICE,
       currency: 'NGN',
+      meta: { analytics_client_id: analyticsClientId(req) },
       payment_plan: Number(plan),
       redirect_url: `${process.env.SITE_URL || 'https://obiemeka.com'}/links?inner_circle=returned`,
       customer: { email },

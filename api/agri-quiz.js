@@ -1,3 +1,4 @@
+import { analyticsClientId } from './_lib/analytics.js'
 import { createQuizPdf, QUIZ_REPORT_FILENAME } from './_lib/agri-quiz-pdf.js'
 import { discoveryCreditToken, DISCOVERY_CREDIT } from './_lib/discovery-credit.js'
 import { createHash, randomBytes, randomUUID } from 'node:crypto'
@@ -40,6 +41,7 @@ export default async function handler(req, res) {
         tx_ref: QUIZ_PREFIX + reference,
         amount: QUIZ_PRICE,
         currency: 'NGN',
+        meta: { analytics_client_id: analyticsClientId(req) },
         redirect_url: `${SITE}/links?quiz_order=${reference}`,
         customer: { email },
         customizations: { title: 'Know the Right Agricultural Business for You' },
