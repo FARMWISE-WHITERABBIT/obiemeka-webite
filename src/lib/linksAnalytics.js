@@ -39,3 +39,10 @@ export function cleanLinksAnalyticsUrl(event) {
   url.hash = ''
   return { ...event, url: url.toString() }
 }
+
+export function trackLead(leadType) {
+  window.gtag?.('event', 'generate_lead', {
+    send_to: 'G-YFDXY1KVNW',
+    lead_type: leadType,
+  })
+}

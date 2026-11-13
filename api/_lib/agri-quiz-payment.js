@@ -1,3 +1,4 @@
+import { trackPurchase } from './analytics.js'
 import { Resend } from 'resend'
 import { createQuizPdf, QUIZ_REPORT_FILENAME } from './agri-quiz-pdf.js'
 import { flutterwave } from './flutterwave.js'
@@ -18,9 +19,10 @@ export async function verifyQuizPayment(db, reference, order, transactionId) {
   if (result.status !== 'success' || tx?.status !== 'successful' ||
       tx.tx_ref !== txRef || tx.currency !== 'NGN' || Number(tx.amount) !== QUIZ_PRICE ||
       !/^\d{1,20}$/.test(String(tx.id))) return false
-  const { error } = await db.from('agri_quiz_orders')
-    .update({ transaction_id: String(tx.id) }).eq('reference', reference).is('transaction_id', null)
+  const { data: recorded, error } = await db.from('agri_quiz_orders')
+    .update({ transaction_id: String(tx.id) }).eq('reference', reference).is('transaction_id', null).select('transaction_id').maybeSingle()
   if (error) throw error
+  if (recorded) await trackPurchase(tx, 'agribusiness_quiz')
   return true
 }
 

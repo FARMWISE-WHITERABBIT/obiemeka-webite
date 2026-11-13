@@ -1,3 +1,4 @@
+import { trackPurchase } from './_lib/analytics.js'
 import { emailQuizReport, QUIZ_ORDER_COLUMNS, QUIZ_PREFIX, QUIZ_REFERENCE_PATTERN, verifyQuizPayment } from './_lib/agri-quiz-payment.js'
 import { INNER_CIRCLE_PREFIX } from './inner-circle.js'
 import { recordInnerCirclePayment } from './_lib/inner-circle-payment.js'
@@ -103,7 +104,7 @@ export default async function handler(req, res) {
     .select()
 
   if (updated && updated.length) {
-    await sendBookingEmails(updated[0])
+    await Promise.all([sendBookingEmails(updated[0]), trackPurchase(tx, 'consultation_' + booking.session)])
   }
 
   return res.status(200).json({ received: true })

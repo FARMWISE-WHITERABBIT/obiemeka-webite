@@ -1,3 +1,4 @@
+import { trackPurchase } from './analytics.js'
 import { Resend } from 'resend'
 import { flutterwave } from './flutterwave.js'
 import { INNER_CIRCLE_PREFIX, INNER_CIRCLE_PRICE } from '../inner-circle.js'
@@ -26,9 +27,10 @@ export async function recordInnerCirclePayment(db, txRef, transactionId) {
     if (subscriptions.status !== 'success' || !Array.isArray(subscriptions.data) || !subscriptions.data.length) {
       throw new Error('Active membership subscription has not been confirmed')
     }
-    const { error: updateError } = await db.from('inner_circle_checkouts')
-      .update({ transaction_id: String(transactionId) }).eq('reference', reference).is('transaction_id', null)
+    const { data: recorded, error: updateError } = await db.from('inner_circle_checkouts')
+      .update({ transaction_id: String(transactionId) }).eq('reference', reference).is('transaction_id', null).select('transaction_id').maybeSingle()
     if (updateError) throw updateError
+    if (recorded) await trackPurchase(tx, 'inner_circle_membership')
   }
   if (order.transaction_id && order.transaction_id !== String(transactionId)) return
 

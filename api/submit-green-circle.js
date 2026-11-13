@@ -163,13 +163,13 @@ export default async function handler(req, res) {
 
   // "Approved" is the existing status for someone invited to the free group.
   // Preserve it for Inner Circle eligibility without adding a review step.
-  const { error: statusError } = await supabase.from('green_circle_signups')
+  const { data: approved, error: statusError } = await supabase.from('green_circle_signups')
     .update({ status: 'approved', approved_at: new Date().toISOString() })
-    .eq('id', signup.id).eq('status', 'pending')
+    .eq('id', signup.id).eq('status', 'pending').select('id').maybeSingle()
   if (statusError) {
     return res.status(503).json({ error: 'Your invite was sent, but we couldn’t finish saving your signup. Please try again shortly.' })
   }
-  return res.status(200).json({ ok: true })
+  return res.status(200).json({ ok: true, leadCreated: Boolean(approved) })
 }
 
 async function sendAdminNotification(signup) {

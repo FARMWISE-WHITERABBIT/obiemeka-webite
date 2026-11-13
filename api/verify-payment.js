@@ -1,3 +1,4 @@
+import { trackPurchase } from './_lib/analytics.js'
 import { expectedBookingAmount, getSupabase, sendBookingEmails } from './_lib/booking.js'
 
 // Flutterwave redirects the browser here after checkout. We never trust the
@@ -99,7 +100,7 @@ export default async function handler(req, res) {
     .select()
 
   if (updated && updated.length) {
-    await sendBookingEmails(updated[0])
+    await Promise.all([sendBookingEmails(updated[0]), trackPurchase(tx, 'consultation_' + booking.session)])
   }
 
   return succeed(tx_ref, booking.session)
