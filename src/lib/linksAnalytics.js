@@ -1,20 +1,30 @@
 import { track } from '@vercel/analytics'
 
-const sources = new Set(['instagram', 'linkedin', 'youtube', 'whatsapp', 'facebook', 'tiktok', 'newsletter', 'qr'])
+import { isLinksEvent, linkSources } from './linksEvents.js'
+
 const campaignFields = {
-  utm_source: sources,
+  utm_source: linkSources,
   utm_medium: new Set(['bio', 'social', 'video', 'message', 'email', 'print']),
   utm_campaign: new Set(['links', 'links_launch']),
 }
 
 function campaignSource() {
   const source = new URLSearchParams(window.location.search).get('utm_source')?.toLowerCase()
-  return sources.has(source) ? source : 'untagged'
+  return linkSources.has(source) ? source : 'untagged'
 }
 
 export function trackLinks(action, destination) {
   if (window.location.pathname.replace(/\/$/, '') !== '/links') return
-  track('Links action', { action: `${action}:${destination}`, source: campaignSource() })
+  const source = campaignSource()
+  destination = destination.toLowerCase().replaceAll(' ', '-')
+  if (!isLinksEvent(action, destination, source)) return
+  window.gtag?.('event', 'links_action', {
+    send_to: 'G-YFDXY1KVNW',
+    link_action: action,
+    link_destination: destination,
+    link_source: source,
+  })
+  track('Links action', { action: `${action}:${destination}`, source })
 }
 
 export function cleanLinksAnalyticsUrl(event) {
